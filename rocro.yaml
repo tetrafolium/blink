@@ -20,7 +20,7 @@ inspecode:
 
     cppcheck:
       options:
-        --filter: [-whitespace]
+        --filter: -whitespace
       thresholds: {num-issues: 999}
 
     cpplint:
