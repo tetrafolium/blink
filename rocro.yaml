@@ -7,42 +7,43 @@ inspecode:
 
     astyle:
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 133}
 
     clang-format:
+      ## "./.clang-format" (config-file) removed
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 184}
 
     # cpd:
     #   # options: [--skip-lexical-errors]
     #   thresholds: {num-issues: 999}
 
     cppcheck:
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 6}
 
     cpplint:
       options:
         --filter: [-whitespace]
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 561}
 
     # fortify:
     #   thresholds: {num-issues: 999}
 
     fossology:
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 134}
 
     grep:
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 29}
 
     # infer:
     #   thresholds: {num-issues: 999}
 
     jscpd:
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 41}
 
     misspell:
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 14}
 
     # scan-build:
     #   thresholds: {num-issues: 999}
@@ -50,20 +51,20 @@ inspecode:
     swiftlint:
       config-file: inspecode-SwiftLint.yaml
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 991}
 
     tailor:
       options:
         --except: [trailing-whitespace]
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 844}
 
     uncrustify:
       auto-fix: true
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 140}
 
     # understand:
     #   thresholds: {num-issues: 999}
 
     unused:
       options: [--single-occurrence, --all-likelihoods]
-      thresholds: {num-issues: 999}
+      thresholds: {num-issues: 189}
