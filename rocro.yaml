@@ -10,14 +10,17 @@ inspecode:
       thresholds: {num-issues: 999}
 
     clang-format:
+      config-file: ""   # do not use ".clang-format"
       auto-fix: true
       thresholds: {num-issues: 999}
 
-    cpd:
-      # options: [--skip-lexical-errors]
-      thresholds: {num-issues: 999}
+    # cpd:
+    #   # options: [--skip-lexical-errors]
+    #   thresholds: {num-issues: 999}
 
     cppcheck:
+      options:
+        --filter: [-whitespace]
       thresholds: {num-issues: 999}
 
     cpplint:
@@ -32,8 +35,8 @@ inspecode:
     grep:
       thresholds: {num-issues: 999}
 
-    infer:
-      thresholds: {num-issues: 999}
+    # infer:
+    #   thresholds: {num-issues: 999}
 
     jscpd:
       thresholds: {num-issues: 999}
@@ -42,14 +45,17 @@ inspecode:
       auto-fix: true
       thresholds: {num-issues: 999}
 
-    scan-build:
-      thresholds: {num-issues: 999}
+    # scan-build:
+    #   thresholds: {num-issues: 999}
 
     swiftlint:
+      config-file: inspecode-SwiftLint.yaml
       auto-fix: true
       thresholds: {num-issues: 999}
 
     tailor:
+      options:
+        --except: [trailing-whitespace]
       thresholds: {num-issues: 999}
 
     uncrustify:
