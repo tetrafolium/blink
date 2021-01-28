@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak) id<SSHClientConnectedChannelDelegate> delegate;
 @property (readonly) int exit_status;
-@property (readonly)ssh_channel channel;
+@property (readonly) ssh_channel channel;
 
 - (void)close;
 

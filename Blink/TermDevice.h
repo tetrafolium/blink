@@ -62,7 +62,7 @@
 @end
 
 @interface TermDevice : NSObject {
-@public struct winsize win;
+	@public struct winsize win;
 }
 
 @property (readonly) TermStream *stream;

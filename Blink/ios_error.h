@@ -26,7 +26,7 @@ extern "C" {
  #endif */
 
 #undef printf
-#define printf(...) fprintf (thread_stdout, ##__VA_ARGS__)
+#define printf(...) fprintf (thread_stdout, ## __VA_ARGS__)
 
 #define putchar(a) fputc(a, thread_stdout)
 #define getchar() fgetc(thread_stdin)
@@ -76,7 +76,7 @@ extern ssize_t ios_write(int fildes, const void *buf, size_t nbyte);
 extern size_t ios_fwrite(const void *ptr, size_t size, size_t nitems, FILE *stream);
 extern int ios_puts(const char *s);
 extern int ios_fputs(const char* s, FILE *stream);
-extern    int ios_fputc(int c, FILE *stream);
+extern int ios_fputc(int c, FILE *stream);
 extern int ios_putw(int w, FILE *stream);
 extern int ios_fflush(FILE *stream);
 

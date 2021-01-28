@@ -34,8 +34,8 @@
 @class CKRecordID;
 
 typedef enum {
-    BKiCloudRecordTypeHosts,
-    BKiCloudRecordTypeKeys
+	BKiCloudRecordTypeHosts,
+	BKiCloudRecordTypeKeys
 } BKiCloudRecordType;
 
 extern NSString const *BKiCloudSyncDeletedHosts;

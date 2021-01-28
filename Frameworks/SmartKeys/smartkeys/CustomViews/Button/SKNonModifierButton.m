@@ -10,8 +10,8 @@
 @implementation SKNonModifierButton
 
 - (void)setHighlighted:(BOOL)highlighted {
-    [super setHighlighted:highlighted];
-    [super animatedButtonSelection:highlighted];
+	[super setHighlighted:highlighted];
+	[super animatedButtonSelection:highlighted];
 }
 
 @end

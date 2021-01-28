@@ -40,10 +40,10 @@ int ssh_compatible_openssl(long, long);
 #endif
 
 #ifndef OPENSSL_RSA_MAX_MODULUS_BITS
-# define OPENSSL_RSA_MAX_MODULUS_BITS	16384
+# define OPENSSL_RSA_MAX_MODULUS_BITS   16384
 #endif
 #ifndef OPENSSL_DSA_MAX_MODULUS_BITS
-# define OPENSSL_DSA_MAX_MODULUS_BITS	10000
+# define OPENSSL_DSA_MAX_MODULUS_BITS   10000
 #endif
 
 #ifndef OPENSSL_HAVE_EVPCTR
@@ -96,7 +96,7 @@ void ssh_aes_ctr_iv(EVP_CIPHER_CTX *, int, u_char *, size_t);
 
 void ssh_OpenSSL_add_all_algorithms(void);
 
-#endif	/* SSH_DONT_OVERLOAD_OPENSSL_FUNCS */
+#endif  /* SSH_DONT_OVERLOAD_OPENSSL_FUNCS */
 
 /* LibreSSL/OpenSSL 1.1x API compat */
 #ifndef HAVE_DSA_GET0_PQG
@@ -208,12 +208,12 @@ int (*RSA_meth_get_finish(const RSA_METHOD *meth))(RSA *rsa);
 
 #ifndef HAVE_RSA_METH_SET_PRIV_ENC
 int RSA_meth_set_priv_enc(RSA_METHOD *meth, int (*priv_enc)(int flen,
-                          const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
+                                                            const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
 #endif /* HAVE_RSA_METH_SET_PRIV_ENC */
 
 #ifndef HAVE_RSA_METH_SET_PRIV_DEC
 int RSA_meth_set_priv_dec(RSA_METHOD *meth, int (*priv_dec)(int flen,
-                          const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
+                                                            const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
 #endif /* HAVE_RSA_METH_SET_PRIV_DEC */
 
 #ifndef HAVE_RSA_METH_SET_FINISH

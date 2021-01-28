@@ -40,101 +40,101 @@
 @end
 
 @implementation SSHClientPortListener {
-    CFSocketRef _socketRef;
-    CFRunLoopSourceRef _sourceRef;
+	CFSocketRef _socketRef;
+	CFRunLoopSourceRef _sourceRef;
 }
 
 - (instancetype)initInitWithAddress:(NSString *)strAddress {
-    if (self = [super init]) {
-        NSMutableArray<NSString *> *parts = [[strAddress componentsSeparatedByString:@":"] mutableCopy];
-        _remoteport = [[parts lastObject] intValue];
-        [parts removeLastObject];
-        _remotehost = [parts lastObject];
-        [parts removeLastObject];
-        _localport = [[parts lastObject] intValue];
-        [parts removeLastObject];
-        _sourcehost = [parts lastObject] ?: @"localhost";
-    }
-    return self;
+	if (self = [super init]) {
+		NSMutableArray<NSString *> *parts = [[strAddress componentsSeparatedByString:@":"] mutableCopy];
+		_remoteport = [[parts lastObject] intValue];
+		[parts removeLastObject];
+		_remotehost = [parts lastObject];
+		[parts removeLastObject];
+		_localport = [[parts lastObject] intValue];
+		[parts removeLastObject];
+		_sourcehost = [parts lastObject] ? : @"localhost";
+	}
+	return self;
 }
 
 void _socketCallback(CFSocketRef s, CFSocketCallBackType type, CFDataRef address, const void *data, void *info) {
 
-    CFSocketNativeHandle socket = *(CFSocketNativeHandle *)data;
-    SSHClientPortListener *client = (__bridge SSHClientPortListener *)info;
+	CFSocketNativeHandle socket = *(CFSocketNativeHandle *)data;
+	SSHClientPortListener *client = (__bridge SSHClientPortListener *)info;
 
-    int yes = 1;
-    setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &yes, sizeof(yes));
-    setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
-    fcntl(socket, F_SETFL, O_NONBLOCK);
+	int yes = 1;
+	setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, &yes, sizeof(yes));
+	setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+	fcntl(socket, F_SETFL, O_NONBLOCK);
 
-    [client.delegate sshClientPortListener:client acceptedSocket:socket];
+	[client.delegate sshClientPortListener:client acceptedSocket:socket];
 }
 
 - (int)listen {
 
-    CFSocketContext ctx = {
-        .info =  (__bridge void *)self
-    };
+	CFSocketContext ctx = {
+		.info =  (__bridge void *)self
+	};
 
-    struct sockaddr_in address = {
-        .sin_family = AF_INET,
-        .sin_addr.s_addr = INADDR_ANY, // TODO: inet_aton("<address>", &address.sin_addr.s_addr)
-        .sin_port = htons(_localport)
-    };
+	struct sockaddr_in address = {
+		.sin_family = AF_INET,
+		.sin_addr.s_addr = INADDR_ANY, // TODO: inet_aton("<address>", &address.sin_addr.s_addr)
+		.sin_port = htons(_localport)
+	};
 
-    int sock = socket(AF_INET, SOCK_STREAM, 0);
-    fcntl(sock, F_SETFL, O_NONBLOCK);
-    int yes = 1;
-    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (void*)&yes, sizeof(yes));
+	int sock = socket(AF_INET, SOCK_STREAM, 0);
+	fcntl(sock, F_SETFL, O_NONBLOCK);
+	int yes = 1;
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (void*)&yes, sizeof(yes));
 //  setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, (void*)&yes, sizeof(yes));
 
-    if (bind(sock, (struct sockaddr*)&address, sizeof(address)) != 0) {
-        return SSH_ERROR;
-    }
+	if (bind(sock, (struct sockaddr*)&address, sizeof(address)) != 0) {
+		return SSH_ERROR;
+	}
 
-    if (listen(sock, 10) != 0) {
-        return SSH_ERROR;
-    }
+	if (listen(sock, 10) != 0) {
+		return SSH_ERROR;
+	}
 
-    _socketRef = CFSocketCreateWithNative(NULL, sock, kCFSocketAcceptCallBack, _socketCallback, &ctx);
+	_socketRef = CFSocketCreateWithNative(NULL, sock, kCFSocketAcceptCallBack, _socketCallback, &ctx);
 
-    if (_socketRef == nil) {
-        close(sock);
-        return SSH_ERROR;
-    }
+	if (_socketRef == nil) {
+		close(sock);
+		return SSH_ERROR;
+	}
 
-    _sourceRef = CFSocketCreateRunLoopSource(NULL, _socketRef, 0);
+	_sourceRef = CFSocketCreateRunLoopSource(NULL, _socketRef, 0);
 
-    if (_sourceRef == nil) {
-        CFSocketInvalidate(_socketRef);
-        CFRelease(_socketRef);
-        _socketRef = nil;
-        return SSH_ERROR;
-    }
+	if (_sourceRef == nil) {
+		CFSocketInvalidate(_socketRef);
+		CFRelease(_socketRef);
+		_socketRef = nil;
+		return SSH_ERROR;
+	}
 
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), _sourceRef, kCFRunLoopCommonModes);
+	CFRunLoopAddSource(CFRunLoopGetCurrent(), _sourceRef, kCFRunLoopCommonModes);
 
-    return SSH_OK;
+	return SSH_OK;
 }
 
 - (void)close {
-    if (_sourceRef) {
-        CFRunLoopSourceInvalidate(_sourceRef);
-        CFRelease(_sourceRef);
-        _sourceRef = NULL;
-    }
+	if (_sourceRef) {
+		CFRunLoopSourceInvalidate(_sourceRef);
+		CFRelease(_sourceRef);
+		_sourceRef = NULL;
+	}
 
-    if (_socketRef) {
-        CFSocketInvalidate(_socketRef);
-        CFRelease(_socketRef);
-        _socketRef = NULL;
-    }
+	if (_socketRef) {
+		CFSocketInvalidate(_socketRef);
+		CFRelease(_socketRef);
+		_socketRef = NULL;
+	}
 
 }
 
 - (void)dealloc {
-    [self close];
+	[self close];
 }
 
 @end

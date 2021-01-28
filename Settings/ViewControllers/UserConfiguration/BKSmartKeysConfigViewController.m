@@ -41,24 +41,24 @@
 @implementation BKSmartKeysConfigViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    [self setupUI];
+	[super viewDidLoad];
+	[self setupUI];
 }
 
 - (void)setupUI
 {
-    [_showWithExternalKeyboard setOn:[BKUserConfigurationManager userSettingsValueForKey:BKUserConfigShowSmartKeysWithXKeyBoard]];
+	[_showWithExternalKeyboard setOn:[BKUserConfigurationManager userSettingsValueForKey:BKUserConfigShowSmartKeysWithXKeyBoard]];
 
-    [_keyboardClicksSoundSwitch setOn:![BKUserConfigurationManager userSettingsValueForKey:BKUserConfigMuteSmartKeysPlaySound]];
+	[_keyboardClicksSoundSwitch setOn:![BKUserConfigurationManager userSettingsValueForKey:BKUserConfigMuteSmartKeysPlaySound]];
 }
 
 - (IBAction)didToggleSwitch:(UISwitch *)sender
 {
-    if (sender == _showWithExternalKeyboard) {
-        [BKUserConfigurationManager setUserSettingsValue:sender.isOn forKey:BKUserConfigShowSmartKeysWithXKeyBoard];
-    } else if (sender == _keyboardClicksSoundSwitch) {
-        [BKUserConfigurationManager setUserSettingsValue:!sender.isOn forKey:BKUserConfigMuteSmartKeysPlaySound];
-    }
+	if (sender == _showWithExternalKeyboard) {
+		[BKUserConfigurationManager setUserSettingsValue:sender.isOn forKey:BKUserConfigShowSmartKeysWithXKeyBoard];
+	} else if (sender == _keyboardClicksSoundSwitch) {
+		[BKUserConfigurationManager setUserSettingsValue:!sender.isOn forKey:BKUserConfigMuteSmartKeysPlaySound];
+	}
 }
 
 @end

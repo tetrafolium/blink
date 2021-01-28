@@ -38,47 +38,47 @@
 
 + (void)sendToTwitter
 {
-    NSURL *twitterApp = [NSURL URLWithString:@"twitter:///BlinkShell?screen_name=PAGE"];
-    NSURL *twitterURL = [NSURL URLWithString:@"https://twitter.com/BlinkShell"];
+	NSURL *twitterApp = [NSURL URLWithString:@"twitter:///BlinkShell?screen_name=PAGE"];
+	NSURL *twitterURL = [NSURL URLWithString:@"https://twitter.com/BlinkShell"];
 
-    UIApplication *app = [UIApplication sharedApplication];
-    if ([app canOpenURL:twitterApp]) {
-        [app openURL:twitterApp options:@ {} completionHandler:nil];
-    } else {
-        blink_openurl(twitterURL);
-    }
+	UIApplication *app = [UIApplication sharedApplication];
+	if ([app canOpenURL:twitterApp]) {
+		[app openURL:twitterApp options:@{} completionHandler:nil];
+	} else {
+		blink_openurl(twitterURL);
+	}
 }
 
 + (void)sendToGitHub:(NSString *)location
 {
-    NSURL *githubURL = [NSURL URLWithString:@"https://github.com/BlinkSh"];
-    if (location) {
-        githubURL = [githubURL URLByAppendingPathComponent:location];
-    }
-    blink_openurl(githubURL);
+	NSURL *githubURL = [NSURL URLWithString:@"https://github.com/BlinkSh"];
+	if (location) {
+		githubURL = [githubURL URLByAppendingPathComponent:location];
+	}
+	blink_openurl(githubURL);
 }
 
 + (void)sendToAppStore
 {
-    NSURL *appStoreLink = [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1156707581?action=write-review"];
-    [[UIApplication sharedApplication] openURL:appStoreLink options:@ {} completionHandler:nil];
+	NSURL *appStoreLink = [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id1156707581?action=write-review"];
+	[[UIApplication sharedApplication] openURL:appStoreLink options:@{} completionHandler:nil];
 }
 
 + (void)sendToEmailApp
 {
-    NSURL *mailURL = [NSURL URLWithString:@"mailto:support@blink.sh"];
+	NSURL *mailURL = [NSURL URLWithString:@"mailto:support@blink.sh"];
 
-    [[UIApplication sharedApplication] openURL:mailURL options:@ {} completionHandler:nil];
+	[[UIApplication sharedApplication] openURL:mailURL options:@{} completionHandler:nil];
 }
 
 + (void)sendToDiscord {
-    NSURL *url = [NSURL URLWithString:@"https://discord.gg/ZTtMfvK"];
-    blink_openurl(url);
+	NSURL *url = [NSURL URLWithString:@"https://discord.gg/ZTtMfvK"];
+	blink_openurl(url);
 }
 
 + (void)sendToDiscordSupport {
-    NSURL *url = [NSURL URLWithString:@"https://discord.gg/uATT2ad"];
-    blink_openurl(url);
+	NSURL *url = [NSURL URLWithString:@"https://discord.gg/uATT2ad"];
+	blink_openurl(url);
 }
 
 @end

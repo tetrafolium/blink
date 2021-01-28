@@ -136,12 +136,12 @@ char *dirname(const char *path);
 #endif
 
 #ifndef HAVE_FMT_SCALED
-#define	FMT_SCALED_STRSIZE	7
-int	fmt_scaled(long long number, char *result);
+#define FMT_SCALED_STRSIZE      7
+int     fmt_scaled(long long number, char *result);
 #endif
 
 #ifndef HAVE_SCAN_SCALED
-int	scan_scaled(char *, long long *);
+int     scan_scaled(char *, long long *);
 #endif
 
 #if defined(BROKEN_INET_NTOA) || !defined(HAVE_INET_NTOA)
@@ -175,7 +175,7 @@ int BSDgetopt(int argc, char * const *argv, const char *opts);
 #endif
 
 #if ((defined(HAVE_DECL_READV) && HAVE_DECL_READV == 0) || \
-    (defined(HAVE_DECL_WRITEV) && HAVE_DECL_WRITEV == 0))
+        (defined(HAVE_DECL_WRITEV) && HAVE_DECL_WRITEV == 0))
 # include <sys/types.h>
 # include <sys/uio.h>
 
@@ -222,7 +222,7 @@ int asprintf(char **, const char *, ...);
 #endif
 
 #ifndef HAVE_OPENPTY
-# include <sys/ioctl.h>	/* for struct winsize */
+# include <sys/ioctl.h> /* for struct winsize */
 int openpty(int *, int *, char *, struct termios *, struct winsize *);
 #endif /* HAVE_OPENPTY */
 
@@ -248,11 +248,11 @@ long long strtonum(const char *, long long, long long, const char **);
 
 /* multibyte character support */
 #ifndef HAVE_MBLEN
-# define mblen(x, y)	(1)
+# define mblen(x, y)    (1)
 #endif
 
 #ifndef HAVE_WCWIDTH
-# define wcwidth(x)	(((x) >= 0x20 && (x) <= 0x7e) ? 1 : -1)
+# define wcwidth(x)     (((x) >= 0x20 && (x) <= 0x7e) ? 1 : -1)
 /* force our no-op nl_langinfo and mbtowc */
 # undef HAVE_NL_LANGINFO
 # undef HAVE_MBTOWC
@@ -260,7 +260,7 @@ long long strtonum(const char *, long long, long long, const char **);
 #endif
 
 #ifndef HAVE_NL_LANGINFO
-# define nl_langinfo(x)	""
+# define nl_langinfo(x) ""
 #endif
 
 #ifndef HAVE_MBTOWC
@@ -309,7 +309,7 @@ int timingsafe_bcmp(const void *, const void *, size_t);
 #endif
 
 #ifndef HAVE_BCRYPT_PBKDF
-int	bcrypt_pbkdf(const char *, size_t, const u_int8_t *, size_t,
+int bcrypt_pbkdf(const char *, size_t, const u_int8_t *, size_t,
                  u_int8_t *, size_t, unsigned int);
 #endif
 
@@ -345,8 +345,8 @@ char *shadow_pw(struct passwd *pw);
 #   include <sys/socket.h>  /* Ensure include guard is defined */
 #   undef FD_SET
 #   undef FD_ISSET
-#   define FD_SET(n, set)	kludge_FD_SET(n, set)
-#   define FD_ISSET(n, set)	kludge_FD_ISSET(n, set)
+#   define FD_SET(n, set)       kludge_FD_SET(n, set)
+#   define FD_ISSET(n, set)     kludge_FD_ISSET(n, set)
 void kludge_FD_SET(int, fd_set *);
 int kludge_FD_ISSET(int, fd_set *);
 #  endif /* __GLIBC_PREREQ(2, 15) && (_FORTIFY_SOURCE > 0) */

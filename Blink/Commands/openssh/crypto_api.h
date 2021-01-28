@@ -22,19 +22,19 @@ typedef uint32_t crypto_uint32;
 
 #define crypto_hash_sha512_BYTES 64U
 
-int	crypto_hash_sha512(unsigned char *, const unsigned char *,
-                       unsigned long long);
+int     crypto_hash_sha512(unsigned char *, const unsigned char *,
+                           unsigned long long);
 
-int	crypto_verify_32(const unsigned char *, const unsigned char *);
+int     crypto_verify_32(const unsigned char *, const unsigned char *);
 
 #define crypto_sign_ed25519_SECRETKEYBYTES 64U
 #define crypto_sign_ed25519_PUBLICKEYBYTES 32U
 #define crypto_sign_ed25519_BYTES 64U
 
-int	crypto_sign_ed25519(unsigned char *, unsigned long long *,
-                        const unsigned char *, unsigned long long, const unsigned char *);
-int	crypto_sign_ed25519_open(unsigned char *, unsigned long long *,
-                             const unsigned char *, unsigned long long, const unsigned char *);
-int	crypto_sign_ed25519_keypair(unsigned char *, unsigned char *);
+int     crypto_sign_ed25519(unsigned char *, unsigned long long *,
+                            const unsigned char *, unsigned long long, const unsigned char *);
+int     crypto_sign_ed25519_open(unsigned char *, unsigned long long *,
+                                 const unsigned char *, unsigned long long, const unsigned char *);
+int     crypto_sign_ed25519_keypair(unsigned char *, unsigned char *);
 
 #endif /* crypto_api_h */

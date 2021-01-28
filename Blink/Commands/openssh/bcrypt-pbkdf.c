@@ -29,7 +29,7 @@
 #endif
 #define SHA512_DIGEST_LENGTH crypto_hash_sha512_BYTES
 
-#define	MINIMUM(a,b) (((a) < (b)) ? (a) : (b))
+#define MINIMUM(a,b) (((a) < (b)) ? (a) : (b))
 
 #define explicit_bzero(data, len) memset_s(data, len, 0x0, len)
 
@@ -63,110 +63,110 @@
 static void
 bcrypt_hash(uint8_t *sha2pass, uint8_t *sha2salt, uint8_t *out)
 {
-    blf_ctx state;
-    uint8_t ciphertext[BCRYPT_HASHSIZE] =
-        "OxychromaticBlowfishSwatDynamite";
-    uint32_t cdata[BCRYPT_WORDS];
-    int i;
-    uint16_t j;
-    size_t shalen = SHA512_DIGEST_LENGTH;
+	blf_ctx state;
+	uint8_t ciphertext[BCRYPT_HASHSIZE] =
+		"OxychromaticBlowfishSwatDynamite";
+	uint32_t cdata[BCRYPT_WORDS];
+	int i;
+	uint16_t j;
+	size_t shalen = SHA512_DIGEST_LENGTH;
 
-    /* key expansion */
-    Blowfish_initstate(&state);
-    Blowfish_expandstate(&state, sha2salt, shalen, sha2pass, shalen);
-    for (i = 0; i < 64; i++) {
-        Blowfish_expand0state(&state, sha2salt, shalen);
-        Blowfish_expand0state(&state, sha2pass, shalen);
-    }
+	/* key expansion */
+	Blowfish_initstate(&state);
+	Blowfish_expandstate(&state, sha2salt, shalen, sha2pass, shalen);
+	for (i = 0; i < 64; i++) {
+		Blowfish_expand0state(&state, sha2salt, shalen);
+		Blowfish_expand0state(&state, sha2pass, shalen);
+	}
 
-    /* encryption */
-    j = 0;
-    for (i = 0; i < BCRYPT_WORDS; i++)
-        cdata[i] = Blowfish_stream2word(ciphertext, sizeof(ciphertext),
-                                        &j);
-    for (i = 0; i < 64; i++)
-        blf_enc(&state, cdata, sizeof(cdata) / sizeof(uint64_t));
+	/* encryption */
+	j = 0;
+	for (i = 0; i < BCRYPT_WORDS; i++)
+		cdata[i] = Blowfish_stream2word(ciphertext, sizeof(ciphertext),
+		                                &j);
+	for (i = 0; i < 64; i++)
+		blf_enc(&state, cdata, sizeof(cdata) / sizeof(uint64_t));
 
-    /* copy out */
-    for (i = 0; i < BCRYPT_WORDS; i++) {
-        out[4 * i + 3] = (cdata[i] >> 24) & 0xff;
-        out[4 * i + 2] = (cdata[i] >> 16) & 0xff;
-        out[4 * i + 1] = (cdata[i] >> 8) & 0xff;
-        out[4 * i + 0] = cdata[i] & 0xff;
-    }
+	/* copy out */
+	for (i = 0; i < BCRYPT_WORDS; i++) {
+		out[4 * i + 3] = (cdata[i] >> 24) & 0xff;
+		out[4 * i + 2] = (cdata[i] >> 16) & 0xff;
+		out[4 * i + 1] = (cdata[i] >> 8) & 0xff;
+		out[4 * i + 0] = cdata[i] & 0xff;
+	}
 
-    /* zap */
-    explicit_bzero(ciphertext, sizeof(ciphertext));
-    explicit_bzero(cdata, sizeof(cdata));
-    explicit_bzero(&state, sizeof(state));
+	/* zap */
+	explicit_bzero(ciphertext, sizeof(ciphertext));
+	explicit_bzero(cdata, sizeof(cdata));
+	explicit_bzero(&state, sizeof(state));
 }
 
 int
 bcrypt_pbkdf(const char *pass, size_t passlen, const uint8_t *salt, size_t saltlen,
              uint8_t *key, size_t keylen, unsigned int rounds)
 {
-    uint8_t sha2pass[SHA512_DIGEST_LENGTH];
-    uint8_t sha2salt[SHA512_DIGEST_LENGTH];
-    uint8_t out[BCRYPT_HASHSIZE];
-    uint8_t tmpout[BCRYPT_HASHSIZE];
-    uint8_t *countsalt;
-    size_t i, j, amt, stride;
-    uint32_t count;
-    size_t origkeylen = keylen;
+	uint8_t sha2pass[SHA512_DIGEST_LENGTH];
+	uint8_t sha2salt[SHA512_DIGEST_LENGTH];
+	uint8_t out[BCRYPT_HASHSIZE];
+	uint8_t tmpout[BCRYPT_HASHSIZE];
+	uint8_t *countsalt;
+	size_t i, j, amt, stride;
+	uint32_t count;
+	size_t origkeylen = keylen;
 
-    /* nothing crazy */
-    if (rounds < 1)
-        return -1;
-    if (passlen == 0 || saltlen == 0 || keylen == 0 ||
-            keylen > sizeof(out) * sizeof(out) || saltlen > 1<<20)
-        return -1;
-    if ((countsalt = calloc(1, saltlen + 4)) == NULL)
-        return -1;
-    stride = (keylen + sizeof(out) - 1) / sizeof(out);
-    amt = (keylen + stride - 1) / stride;
+	/* nothing crazy */
+	if (rounds < 1)
+		return -1;
+	if (passlen == 0 || saltlen == 0 || keylen == 0 ||
+	    keylen > sizeof(out) * sizeof(out) || saltlen > 1<<20)
+		return -1;
+	if ((countsalt = calloc(1, saltlen + 4)) == NULL)
+		return -1;
+	stride = (keylen + sizeof(out) - 1) / sizeof(out);
+	amt = (keylen + stride - 1) / stride;
 
-    memcpy(countsalt, salt, saltlen);
+	memcpy(countsalt, salt, saltlen);
 
-    /* collapse password */
-    crypto_hash_sha512(sha2pass, (const u_char *)pass, passlen);
+	/* collapse password */
+	crypto_hash_sha512(sha2pass, (const u_char *)pass, passlen);
 
-    /* generate key, sizeof(out) at a time */
-    for (count = 1; keylen > 0; count++) {
-        countsalt[saltlen + 0] = (count >> 24) & 0xff;
-        countsalt[saltlen + 1] = (count >> 16) & 0xff;
-        countsalt[saltlen + 2] = (count >> 8) & 0xff;
-        countsalt[saltlen + 3] = count & 0xff;
+	/* generate key, sizeof(out) at a time */
+	for (count = 1; keylen > 0; count++) {
+		countsalt[saltlen + 0] = (count >> 24) & 0xff;
+		countsalt[saltlen + 1] = (count >> 16) & 0xff;
+		countsalt[saltlen + 2] = (count >> 8) & 0xff;
+		countsalt[saltlen + 3] = count & 0xff;
 
-        /* first round, salt is salt */
-        crypto_hash_sha512(sha2salt, countsalt, saltlen + 4);
+		/* first round, salt is salt */
+		crypto_hash_sha512(sha2salt, countsalt, saltlen + 4);
 
-        bcrypt_hash(sha2pass, sha2salt, tmpout);
-        memcpy(out, tmpout, sizeof(out));
+		bcrypt_hash(sha2pass, sha2salt, tmpout);
+		memcpy(out, tmpout, sizeof(out));
 
-        for (i = 1; i < rounds; i++) {
-            /* subsequent rounds, salt is previous output */
-            crypto_hash_sha512(sha2salt, tmpout, sizeof(tmpout));
-            bcrypt_hash(sha2pass, sha2salt, tmpout);
-            for (j = 0; j < sizeof(out); j++)
-                out[j] ^= tmpout[j];
-        }
+		for (i = 1; i < rounds; i++) {
+			/* subsequent rounds, salt is previous output */
+			crypto_hash_sha512(sha2salt, tmpout, sizeof(tmpout));
+			bcrypt_hash(sha2pass, sha2salt, tmpout);
+			for (j = 0; j < sizeof(out); j++)
+				out[j] ^= tmpout[j];
+		}
 
-        /*
-         * pbkdf2 deviation: output the key material non-linearly.
-         */
-        amt = MINIMUM(amt, keylen);
-        for (i = 0; i < amt; i++) {
-            size_t dest = i * stride + (count - 1);
-            if (dest >= origkeylen)
-                break;
-            key[dest] = out[i];
-        }
-        keylen -= i;
-    }
+		/*
+		 * pbkdf2 deviation: output the key material non-linearly.
+		 */
+		amt = MINIMUM(amt, keylen);
+		for (i = 0; i < amt; i++) {
+			size_t dest = i * stride + (count - 1);
+			if (dest >= origkeylen)
+				break;
+			key[dest] = out[i];
+		}
+		keylen -= i;
+	}
 
-    /* zap */
-    explicit_bzero(out, sizeof(out));
-    free(countsalt);
+	/* zap */
+	explicit_bzero(out, sizeof(out));
+	free(countsalt);
 
-    return 0;
+	return 0;
 }

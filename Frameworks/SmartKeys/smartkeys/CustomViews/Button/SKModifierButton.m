@@ -14,8 +14,8 @@
 @implementation SKModifierButton
 
 -(void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
-    [super animatedButtonSelection:selected];
+	[super setSelected:selected];
+	[super animatedButtonSelection:selected];
 }
 
 @end

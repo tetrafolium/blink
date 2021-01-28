@@ -39,202 +39,202 @@ static char customKey;
 
 
 @implementation BKResource {
-    NSURL *_fileURL;
+	NSURL *_fileURL;
 }
 
 - (instancetype)initWithName:(NSString *)name andFileName:(NSString *)fileName onURL:(NSURL *)fileURL
 {
-    self = [super init];
-    if (self) {
-        self.name = name;
-        self.filename = fileName;
-        _fileURL = fileURL;
-    }
-    return self;
+	self = [super init];
+	if (self) {
+		self.name = name;
+		self.filename = fileName;
+		_fileURL = fileURL;
+	}
+	return self;
 }
 
 - (id)initWithCoder:(NSCoder *)coder
 {
-    _name = [coder decodeObjectForKey:@"title"];
-    _filename = [coder decodeObjectForKey:@"filename"];
-    // Only Custom is initialized with URL
-    _fileURL = [[self class] customResourcesLocation];
-    return self;
+	_name = [coder decodeObjectForKey:@"title"];
+	_filename = [coder decodeObjectForKey:@"filename"];
+	// Only Custom is initialized with URL
+	_fileURL = [[self class] customResourcesLocation];
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:_name forKey:@"title"];
-    [encoder encodeObject:_filename forKey:@"filename"];
+	[encoder encodeObject:_name forKey:@"title"];
+	[encoder encodeObject:_filename forKey:@"filename"];
 }
 
 - (BOOL)isCustom
 {
-    if (_fileURL) {
-        return YES;
-    }
+	if (_fileURL) {
+		return YES;
+	}
 
-    return NO;
+	return NO;
 }
 
 - (NSString *)content
 {
-    return [NSString stringWithContentsOfFile:self.fullPath encoding:NSUTF8StringEncoding error:nil];
+	return [NSString stringWithContentsOfFile:self.fullPath encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (NSString *)fullPath
 {
-    return [[_fileURL URLByAppendingPathComponent:self.filename] path];
+	return [[_fileURL URLByAppendingPathComponent:self.filename] path];
 }
 
 + (instancetype)withName:(NSString *)name
 {
-    for (BKResource *res in [self all]) {
-        if ([res->_name isEqualToString:name]) {
-            return res;
-        }
-    }
-    return nil;
+	for (BKResource *res in [self all]) {
+		if ([res->_name isEqualToString:name]) {
+			return res;
+		}
+	}
+	return nil;
 }
 
 + (NSURL *)resourcesURL
 {
-    return [BlinkPaths blinkURL];
+	return [BlinkPaths blinkURL];
 }
 
 + (NSMutableArray *)defaultResources
 {
-    NSMutableArray *rscs = objc_getAssociatedObject(self, &defaultKey);
-    if (!rscs) {
-        // Load Default resources
-        rscs = [[NSMutableArray alloc] init];
-        NSError *error = nil;
-        NSArray *properties = [NSArray arrayWithObjects:NSURLLocalizedNameKey, nil];
+	NSMutableArray *rscs = objc_getAssociatedObject(self, &defaultKey);
+	if (!rscs) {
+		// Load Default resources
+		rscs = [[NSMutableArray alloc] init];
+		NSError *error = nil;
+		NSArray *properties = [NSArray arrayWithObjects:NSURLLocalizedNameKey, nil];
 
-        NSArray *resourceFiles = [[NSFileManager defaultManager]
-                                  contentsOfDirectoryAtURL:self.defaultResourcesLocation
-                                  includingPropertiesForKeys:properties
-                                  options:(NSDirectoryEnumerationSkipsHiddenFiles)
-                                  error:&error];
+		NSArray *resourceFiles = [[NSFileManager defaultManager]
+		                          contentsOfDirectoryAtURL:self.defaultResourcesLocation
+		                          includingPropertiesForKeys:properties
+		                          options:(NSDirectoryEnumerationSkipsHiddenFiles)
+		                          error:&error];
 
-        NSString *resExt = self.resourcesExtension;
-        NSString *fileExt = [NSString stringWithFormat:@".%@", resExt];
+		NSString *resExt = self.resourcesExtension;
+		NSString *fileExt = [NSString stringWithFormat:@".%@", resExt];
 
-        if (resourceFiles != nil) {
-            for (NSURL *file in resourceFiles) {
-                if (![[file pathExtension] isEqualToString:resExt]) {
-                    continue;
-                }
-                NSString *fileName = [file lastPathComponent];
+		if (resourceFiles != nil) {
+			for (NSURL *file in resourceFiles) {
+				if (![[file pathExtension] isEqualToString:resExt]) {
+					continue;
+				}
+				NSString *fileName = [file lastPathComponent];
 
-                BKResource *res = [[self alloc] initWithName:[fileName stringByReplacingOccurrencesOfString:fileExt withString:@""]
-                                                andFileName:fileName
-                                                onURL:self.defaultResourcesLocation];
-                [rscs addObject:res];
-            }
-        }
-        objc_setAssociatedObject(self, &defaultKey, rscs, OBJC_ASSOCIATION_RETAIN);
-    }
-    return rscs;
+				BKResource *res = [[self alloc] initWithName:[fileName stringByReplacingOccurrencesOfString:fileExt withString:@""]
+				                   andFileName:fileName
+				                   onURL:self.defaultResourcesLocation];
+				[rscs addObject:res];
+			}
+		}
+		objc_setAssociatedObject(self, &defaultKey, rscs, OBJC_ASSOCIATION_RETAIN);
+	}
+	return rscs;
 }
 
 + (NSMutableArray *)customResources
 {
-    NSMutableArray *rscs = objc_getAssociatedObject(self, &customKey);
-    if (!rscs) {
-        if ((rscs = [NSKeyedUnarchiver unarchiveObjectWithFile:self.customResourcesListLocation.path]) == nil) {
-            rscs = [[NSMutableArray alloc] init];
-        }
-        objc_setAssociatedObject(self, &customKey, rscs, OBJC_ASSOCIATION_RETAIN);
-    }
-    return rscs;
+	NSMutableArray *rscs = objc_getAssociatedObject(self, &customKey);
+	if (!rscs) {
+		if ((rscs = [NSKeyedUnarchiver unarchiveObjectWithFile:self.customResourcesListLocation.path]) == nil) {
+			rscs = [[NSMutableArray alloc] init];
+		}
+		objc_setAssociatedObject(self, &customKey, rscs, OBJC_ASSOCIATION_RETAIN);
+	}
+	return rscs;
 }
 
 + (NSMutableArray *)associatedResource:(char *)key
 {
-    NSMutableArray *rscs = objc_getAssociatedObject(self, &customKey);
-    if (!rscs) {
-        rscs = [[NSMutableArray alloc] init];
-        objc_setAssociatedObject(self, &customKey, rscs, OBJC_ASSOCIATION_RETAIN);
-    }
-    return rscs;
+	NSMutableArray *rscs = objc_getAssociatedObject(self, &customKey);
+	if (!rscs) {
+		rscs = [[NSMutableArray alloc] init];
+		objc_setAssociatedObject(self, &customKey, rscs, OBJC_ASSOCIATION_RETAIN);
+	}
+	return rscs;
 }
 
 + (NSURL *)defaultResourcesLocation
 {
-    return [[[NSBundle mainBundle] resourceURL] URLByAppendingPathComponent:[self resourcesPathName]];
+	return [[[NSBundle mainBundle] resourceURL] URLByAppendingPathComponent:[self resourcesPathName]];
 }
 
 + (NSURL *)customResourcesLocation
 {
-    return [[BlinkPaths blinkURL] URLByAppendingPathComponent:[self resourcesPathName]];
+	return [[BlinkPaths blinkURL] URLByAppendingPathComponent:[self resourcesPathName]];
 }
 
 + (NSURL *)customResourcesListLocation
 {
-    NSString *listFileName = [[self resourcesPathName] stringByAppendingString:@"List"];
-    return [[BlinkPaths blinkURL] URLByAppendingPathComponent:listFileName];
+	NSString *listFileName = [[self resourcesPathName] stringByAppendingString:@"List"];
+	return [[BlinkPaths blinkURL] URLByAppendingPathComponent:listFileName];
 }
 
 + (NSString *)resourcesPathName
 {
-    NSAssert(NO, @"The method %@ in %@ must be overridden.",
-             NSStringFromSelector(_cmd), NSStringFromClass([self class]));
-    return nil;
+	NSAssert(NO, @"The method %@ in %@ must be overridden.",
+	         NSStringFromSelector(_cmd), NSStringFromClass([self class]));
+	return nil;
 }
 
 + (NSString *)resourcesExtension
 {
-    NSAssert(NO, @"The method %@ in %@ must be overridden.",
-             NSStringFromSelector(_cmd), NSStringFromClass([self class]));
-    return nil;
+	NSAssert(NO, @"The method %@ in %@ must be overridden.",
+	         NSStringFromSelector(_cmd), NSStringFromClass([self class]));
+	return nil;
 }
 
 + (NSArray *)all
 {
-    return [self.defaultResources arrayByAddingObjectsFromArray:self.customResources];
+	return [self.defaultResources arrayByAddingObjectsFromArray:self.customResources];
 }
 
 + (NSInteger)count
 {
-    return [self.all count];
+	return [self.all count];
 }
 
 + (NSInteger)defaultResourcesCount
 {
-    return self.all.count - self.customResources.count;
+	return self.all.count - self.customResources.count;
 }
 
 + (BOOL)saveAll
 {
-    // Save IDs to file
-    return [NSKeyedArchiver archiveRootObject:self.customResources toFile:self.customResourcesListLocation.path];
+	// Save IDs to file
+	return [NSKeyedArchiver archiveRootObject:self.customResources toFile:self.customResourcesListLocation.path];
 }
 
 + (instancetype)saveResource:(NSString *)name withContent:(NSData *)content error:(NSError *__autoreleasing *)error
 {
-    NSString *fileName = [[NSUUID UUID] UUIDString];
+	NSString *fileName = [[NSUUID UUID] UUIDString];
 
-    NSURL *filePath = [self.customResourcesLocation URLByAppendingPathComponent:fileName];
-    [[NSFileManager defaultManager] createDirectoryAtURL:self.customResourcesLocation withIntermediateDirectories:YES attributes:nil error:nil];
+	NSURL *filePath = [self.customResourcesLocation URLByAppendingPathComponent:fileName];
+	[[NSFileManager defaultManager] createDirectoryAtURL:self.customResourcesLocation withIntermediateDirectories:YES attributes:nil error:nil];
 
-    [content writeToURL:filePath options:NSDataWritingAtomic error:error];
+	[content writeToURL:filePath options:NSDataWritingAtomic error:error];
 
-    if (*error) {
-        return nil;
-    }
+	if (*error) {
+		return nil;
+	}
 
-    BKResource *res = [[self alloc] initWithName:name andFileName:fileName onURL:self.customResourcesLocation];
-    [self.customResources addObject:res];
+	BKResource *res = [[self alloc] initWithName:name andFileName:fileName onURL:self.customResourcesLocation];
+	[self.customResources addObject:res];
 
-    [self saveAll];
-    return res;
+	[self saveAll];
+	return res;
 }
 
 + (void)removeResourceAtIndex:(int)index
 {
-    [self.customResources removeObjectAtIndex:index - [self defaultResourcesCount]];
-    [self saveAll];
+	[self.customResources removeObjectAtIndex:index - [self defaultResourcesCount]];
+	[self saveAll];
 }
 
 @end

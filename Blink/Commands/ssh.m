@@ -39,19 +39,19 @@
 
 
 void __thread_ssh_execute_command(const char *command, socket_t in, socket_t out) {
-    /* Prepare /dev/null socket for the stderr redirection */
-    int devnull = open("/dev/null", O_WRONLY);
-    if (devnull == -1) {
-        ios_exit(1);
-    }
+	/* Prepare /dev/null socket for the stderr redirection */
+	int devnull = open("/dev/null", O_WRONLY);
+	if (devnull == -1) {
+		ios_exit(1);
+	}
 
-    /* redirect in and out to stdin, stdout */
-    ios_dup2(in,  STDIN_FILENO);
-    ios_dup2(out, STDOUT_FILENO);
-    ios_dup2(devnull, STDERR_FILENO);
+	/* redirect in and out to stdin, stdout */
+	ios_dup2(in,  STDIN_FILENO);
+	ios_dup2(out, STDOUT_FILENO);
+	ios_dup2(devnull, STDERR_FILENO);
 //  close(in);
 //  close(out);
-    ios_system(command);
+	ios_system(command);
 //  ios_exit(1);
 //  ios_execv(args[0],(char * const *)args);
 //  exit(1);
@@ -61,34 +61,34 @@ void __ssh_logging(int priority,
                    const char *function,
                    const char *buffer,
                    void *userdata) {
-    fwrite(buffer, strlen(buffer), 1, thread_stderr);
-    fwrite("\n", 1, 1, thread_stderr);
+	fwrite(buffer, strlen(buffer), 1, thread_stderr);
+	fwrite("\n", 1, 1, thread_stderr);
 }
 
 
 
 int ssh_main(int argc, char *argv[]) {
 
-    MCPSession *session = (__bridge MCPSession *)thread_context;
-    thread_ssh_execute_command = &__thread_ssh_execute_command;
+	MCPSession *session = (__bridge MCPSession *)thread_context;
+	thread_ssh_execute_command = &__thread_ssh_execute_command;
 
-    ssh_set_log_callback(__ssh_logging);
+	ssh_set_log_callback(__ssh_logging);
 
-    setvbuf(thread_stdin, NULL, _IONBF, 0);
-    setvbuf(thread_stdout, NULL, _IONBF, 0);
-    setvbuf(thread_stderr, NULL, _IONBF, 0);
+	setvbuf(thread_stdin, NULL, _IONBF, 0);
+	setvbuf(thread_stdout, NULL, _IONBF, 0);
+	setvbuf(thread_stderr, NULL, _IONBF, 0);
 
 
-    SSHClient *client = [[SSHClient alloc]
-                         initWithStdIn: fileno(thread_stdin)
-                         stdOut: fileno(thread_stdout)
-                         stdErr: fileno(thread_stderr)
-                         device: session.device
-                         isTTY: ios_isatty(fileno(thread_stdin))];
-    [session registerSSHClient:client];
+	SSHClient *client = [[SSHClient alloc]
+	                     initWithStdIn: fileno(thread_stdin)
+	                     stdOut: fileno(thread_stdout)
+	                     stdErr: fileno(thread_stderr)
+	                     device: session.device
+	                     isTTY: ios_isatty(fileno(thread_stdin))];
+	[session registerSSHClient:client];
 
-    int rc = [client main:argc argv:argv];
-    [session unregisterSSHClient:client];
+	int rc = [client main:argc argv:argv];
+	[session unregisterSSHClient:client];
 
-    return rc;
+	return rc;
 }

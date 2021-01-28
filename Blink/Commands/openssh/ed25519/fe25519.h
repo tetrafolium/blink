@@ -31,7 +31,7 @@
 
 typedef struct
 {
-    crypto_uint32 v[32];
+	crypto_uint32 v[32];
 }
 fe25519;
 

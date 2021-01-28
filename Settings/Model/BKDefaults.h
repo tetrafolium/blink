@@ -33,24 +33,24 @@
 
 extern NSString *const BKAppearanceChanged;
 
-typedef NS_ENUM(NSInteger, BKLayoutMode) {
-    BKLayoutModeDefault = 0,
-    BKLayoutModeFill, // Fit screen
-    BKLayoutModeCover, //  Cover screen
-    BKLayoutModeSafeFit, // Honors safe layout guides
+typedef NS_ENUM (NSInteger, BKLayoutMode) {
+	BKLayoutModeDefault = 0,
+	BKLayoutModeFill, // Fit screen
+	BKLayoutModeCover, //  Cover screen
+	BKLayoutModeSafeFit, // Honors safe layout guides
 };
 
-typedef NS_ENUM(NSInteger, BKOverscanCompensation) {
-    BKBKOverscanCompensationScale = 0,
-    BKBKOverscanCompensationInsetBounds,
-    BKBKOverscanCompensationNone,
-    BKBKOverscanCompensationMirror,
+typedef NS_ENUM (NSInteger, BKOverscanCompensation) {
+	BKBKOverscanCompensationScale = 0,
+	BKBKOverscanCompensationInsetBounds,
+	BKBKOverscanCompensationNone,
+	BKBKOverscanCompensationMirror,
 };
 
-typedef NS_ENUM(NSInteger, BKKeyboardStyle) {
-    BKKeyboardStyleDark = 0,
-    BKKeyboardStyleLight,
-    BKKeyboardStyleSystem,
+typedef NS_ENUM (NSInteger, BKKeyboardStyle) {
+	BKKeyboardStyleDark = 0,
+	BKKeyboardStyleLight,
+	BKKeyboardStyleSystem,
 };
 
 @interface BKDefaults : NSObject <NSCoding>

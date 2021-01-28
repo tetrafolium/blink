@@ -1,9 +1,9 @@
 /*
- Copyright (C) 2016 Apple Inc. All Rights Reserved.
- See LICENSE.txt for this sample’s licensing information
+   Copyright (C) 2016 Apple Inc. All Rights Reserved.
+   See LICENSE.txt for this sample’s licensing information
 
- Abstract:
- Basic demonstration of how to use the SystemConfiguration Reachablity APIs.
+   Abstract:
+   Basic demonstration of how to use the SystemConfiguration Reachablity APIs.
  */
 
 #import <Foundation/Foundation.h>
@@ -12,9 +12,9 @@
 
 
 typedef enum : NSInteger {
-    NotReachable = 0,
-    ReachableViaWiFi,
-    ReachableViaWWAN
+	NotReachable = 0,
+	ReachableViaWiFi,
+	ReachableViaWWAN
 } NetworkStatus;
 
 #pragma mark IPv6 Support
@@ -26,9 +26,9 @@ extern NSString *kReachabilityChangedNotification;
 
 @interface Reachability : NSObject
 
-    /*!
-     * Use to check the reachability of a given host name.
-     */
+	/*!
+	 * Use to check the reachability of a given host name.
+	 */
 + (instancetype)reachabilityWithHostName:(NSString *)hostName;
 
 /*!

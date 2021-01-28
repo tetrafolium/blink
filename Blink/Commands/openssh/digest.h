@@ -19,17 +19,17 @@
 #define _DIGEST_H
 
 /* Maximum digest output length */
-#define SSH_DIGEST_MAX_LENGTH	64
+#define SSH_DIGEST_MAX_LENGTH   64
 
 /* Digest algorithms */
 enum sshdigest_types {
-    SSH_DIGEST_MD5 = 0,
-    SSH_DIGEST_RIPEMD160 = 1,
-    SSH_DIGEST_SHA1 = 2,
-    SSH_DIGEST_SHA256 = 3,
-    SSH_DIGEST_SHA384 = 4,
-    SSH_DIGEST_SHA512 = 5,
-    SSH_DIGEST_MAX
+	SSH_DIGEST_MD5 = 0,
+	SSH_DIGEST_RIPEMD160 = 1,
+	SSH_DIGEST_SHA1 = 2,
+	SSH_DIGEST_SHA256 = 3,
+	SSH_DIGEST_SHA384 = 4,
+	SSH_DIGEST_SHA512 = 5,
+	SSH_DIGEST_MAX
 };
 
 struct sshbuf;

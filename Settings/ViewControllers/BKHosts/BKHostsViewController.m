@@ -38,105 +38,105 @@
 
 - (void)viewDidLoad
 {
-    [super viewDidLoad];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    [[BKiCloudSyncHandler sharedHandler] setMergeHostCompletionBlock:^ {
-                                            dispatch_async(dispatch_get_main_queue(), ^{
-                                                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-            [self.tableView reloadData];
-        });
-    }];
-    [[BKiCloudSyncHandler sharedHandler] checkForReachabilityAndSync:nil];
+	[super viewDidLoad];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	[[BKiCloudSyncHandler sharedHandler] setMergeHostCompletionBlock:^ {
+	         dispatch_async(dispatch_get_main_queue(), ^{
+					[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+					[self.tableView reloadData];
+				});
+	 }];
+	[[BKiCloudSyncHandler sharedHandler] checkForReachabilityAndSync:nil];
 }
 
 #pragma mark - UITable View delegates
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return BKHosts.count;
+	return BKHosts.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger pkIdx = indexPath.row;
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    BKHosts *pk = [BKHosts.all objectAtIndex:pkIdx];
+	NSInteger pkIdx = indexPath.row;
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+	BKHosts *pk = [BKHosts.all objectAtIndex:pkIdx];
 
-    if (pk.iCloudConflictDetected == [NSNumber numberWithBool:YES]) {
-        if ((pk.iCloudConflictDetected.boolValue && pk.iCloudConflictCopy)) {
-            cell.textLabel.textColor = [UIColor systemRedColor];
-        } else {
-            cell.textLabel.textColor = [UIColor labelColor];
-            [BKHosts markHost:pk.host forRecord:[BKHosts recordFromHost:pk] withConflict:NO];
-        }
-    } else {
-        cell.textLabel.textColor = [UIColor labelColor];
-    }
-    // Configure the cell...
-    cell.textLabel.text = pk.host;
-    cell.detailTextLabel.text = @"";
+	if (pk.iCloudConflictDetected == [NSNumber numberWithBool:YES]) {
+		if ((pk.iCloudConflictDetected.boolValue && pk.iCloudConflictCopy)) {
+			cell.textLabel.textColor = [UIColor systemRedColor];
+		} else {
+			cell.textLabel.textColor = [UIColor labelColor];
+			[BKHosts markHost:pk.host forRecord:[BKHosts recordFromHost:pk] withConflict:NO];
+		}
+	} else {
+		cell.textLabel.textColor = [UIColor labelColor];
+	}
+	// Configure the cell...
+	cell.textLabel.text = pk.host;
+	cell.detailTextLabel.text = @"";
 
-    return cell;
+	return cell;
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return UITableViewCellEditingStyleDelete;
+	return UITableViewCellEditingStyleDelete;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        CKRecordID *recordId = [[BKHosts.all objectAtIndex:indexPath.row] iCloudRecordId];
-        if (recordId != nil) {
-            [[BKiCloudSyncHandler sharedHandler] deleteRecord:recordId ofType:BKiCloudRecordTypeHosts];
-        }
-        [BKHosts.all removeObjectAtIndex:indexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:@[ indexPath ] withRowAnimation:true];
-        [BKHosts saveHosts];
-        [self.tableView reloadData];
-    }
+	if (editingStyle == UITableViewCellEditingStyleDelete) {
+		CKRecordID *recordId = [[BKHosts.all objectAtIndex:indexPath.row] iCloudRecordId];
+		if (recordId != nil) {
+			[[BKiCloudSyncHandler sharedHandler] deleteRecord:recordId ofType:BKiCloudRecordTypeHosts];
+		}
+		[BKHosts.all removeObjectAtIndex:indexPath.row];
+		[self.tableView deleteRowsAtIndexPaths:@[ indexPath ] withRowAnimation:true];
+		[BKHosts saveHosts];
+		[self.tableView reloadData];
+	}
 }
 
 #pragma mark - Navigation
 
 - (IBAction)unwindFromCreate:(UIStoryboardSegue *)sender
 {
-    BKHostsDetailViewController *details = sender.sourceViewController;
-    if (!details.isExistingHost) {
-        NSIndexPath *newIdx = [NSIndexPath indexPathForRow:(BKHosts.count - 1) inSection:0];
-        [self.tableView insertRowsAtIndexPaths:@[ newIdx ] withRowAnimation:UITableViewRowAnimationBottom];
-    } else {
+	BKHostsDetailViewController *details = sender.sourceViewController;
+	if (!details.isExistingHost) {
+		NSIndexPath *newIdx = [NSIndexPath indexPathForRow:(BKHosts.count - 1) inSection:0];
+		[self.tableView insertRowsAtIndexPaths:@[ newIdx ] withRowAnimation:UITableViewRowAnimationBottom];
+	} else {
 
-        NSUInteger lastRow = [self.tableView numberOfRowsInSection:0];
-        if ([self.tableView indexPathForSelectedRow] && lastRow > [[self.tableView indexPathForSelectedRow] row]) {
-            [self.tableView reloadRowsAtIndexPaths:@[ [[self tableView] indexPathForSelectedRow] ] withRowAnimation:UITableViewRowAnimationBottom];
-        }
-    }
+		NSUInteger lastRow = [self.tableView numberOfRowsInSection:0];
+		if ([self.tableView indexPathForSelectedRow] && lastRow > [[self.tableView indexPathForSelectedRow] row]) {
+			[self.tableView reloadRowsAtIndexPaths:@[ [[self tableView] indexPathForSelectedRow] ] withRowAnimation:UITableViewRowAnimationBottom];
+		}
+	}
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([[segue identifier] isEqualToString:@"newHost"]) {
-        BKHostsDetailViewController *details = segue.destinationViewController;
-        NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
-        details.isExistingHost = YES;
-        BKHosts *bkHost = [BKHosts.all objectAtIndex:indexPath.row];
-        details.bkHost = bkHost;
-        return;
-    }
+	// Get the new view controller using [segue destinationViewController].
+	// Pass the selected object to the new view controller.
+	if ([[segue identifier] isEqualToString:@"newHost"]) {
+		BKHostsDetailViewController *details = segue.destinationViewController;
+		NSIndexPath *indexPath = [[self tableView] indexPathForSelectedRow];
+		details.isExistingHost = YES;
+		BKHosts *bkHost = [BKHosts.all objectAtIndex:indexPath.row];
+		details.bkHost = bkHost;
+		return;
+	}
 }
 
 - (void)dealloc
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 @end

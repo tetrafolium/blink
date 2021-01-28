@@ -72,119 +72,119 @@
 int
 rsa_public_encrypt(BIGNUM *out, BIGNUM *in, RSA *key)
 {
-    u_char *inbuf = NULL, *outbuf = NULL;
-    int len, ilen, olen, r = SSH_ERR_INTERNAL_ERROR;
+	u_char *inbuf = NULL, *outbuf = NULL;
+	int len, ilen, olen, r = SSH_ERR_INTERNAL_ERROR;
 
-    if (BN_num_bits(key->e) < 2 || !BN_is_odd(key->e))
-        return SSH_ERR_INVALID_ARGUMENT;
+	if (BN_num_bits(key->e) < 2 || !BN_is_odd(key->e))
+		return SSH_ERR_INVALID_ARGUMENT;
 
-    olen = BN_num_bytes(key->n);
-    if ((outbuf = malloc(olen)) == NULL) {
-        r = SSH_ERR_ALLOC_FAIL;
-        goto out;
-    }
+	olen = BN_num_bytes(key->n);
+	if ((outbuf = malloc(olen)) == NULL) {
+		r = SSH_ERR_ALLOC_FAIL;
+		goto out;
+	}
 
-    ilen = BN_num_bytes(in);
-    if ((inbuf = malloc(ilen)) == NULL) {
-        r = SSH_ERR_ALLOC_FAIL;
-        goto out;
-    }
-    BN_bn2bin(in, inbuf);
+	ilen = BN_num_bytes(in);
+	if ((inbuf = malloc(ilen)) == NULL) {
+		r = SSH_ERR_ALLOC_FAIL;
+		goto out;
+	}
+	BN_bn2bin(in, inbuf);
 
-    if ((len = RSA_public_encrypt(ilen, inbuf, outbuf, key,
-                                  RSA_PKCS1_PADDING)) <= 0) {
-        r = SSH_ERR_LIBCRYPTO_ERROR;
-        goto out;
-    }
+	if ((len = RSA_public_encrypt(ilen, inbuf, outbuf, key,
+	                              RSA_PKCS1_PADDING)) <= 0) {
+		r = SSH_ERR_LIBCRYPTO_ERROR;
+		goto out;
+	}
 
-    if (BN_bin2bn(outbuf, len, out) == NULL) {
-        r = SSH_ERR_LIBCRYPTO_ERROR;
-        goto out;
-    }
-    r = 0;
+	if (BN_bin2bn(outbuf, len, out) == NULL) {
+		r = SSH_ERR_LIBCRYPTO_ERROR;
+		goto out;
+	}
+	r = 0;
 
 out:
-    if (outbuf != NULL) {
-        memset_s(outbuf, olen, 0x0, olen);
-        //explicit_bzero(outbuf, olen);
-        free(outbuf);
-    }
-    if (inbuf != NULL) {
-        memset_s(inbuf, ilen, 0x0, ilen);
+	if (outbuf != NULL) {
+		memset_s(outbuf, olen, 0x0, olen);
+		//explicit_bzero(outbuf, olen);
+		free(outbuf);
+	}
+	if (inbuf != NULL) {
+		memset_s(inbuf, ilen, 0x0, ilen);
 //    explicit_bzero(inbuf, ilen);
-        free(inbuf);
-    }
-    return r;
+		free(inbuf);
+	}
+	return r;
 }
 
 int
 rsa_private_decrypt(BIGNUM *out, BIGNUM *in, RSA *key)
 {
-    u_char *inbuf = NULL, *outbuf = NULL;
-    int len, ilen, olen, r = SSH_ERR_INTERNAL_ERROR;
+	u_char *inbuf = NULL, *outbuf = NULL;
+	int len, ilen, olen, r = SSH_ERR_INTERNAL_ERROR;
 
-    olen = BN_num_bytes(key->n);
-    if ((outbuf = malloc(olen)) == NULL) {
-        r = SSH_ERR_ALLOC_FAIL;
-        goto out;
-    }
+	olen = BN_num_bytes(key->n);
+	if ((outbuf = malloc(olen)) == NULL) {
+		r = SSH_ERR_ALLOC_FAIL;
+		goto out;
+	}
 
-    ilen = BN_num_bytes(in);
-    if ((inbuf = malloc(ilen)) == NULL) {
-        r = SSH_ERR_ALLOC_FAIL;
-        goto out;
-    }
-    BN_bn2bin(in, inbuf);
+	ilen = BN_num_bytes(in);
+	if ((inbuf = malloc(ilen)) == NULL) {
+		r = SSH_ERR_ALLOC_FAIL;
+		goto out;
+	}
+	BN_bn2bin(in, inbuf);
 
-    if ((len = RSA_private_decrypt(ilen, inbuf, outbuf, key,
-                                   RSA_PKCS1_PADDING)) <= 0) {
-        r = SSH_ERR_LIBCRYPTO_ERROR;
-        goto out;
-    } else if (BN_bin2bn(outbuf, len, out) == NULL) {
-        r = SSH_ERR_LIBCRYPTO_ERROR;
-        goto out;
-    }
-    r = 0;
+	if ((len = RSA_private_decrypt(ilen, inbuf, outbuf, key,
+	                               RSA_PKCS1_PADDING)) <= 0) {
+		r = SSH_ERR_LIBCRYPTO_ERROR;
+		goto out;
+	} else if (BN_bin2bn(outbuf, len, out) == NULL) {
+		r = SSH_ERR_LIBCRYPTO_ERROR;
+		goto out;
+	}
+	r = 0;
 out:
-    if (outbuf != NULL) {
-        memset_s(outbuf, olen, 0x0, olen);
+	if (outbuf != NULL) {
+		memset_s(outbuf, olen, 0x0, olen);
 //    explicit_bzero(outbuf, olen);
-        free(outbuf);
-    }
-    if (inbuf != NULL) {
-        memset_s(inbuf, ilen, 0x0, ilen);
+		free(outbuf);
+	}
+	if (inbuf != NULL) {
+		memset_s(inbuf, ilen, 0x0, ilen);
 //    explicit_bzero(inbuf, ilen);
-        free(inbuf);
-    }
-    return r;
+		free(inbuf);
+	}
+	return r;
 }
 
 /* calculate p-1 and q-1 */
 int
 rsa_generate_additional_parameters(RSA *rsa)
 {
-    BIGNUM *aux = NULL;
-    BN_CTX *ctx = NULL;
-    int r;
+	BIGNUM *aux = NULL;
+	BN_CTX *ctx = NULL;
+	int r;
 
-    if ((ctx = BN_CTX_new()) == NULL)
-        return SSH_ERR_ALLOC_FAIL;
-    if ((aux = BN_new()) == NULL) {
-        r = SSH_ERR_ALLOC_FAIL;
-        goto out;
-    }
+	if ((ctx = BN_CTX_new()) == NULL)
+		return SSH_ERR_ALLOC_FAIL;
+	if ((aux = BN_new()) == NULL) {
+		r = SSH_ERR_ALLOC_FAIL;
+		goto out;
+	}
 
-    if ((BN_sub(aux, rsa->q, BN_value_one()) == 0) ||
-            (BN_mod(rsa->dmq1, rsa->d, aux, ctx) == 0) ||
-            (BN_sub(aux, rsa->p, BN_value_one()) == 0) ||
-            (BN_mod(rsa->dmp1, rsa->d, aux, ctx) == 0)) {
-        r = SSH_ERR_LIBCRYPTO_ERROR;
-        goto out;
-    }
-    r = 0;
+	if ((BN_sub(aux, rsa->q, BN_value_one()) == 0) ||
+	    (BN_mod(rsa->dmq1, rsa->d, aux, ctx) == 0) ||
+	    (BN_sub(aux, rsa->p, BN_value_one()) == 0) ||
+	    (BN_mod(rsa->dmp1, rsa->d, aux, ctx) == 0)) {
+		r = SSH_ERR_LIBCRYPTO_ERROR;
+		goto out;
+	}
+	r = 0;
 out:
-    BN_clear_free(aux);
-    BN_CTX_free(ctx);
-    return r;
+	BN_clear_free(aux);
+	BN_CTX_free(ctx);
+	return r;
 }
 

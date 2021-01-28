@@ -45,14 +45,14 @@
  * of the key affect all cipherbits.
  */
 
-#define BLF_N	16			/* Number of Subkeys */
-#define BLF_MAXKEYLEN ((BLF_N-2)*4)	/* 448 bits */
-#define BLF_MAXUTILIZED ((BLF_N+2)*4)	/* 576 bits */
+#define BLF_N   16                      /* Number of Subkeys */
+#define BLF_MAXKEYLEN ((BLF_N-2)*4)     /* 448 bits */
+#define BLF_MAXUTILIZED ((BLF_N+2)*4)   /* 576 bits */
 
 /* Blowfish context */
 typedef struct BlowfishContext {
-    uint32_t S[4][256];	/* S-Boxes */
-    uint32_t P[BLF_N + 2];	/* Subkeys */
+	uint32_t S[4][256]; /* S-Boxes */
+	uint32_t P[BLF_N + 2];  /* Subkeys */
 } blf_ctx;
 
 /* Raw access to customized Blowfish
@@ -66,7 +66,7 @@ void Blowfish_decipher(blf_ctx *, uint32_t *, uint32_t *);
 void Blowfish_initstate(blf_ctx *);
 void Blowfish_expand0state(blf_ctx *, const uint8_t *, uint16_t);
 void Blowfish_expandstate
-(blf_ctx *, const uint8_t *, uint16_t, const uint8_t *, uint16_t);
+        (blf_ctx *, const uint8_t *, uint16_t, const uint8_t *, uint16_t);
 
 /* Standard Blowfish */
 

@@ -49,136 +49,136 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-        [self performSegueWithIdentifier:@"unwindFromAddFont" sender:self];
-        [BKSettingsFileDownloader cancelRunningDownloads];
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    }
-    [super viewWillDisappear:animated];
+	if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+		[self performSegueWithIdentifier:@"unwindFromAddFont" sender:self];
+		[BKSettingsFileDownloader cancelRunningDownloads];
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	}
+	[super viewWillDisappear:animated];
 }
 
 #pragma mark - Validations
 
 - (IBAction)urlTextDidChange:(id)sender
 {
-    NSURL *url = [NSURL URLWithString:_urlTextField.text];
-    if (url && url.scheme && url.host) {
-        self.importButton.enabled = YES;
-    } else {
-        self.importButton.enabled = NO;
-    }
+	NSURL *url = [NSURL URLWithString:_urlTextField.text];
+	if (url && url.scheme && url.host) {
+		self.importButton.enabled = YES;
+	} else {
+		self.importButton.enabled = NO;
+	}
 }
 
 - (IBAction)nameFieldDidChange:(id)sender
 {
-    if (self.nameTextField.text.length > 0 && _downloadCompleted) {
-        self.navigationItem.rightBarButtonItem.enabled = YES;
-    } else {
-        self.navigationItem.rightBarButtonItem.enabled = NO;
-    }
+	if (self.nameTextField.text.length > 0 && _downloadCompleted) {
+		self.navigationItem.rightBarButtonItem.enabled = YES;
+	} else {
+		self.navigationItem.rightBarButtonItem.enabled = NO;
+	}
 }
 
 
 - (IBAction)importButtonClicked:(id)sender
 {
-    NSString *fontUrl = _urlTextField.text;
-    if (fontUrl.length > 4 && [[fontUrl substringFromIndex:[fontUrl length] - 4] isEqualToString:@".css"]) {
-        if ([fontUrl rangeOfString:@"github.com"].location != NSNotFound && [fontUrl rangeOfString:@"/raw/"].location == NSNotFound) {
-            // Replace HTML versions of fonts with the raw version
-            fontUrl = [fontUrl stringByReplacingOccurrencesOfString:@"/blob/" withString:@"/raw/"];
-        }
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        [self configureImportButtonForCancel];
-        self.urlTextField.enabled = NO;
-        [BKSettingsFileDownloader downloadFileAtUrl:fontUrl
-                                  expectedMIMETypes:@[@"text/css", @"text/plain"]
-                                 withCompletionHandler:^(NSData *fileData, NSError *error) {
-                                     if (error == nil) {
-                                         [self performSelectorOnMainThread:@selector(downloadCompletedWithFilePath:) withObject:fileData waitUntilDone:NO];
-                                     } else {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Download error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-                [alertController addAction:ok];
-                dispatch_async(dispatch_get_main_queue(), ^ {
-                    [self presentViewController:alertController animated:YES completion:nil];
-                    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-                    self.urlTextField.enabled = YES;
-                    [self reconfigureImportButton];
-                });
-            }
-        }];
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"URL error" message:@"Fonts are assigned using valid .css files. Please open the gallery for more information." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }
+	NSString *fontUrl = _urlTextField.text;
+	if (fontUrl.length > 4 && [[fontUrl substringFromIndex:[fontUrl length] - 4] isEqualToString:@".css"]) {
+		if ([fontUrl rangeOfString:@"github.com"].location != NSNotFound && [fontUrl rangeOfString:@"/raw/"].location == NSNotFound) {
+			// Replace HTML versions of fonts with the raw version
+			fontUrl = [fontUrl stringByReplacingOccurrencesOfString:@"/blob/" withString:@"/raw/"];
+		}
+		[UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+		[self configureImportButtonForCancel];
+		self.urlTextField.enabled = NO;
+		[BKSettingsFileDownloader downloadFileAtUrl:fontUrl
+		 expectedMIMETypes:@[@"text/css", @"text/plain"]
+		 withCompletionHandler:^(NSData *fileData, NSError *error) {
+		         if (error == nil) {
+		                 [self performSelectorOnMainThread:@selector(downloadCompletedWithFilePath:) withObject:fileData waitUntilDone:NO];
+			 } else {
+		                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Download error" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+		                 UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+		                 [alertController addAction:ok];
+		                 dispatch_async(dispatch_get_main_queue(), ^ {
+							[self presentViewController:alertController animated:YES completion:nil];
+							[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+							self.urlTextField.enabled = YES;
+							[self reconfigureImportButton];
+						});
+			 }
+		 }];
+	} else {
+		UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"URL error" message:@"Fonts are assigned using valid .css files. Please open the gallery for more information." preferredStyle:UIAlertControllerStyleAlert];
+		UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+		[alertController addAction:ok];
+		[self presentViewController:alertController animated:YES completion:nil];
+	}
 }
 
 - (void)downloadCompletedWithFilePath:(NSData *)fileData
 {
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self.importButton setTitle:@"Download Complete" forState:UIControlStateNormal];
-    self.importButton.enabled = NO;
-    _downloadCompleted = YES;
-    _tempFileData = fileData;
-    [self nameFieldDidChange:self.nameTextField];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	[self.importButton setTitle:@"Download Complete" forState:UIControlStateNormal];
+	self.importButton.enabled = NO;
+	_downloadCompleted = YES;
+	_tempFileData = fileData;
+	[self nameFieldDidChange:self.nameTextField];
 }
 
 - (IBAction)didTapOnSave:(id)sender
 {
-    if ([BKFont withName:self.nameTextField.text]) {
-        //Error
-        [self showErrorMsg:@"Cannot have two fonts with the same name"];
-    } else {
-        NSError *error;
-        [BKFont saveResource:self.nameTextField.text withContent:_tempFileData error:&error];
+	if ([BKFont withName:self.nameTextField.text]) {
+		//Error
+		[self showErrorMsg:@"Cannot have two fonts with the same name"];
+	} else {
+		NSError *error;
+		[BKFont saveResource:self.nameTextField.text withContent:_tempFileData error:&error];
 
-        if (error) {
-            [self showErrorMsg:error.localizedDescription];
-        }
-        [self.navigationController popViewControllerAnimated:YES];
-    }
+		if (error) {
+			[self showErrorMsg:error.localizedDescription];
+		}
+		[self.navigationController popViewControllerAnimated:YES];
+	}
 }
 
 - (IBAction)cancelButtonTapped:(id)sender
 {
-    [BKSettingsFileDownloader cancelRunningDownloads];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    self.urlTextField.enabled = YES;
-    [self reconfigureImportButton];
+	[BKSettingsFileDownloader cancelRunningDownloads];
+	[UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+	self.urlTextField.enabled = YES;
+	[self reconfigureImportButton];
 }
 
 
 - (void)configureImportButtonForCancel
 {
-    [self.importButton setTitle:@"Cancel download" forState:UIControlStateNormal];
-    [self.importButton setTintColor:[UIColor redColor]];
-    [self.importButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+	[self.importButton setTitle:@"Cancel download" forState:UIControlStateNormal];
+	[self.importButton setTintColor:[UIColor redColor]];
+	[self.importButton addTarget:self action:@selector(cancelButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)reconfigureImportButton
 {
-    [self.importButton setTitle:@"Import" forState:UIControlStateNormal];
-    [self.importButton setTintColor:[UIColor blueColor]];
-    [self.importButton addTarget:self action:@selector(importButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+	[self.importButton setTitle:@"Import" forState:UIControlStateNormal];
+	[self.importButton setTintColor:[UIColor blueColor]];
+	[self.importButton addTarget:self action:@selector(importButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)showErrorMsg:(NSString *)errorMsg
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Themes error" message:errorMsg preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-    [alertController addAction:ok];
-    [self presentViewController:alertController animated:YES completion:nil];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Themes error" message:errorMsg preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+	[alertController addAction:ok];
+	[self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *clickedCell = [self.tableView cellForRowAtIndexPath:indexPath];
+	UITableViewCell *clickedCell = [self.tableView cellForRowAtIndexPath:indexPath];
 
-    if ([clickedCell isEqual:self.galleryLinkCell]) {
-        [BKLinkActions sendToGitHub:@"fonts"];
-    }
+	if ([clickedCell isEqual:self.galleryLinkCell]) {
+		[BKLinkActions sendToGitHub:@"fonts"];
+	}
 }
 
 

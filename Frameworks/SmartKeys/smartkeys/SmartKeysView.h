@@ -32,8 +32,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    SKNonModifierButtonTypeNormal,
-    SKNonModifierButtonTypeAlternate
+	SKNonModifierButtonTypeNormal,
+	SKNonModifierButtonTypeAlternate
 } SKNonModifierButtonType;
 
 extern NSString *const KbdLeftArrowKey;
@@ -43,9 +43,9 @@ extern NSString *const KbdDownArrowKey;
 extern NSString *const KbdEscKey;
 extern NSString *const KbdTabKey;
 
-typedef NS_OPTIONS(NSInteger, KbdModifiers) {
-    KbdCtrlModifier = 1 << 0,
-    KbdAltModifier
+typedef NS_OPTIONS (NSInteger, KbdModifiers) {
+	KbdCtrlModifier = 1 << 0,
+	KbdAltModifier
 };
 
 

@@ -37,138 +37,138 @@ NSString *__documentsPath = nil;
 
 + (NSString *)documents
 {
-    if (__documentsPath == nil) {
-        __documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    }
-    return __documentsPath;
+	if (__documentsPath == nil) {
+		__documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+	}
+	return __documentsPath;
 }
 
 + (NSURL *)documentsURL
 {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
+	return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
 }
 
 NSString *__iCloudsDriveDocumentsPath = nil;
 
 + (NSString *)iCloudDriveDocuments
 {
-    if (__iCloudsDriveDocumentsPath == nil) {
-        NSFileManager *fm = [NSFileManager defaultManager];
-        NSString *path = [[fm URLForUbiquityContainerIdentifier:@"iCloud.com.carloscabanero.blinkshell"] URLByAppendingPathComponent:@"Documents"].path;
-        BOOL isDir = NO;
-        if (![fm fileExistsAtPath:path isDirectory:&isDir]) {
-            NSError *error = nil;
-            if (![fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error]) {
-                NSLog(@"Error: %@", error);
-            }
-        }
-        __iCloudsDriveDocumentsPath = path;
-    }
+	if (__iCloudsDriveDocumentsPath == nil) {
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSString *path = [[fm URLForUbiquityContainerIdentifier:@"iCloud.com.carloscabanero.blinkshell"] URLByAppendingPathComponent:@"Documents"].path;
+		BOOL isDir = NO;
+		if (![fm fileExistsAtPath:path isDirectory:&isDir]) {
+			NSError *error = nil;
+			if (![fm createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error]) {
+				NSLog(@"Error: %@", error);
+			}
+		}
+		__iCloudsDriveDocumentsPath = path;
+	}
 
-    return __iCloudsDriveDocumentsPath;
+	return __iCloudsDriveDocumentsPath;
 }
 
 + (void)linkICloudDriveIfNeeded
 {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSString *icloudPath = [[self documents] stringByAppendingPathComponent:@"iCloud"];
-    if ([fm fileExistsAtPath:icloudPath isDirectory:nil]) {
-        return;
-    }
+	NSFileManager *fm = [NSFileManager defaultManager];
+	NSString *icloudPath = [[self documents] stringByAppendingPathComponent:@"iCloud"];
+	if ([fm fileExistsAtPath:icloudPath isDirectory:nil]) {
+		return;
+	}
 
-    NSError *error = nil;
+	NSError *error = nil;
 
-    if (
-        ![fm createSymbolicLinkAtPath:icloudPath withDestinationPath:[self iCloudDriveDocuments] error:&error]
-    ) {
-        NSLog(@"Error: %@", error);
-    };
+	if (
+		![fm createSymbolicLinkAtPath:icloudPath withDestinationPath:[self iCloudDriveDocuments] error:&error]
+		) {
+		NSLog(@"Error: %@", error);
+	};
 }
 
 + (NSString *)blink
 {
-    NSString *dotBlink = [[self documents] stringByAppendingPathComponent:@".blink"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDir = NO;
-    if ([fileManager fileExistsAtPath:dotBlink isDirectory:&isDir]) {
-        if (isDir) {
-            return dotBlink;
-        }
+	NSString *dotBlink = [[self documents] stringByAppendingPathComponent:@".blink"];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	BOOL isDir = NO;
+	if ([fileManager fileExistsAtPath:dotBlink isDirectory:&isDir]) {
+		if (isDir) {
+			return dotBlink;
+		}
 
-        [fileManager removeItemAtPath:dotBlink error:nil];
-    }
+		[fileManager removeItemAtPath:dotBlink error:nil];
+	}
 
-    [fileManager createDirectoryAtPath:dotBlink withIntermediateDirectories:YES attributes:@ {} error:nil];
-    return dotBlink;
+	[fileManager createDirectoryAtPath:dotBlink withIntermediateDirectories:YES attributes:@{} error:nil];
+	return dotBlink;
 }
 
 + (NSString *)ssh
 {
-    NSString *dotSSH = [[self documents] stringByAppendingPathComponent:@".ssh"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDir = NO;
-    if ([fileManager fileExistsAtPath:dotSSH isDirectory:&isDir]) {
-        if (isDir) {
-            return dotSSH;
-        }
+	NSString *dotSSH = [[self documents] stringByAppendingPathComponent:@".ssh"];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	BOOL isDir = NO;
+	if ([fileManager fileExistsAtPath:dotSSH isDirectory:&isDir]) {
+		if (isDir) {
+			return dotSSH;
+		}
 
-        [fileManager removeItemAtPath:dotSSH error:nil];
-    }
-    [fileManager createDirectoryAtPath:dotSSH withIntermediateDirectories:YES attributes:@ {} error:nil];
-    return dotSSH;
+		[fileManager removeItemAtPath:dotSSH error:nil];
+	}
+	[fileManager createDirectoryAtPath:dotSSH withIntermediateDirectories:YES attributes:@{} error:nil];
+	return dotSSH;
 }
 
 
 + (NSURL *)blinkURL
 {
-    return [NSURL fileURLWithPath:[self blink]];
+	return [NSURL fileURLWithPath:[self blink]];
 }
 
 + (NSString *)blinkKeysFile
 {
-    return [[self blink] stringByAppendingPathComponent:@"keys"];
+	return [[self blink] stringByAppendingPathComponent:@"keys"];
 }
 
 + (NSURL *)blinkKBConfigURL
 {
-    return [[self blinkURL] URLByAppendingPathComponent:@"kb.json"];
+	return [[self blinkURL] URLByAppendingPathComponent:@"kb.json"];
 }
 
 
 + (NSString *)blinkHostsFile
 {
-    return [[self blink] stringByAppendingPathComponent:@"hosts"];
+	return [[self blink] stringByAppendingPathComponent:@"hosts"];
 }
 
 + (NSString *)blinkSyncItemsFile
 {
-    return [[self blink] stringByAppendingPathComponent:@"syncItems"];
+	return [[self blink] stringByAppendingPathComponent:@"syncItems"];
 }
 
 + (NSString *)blinkProfileFile
 {
-    return [[self blink] stringByAppendingPathComponent:@"profile"];
+	return [[self blink] stringByAppendingPathComponent:@"profile"];
 }
 
 
 + (NSString *)historyFile
 {
-    return [[self blink] stringByAppendingPathComponent:@"history.txt"];
+	return [[self blink] stringByAppendingPathComponent:@"history.txt"];
 }
 
 + (NSURL *)historyURL
 {
-    return [NSURL fileURLWithPath:[self historyFile]];
+	return [NSURL fileURLWithPath:[self historyFile]];
 }
 
 + (NSString *)knownHostsFile
 {
-    return [[self ssh] stringByAppendingPathComponent:@"known_hosts"];
+	return [[self ssh] stringByAppendingPathComponent:@"known_hosts"];
 }
 
 + (NSString *)defaultsFile
 {
-    return [[self blink] stringByAppendingPathComponent:@"defaults"];
+	return [[self blink] stringByAppendingPathComponent:@"defaults"];
 }
 
 @end

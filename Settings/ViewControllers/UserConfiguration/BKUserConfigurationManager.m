@@ -44,53 +44,53 @@ NSString *const BKUserConfigChangedNotification = @"BKUserConfigChangedNotificat
 
 + (void)setUserSettingsValue:(BOOL)value forKey:(NSString *)key
 {
-    NSMutableDictionary *userSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userSettings"]];
-    if (userSettings == nil) {
-        userSettings = [NSMutableDictionary dictionary];
-    }
-    [userSettings setObject:[NSNumber numberWithBool:value] forKey:key];
-    [[NSUserDefaults standardUserDefaults] setObject:userSettings forKey:@"userSettings"];
+	NSMutableDictionary *userSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] objectForKey:@"userSettings"]];
+	if (userSettings == nil) {
+		userSettings = [NSMutableDictionary dictionary];
+	}
+	[userSettings setObject:[NSNumber numberWithBool:value] forKey:key];
+	[[NSUserDefaults standardUserDefaults] setObject:userSettings forKey:@"userSettings"];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:BKUserConfigChangedNotification object:nil];
+	[[NSNotificationCenter defaultCenter] postNotificationName:BKUserConfigChangedNotification object:nil];
 }
 
 + (BOOL)userSettingsValueForKey:(NSString *)key
 {
-    NSDictionary *userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:@"userSettings"];
-    if (userSettings != nil) {
-        if ([userSettings objectForKey:key]) {
-            NSNumber *value = [userSettings objectForKey:key];
-            return value.boolValue;
-        } else {
-            return NO;
-        }
-    } else {
-        return NO;
-    }
-    return NO;
+	NSDictionary *userSettings = [[NSUserDefaults standardUserDefaults] objectForKey:@"userSettings"];
+	if (userSettings != nil) {
+		if ([userSettings objectForKey:key]) {
+			NSNumber *value = [userSettings objectForKey:key];
+			return value.boolValue;
+		} else {
+			return NO;
+		}
+	} else {
+		return NO;
+	}
+	return NO;
 }
 
 
 + (NSString *)UIKeyModifiersToString:(UIKeyModifierFlags) flags
 {
-    NSMutableArray *components = [[NSMutableArray alloc] init];
+	NSMutableArray *components = [[NSMutableArray alloc] init];
 
-    if ((flags & UIKeyModifierShift) == UIKeyModifierShift) {
-        [components addObject:@"⇧"];
-    }
+	if ((flags & UIKeyModifierShift) == UIKeyModifierShift) {
+		[components addObject:@"⇧"];
+	}
 
-    if ((flags & UIKeyModifierControl) == UIKeyModifierControl) {
-        [components addObject:@"⌃"];
-    }
+	if ((flags & UIKeyModifierControl) == UIKeyModifierControl) {
+		[components addObject:@"⌃"];
+	}
 
-    if ((flags & UIKeyModifierAlternate) == UIKeyModifierAlternate) {
-        [components addObject:@"⌥"];
-    }
+	if ((flags & UIKeyModifierAlternate) == UIKeyModifierAlternate) {
+		[components addObject:@"⌥"];
+	}
 
-    if ((flags & UIKeyModifierCommand) == UIKeyModifierCommand) {
-        [components addObject:@"⌘"];
-    }
+	if ((flags & UIKeyModifierCommand) == UIKeyModifierCommand) {
+		[components addObject:@"⌘"];
+	}
 
-    return [components componentsJoinedByString:@""];
+	return [components componentsJoinedByString:@""];
 }
 @end

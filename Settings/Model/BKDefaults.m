@@ -45,262 +45,262 @@ NSString *const BKAppearanceChanged = @"BKAppearanceChanged";
 
 - (id)initWithCoder:(NSCoder *)coder
 {
-    _themeName = [coder decodeObjectForKey:@"themeName"];
-    _fontName = [coder decodeObjectForKey:@"fontName"];
-    _fontSize = [coder decodeObjectForKey:@"fontSize"];
-    _externalDisplayFontSize = [coder decodeObjectForKey:@"externalDisplayFontSize"];
-    _defaultUser = [coder decodeObjectForKey:@"defaultUser"];
-    _cursorBlink = [coder decodeBoolForKey:@"cursorBlink"];
-    _enableBold = [coder decodeIntegerForKey:@"enableBold"];
-    _boldAsBright = [coder decodeBoolForKey:@"boldAsBright"];
-    _keyboardStyle = (BKKeyboardStyle)[coder decodeIntegerForKey:@"keyboardStyle"];
-    _keycasts = [coder decodeBoolForKey:@"keycasts"];
-    _alternateAppIcon = [coder decodeBoolForKey:@"alternateAppIcon"];
-    _layoutMode = (BKLayoutMode)[coder decodeIntegerForKey:@"layoutMode"];
-    _overscanCompensation = (BKOverscanCompensation)[coder decodeIntegerForKey:@"overscanCompensation"];
-    _xCallBackURLEnabled = [coder decodeBoolForKey:@"xCallBackURLEnabled"];
-    _xCallBackURLKey = [coder decodeObjectForKey:@"xCallBackURLKey"];
-    _disableCustomKeyboards = [coder decodeBoolForKey:@"disableCustomKeyboards"];
-    return self;
+	_themeName = [coder decodeObjectForKey:@"themeName"];
+	_fontName = [coder decodeObjectForKey:@"fontName"];
+	_fontSize = [coder decodeObjectForKey:@"fontSize"];
+	_externalDisplayFontSize = [coder decodeObjectForKey:@"externalDisplayFontSize"];
+	_defaultUser = [coder decodeObjectForKey:@"defaultUser"];
+	_cursorBlink = [coder decodeBoolForKey:@"cursorBlink"];
+	_enableBold = [coder decodeIntegerForKey:@"enableBold"];
+	_boldAsBright = [coder decodeBoolForKey:@"boldAsBright"];
+	_keyboardStyle = (BKKeyboardStyle)[coder decodeIntegerForKey:@"keyboardStyle"];
+	_keycasts = [coder decodeBoolForKey:@"keycasts"];
+	_alternateAppIcon = [coder decodeBoolForKey:@"alternateAppIcon"];
+	_layoutMode = (BKLayoutMode)[coder decodeIntegerForKey:@"layoutMode"];
+	_overscanCompensation = (BKOverscanCompensation)[coder decodeIntegerForKey:@"overscanCompensation"];
+	_xCallBackURLEnabled = [coder decodeBoolForKey:@"xCallBackURLEnabled"];
+	_xCallBackURLKey = [coder decodeObjectForKey:@"xCallBackURLKey"];
+	_disableCustomKeyboards = [coder decodeBoolForKey:@"disableCustomKeyboards"];
+	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:_themeName forKey:@"themeName"];
-    [encoder encodeObject:_fontName forKey:@"fontName"];
-    [encoder encodeObject:_fontSize forKey:@"fontSize"];
-    [encoder encodeObject:_externalDisplayFontSize forKey:@"externalDisplayFontSize"];
-    [encoder encodeObject:_defaultUser forKey:@"defaultUser"];
-    [encoder encodeBool:_cursorBlink forKey:@"cursorBlink"];
-    [encoder encodeInteger:_enableBold forKey:@"enableBold"];
-    [encoder encodeBool:_boldAsBright forKey:@"boldAsBright"];
-    [encoder encodeInteger: _keyboardStyle forKey:@"keyboardStyle"];
-    [encoder encodeBool: _keycasts forKey:@"keycasts"];
-    [encoder encodeBool:_alternateAppIcon forKey:@"alternateAppIcon"];
-    [encoder encodeInteger:_layoutMode forKey:@"layoutMode"];
-    [encoder encodeInteger:_overscanCompensation forKey:@"overscanCompensation"];
-    [encoder encodeBool:_xCallBackURLEnabled forKey:@"xCallBackURLEnabled"];
-    [encoder encodeObject:_xCallBackURLKey forKey:@"xCallBackURLKey"];
-    [encoder encodeBool:_disableCustomKeyboards forKey:@"disableCustomKeyboards"];
+	[encoder encodeObject:_themeName forKey:@"themeName"];
+	[encoder encodeObject:_fontName forKey:@"fontName"];
+	[encoder encodeObject:_fontSize forKey:@"fontSize"];
+	[encoder encodeObject:_externalDisplayFontSize forKey:@"externalDisplayFontSize"];
+	[encoder encodeObject:_defaultUser forKey:@"defaultUser"];
+	[encoder encodeBool:_cursorBlink forKey:@"cursorBlink"];
+	[encoder encodeInteger:_enableBold forKey:@"enableBold"];
+	[encoder encodeBool:_boldAsBright forKey:@"boldAsBright"];
+	[encoder encodeInteger: _keyboardStyle forKey:@"keyboardStyle"];
+	[encoder encodeBool: _keycasts forKey:@"keycasts"];
+	[encoder encodeBool:_alternateAppIcon forKey:@"alternateAppIcon"];
+	[encoder encodeInteger:_layoutMode forKey:@"layoutMode"];
+	[encoder encodeInteger:_overscanCompensation forKey:@"overscanCompensation"];
+	[encoder encodeBool:_xCallBackURLEnabled forKey:@"xCallBackURLEnabled"];
+	[encoder encodeObject:_xCallBackURLKey forKey:@"xCallBackURLKey"];
+	[encoder encodeBool:_disableCustomKeyboards forKey:@"disableCustomKeyboards"];
 }
 
 + (void)loadDefaults
 {
-    // Load IDs from file
-    defaults = [NSKeyedUnarchiver unarchiveObjectWithFile:[BlinkPaths defaultsFile]];
-    if (!defaults) {
-        // Initialize the structure if it doesn't exist
-        defaults = [[BKDefaults alloc] init];
-    }
+	// Load IDs from file
+	defaults = [NSKeyedUnarchiver unarchiveObjectWithFile:[BlinkPaths defaultsFile]];
+	if (!defaults) {
+		// Initialize the structure if it doesn't exist
+		defaults = [[BKDefaults alloc] init];
+	}
 
-    if (defaults.layoutMode == BKLayoutModeDefault) {
-        defaults.layoutMode = [LayoutManager deviceDefaultLayoutMode];
-    }
+	if (defaults.layoutMode == BKLayoutModeDefault) {
+		defaults.layoutMode = [LayoutManager deviceDefaultLayoutMode];
+	}
 
-    if (!defaults.fontName) {
-        if ([BKFont withName:@"Pragmata Pro Mono"] != nil) {
-            [defaults setFontName:@"Pragmata Pro Mono"];
-        } else {
-            [defaults setFontName:@"Source Code Pro"];
-        }
-    }
-    if (!defaults.themeName) {
-        [defaults setThemeName:@"Default"];
-    }
+	if (!defaults.fontName) {
+		if ([BKFont withName:@"Pragmata Pro Mono"] != nil) {
+			[defaults setFontName:@"Pragmata Pro Mono"];
+		} else {
+			[defaults setFontName:@"Source Code Pro"];
+		}
+	}
+	if (!defaults.themeName) {
+		[defaults setThemeName:@"Default"];
+	}
 
-    if (!defaults.fontSize) {
-        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            [defaults setFontSize:[NSNumber numberWithInt:18]];
-        } else {
-            [defaults setFontSize:[NSNumber numberWithInt:10]];
-        }
-    }
-    if (!defaults.externalDisplayFontSize) {
-        [defaults setExternalDisplayFontSize:[NSNumber numberWithInt:24]];
-    }
+	if (!defaults.fontSize) {
+		if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[defaults setFontSize:[NSNumber numberWithInt:18]];
+		} else {
+			[defaults setFontSize:[NSNumber numberWithInt:10]];
+		}
+	}
+	if (!defaults.externalDisplayFontSize) {
+		[defaults setExternalDisplayFontSize:[NSNumber numberWithInt:24]];
+	}
 
-    if(!defaults.defaultUser || ![[defaults.defaultUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
-        [defaults setDefaultUser:[UIDevice getInfoTypeFromDeviceName:BKDeviceInfoTypeUserName]];
-    }
+	if(!defaults.defaultUser || ![[defaults.defaultUser stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]) {
+		[defaults setDefaultUser:[UIDevice getInfoTypeFromDeviceName:BKDeviceInfoTypeUserName]];
+	}
 }
 
 + (BOOL)saveDefaults
 {
-    // Save IDs to file
-    return [NSKeyedArchiver archiveRootObject:defaults toFile:[BlinkPaths defaultsFile]];
+	// Save IDs to file
+	return [NSKeyedArchiver archiveRootObject:defaults toFile:[BlinkPaths defaultsFile]];
 }
 
 + (void)setCursorBlink:(BOOL)state
 {
-    defaults.cursorBlink = state;
+	defaults.cursorBlink = state;
 }
 
 + (void)setBoldAsBright:(BOOL)state
 {
-    defaults.boldAsBright = state;
+	defaults.boldAsBright = state;
 }
 
 + (void)setAlternateAppIcon:(BOOL)state
 {
-    defaults.alternateAppIcon = state;
+	defaults.alternateAppIcon = state;
 }
 
 + (void)setKeycasts:(BOOL)state {
-    defaults.keycasts = state;
+	defaults.keycasts = state;
 }
 
 + (void)setEnableBold:(NSUInteger)state
 {
-    defaults.enableBold = state;
+	defaults.enableBold = state;
 }
 
 + (void)setFontName:(NSString *)fontName
 {
-    defaults.fontName = fontName;
+	defaults.fontName = fontName;
 }
 
 + (void)setThemeName:(NSString *)themeName
 {
-    defaults.themeName = themeName;
+	defaults.themeName = themeName;
 }
 
 + (void)setFontSize:(NSNumber *)fontSize
 {
-    defaults.fontSize = fontSize;
+	defaults.fontSize = fontSize;
 }
 
 + (void)setExternalDisplayFontSize:(NSNumber *)fontSize
 {
-    defaults.externalDisplayFontSize = fontSize;
+	defaults.externalDisplayFontSize = fontSize;
 }
 
 + (void)setDefaultUserName:(NSString*)name
 {
-    defaults.defaultUser = name;
+	defaults.defaultUser = name;
 }
 
 + (void)setLayoutMode:(BKLayoutMode)mode {
-    defaults.layoutMode = mode;
+	defaults.layoutMode = mode;
 }
 
 + (void)setOversanCompensation:(BKOverscanCompensation)value {
-    defaults.overscanCompensation = value;
+	defaults.overscanCompensation = value;
 }
 
 + (void)setKeyboardStyle:(BKKeyboardStyle)value {
-    defaults.keyboardStyle = value;
+	defaults.keyboardStyle = value;
 }
 
 + (void)setXCallBackURLEnabled:(BOOL)value {
-    defaults.xCallBackURLEnabled = value;
+	defaults.xCallBackURLEnabled = value;
 }
 
 + (void)setDisableCustomKeyboards:(BOOL)state {
-    defaults.disableCustomKeyboards = state;
+	defaults.disableCustomKeyboards = state;
 }
 
 + (void)setXCallBackURLKey:(NSString *)key {
-    defaults.xCallBackURLKey = key;
+	defaults.xCallBackURLKey = key;
 }
 
 + (NSString *)selectedFontName
 {
-    return defaults.fontName;
+	return defaults.fontName;
 }
 + (NSString *)selectedThemeName
 {
-    return defaults.themeName;
+	return defaults.themeName;
 }
 
 + (NSNumber *)selectedFontSize
 {
-    return defaults.fontSize;
+	return defaults.fontSize;
 }
 
 + (NSNumber *)selectedExternalDisplayFontSize
 {
-    return defaults.externalDisplayFontSize;
+	return defaults.externalDisplayFontSize;
 }
 
 
 + (BOOL)isCursorBlink
 {
-    return defaults.cursorBlink;
+	return defaults.cursorBlink;
 }
 
 + (NSUInteger)enableBold
 {
-    return defaults.enableBold;
+	return defaults.enableBold;
 }
 
 + (BOOL)isBoldAsBright
 {
-    return defaults.boldAsBright;
+	return defaults.boldAsBright;
 }
 
 + (BOOL)isAlternateAppIcon
 {
-    return defaults.alternateAppIcon;
+	return defaults.alternateAppIcon;
 }
 
 + (BOOL)isKeyCastsOn
 {
-    return defaults.keycasts;
+	return defaults.keycasts;
 }
 
 + (NSString*)defaultUserName
 {
-    return defaults.defaultUser;
+	return defaults.defaultUser;
 }
 
 + (BKLayoutMode)layoutMode
 {
-    return defaults.layoutMode;
+	return defaults.layoutMode;
 }
 
 + (BKOverscanCompensation)overscanCompensation
 {
-    return defaults.overscanCompensation;
+	return defaults.overscanCompensation;
 }
 
 + (BKKeyboardStyle)keyboardStyle {
-    return defaults.keyboardStyle;
+	return defaults.keyboardStyle;
 }
 
 + (BOOL)isXCallBackURLEnabled
 {
-    return defaults.xCallBackURLEnabled;
+	return defaults.xCallBackURLEnabled;
 }
 
 + (NSString *)xCallBackURLKey
 {
-    return defaults.xCallBackURLKey;
+	return defaults.xCallBackURLKey;
 }
 
 + (BOOL)disableCustomKeyboards {
-    return defaults.disableCustomKeyboards;
+	return defaults.disableCustomKeyboards;
 }
 
 + (void)applyExternalScreenCompensation:(BKOverscanCompensation)value {
-    if (UIScreen.screens.count <= 1) {
-        return;
-    }
+	if (UIScreen.screens.count <= 1) {
+		return;
+	}
 
-    UIScreen *screen = UIScreen.screens.lastObject;
+	UIScreen *screen = UIScreen.screens.lastObject;
 
-    switch (value) {
-    case BKBKOverscanCompensationNone:
-        screen.overscanCompensation = UIScreenOverscanCompensationNone;
-        break;
-    case BKBKOverscanCompensationScale:
-        screen.overscanCompensation = UIScreenOverscanCompensationScale;
-        break;
-    case BKBKOverscanCompensationInsetBounds:
-        screen.overscanCompensation = UIScreenOverscanCompensationInsetBounds;
-        break;
-    default:
-        break;
-    }
+	switch (value) {
+	case BKBKOverscanCompensationNone:
+		screen.overscanCompensation = UIScreenOverscanCompensationNone;
+		break;
+	case BKBKOverscanCompensationScale:
+		screen.overscanCompensation = UIScreenOverscanCompensationScale;
+		break;
+	case BKBKOverscanCompensationInsetBounds:
+		screen.overscanCompensation = UIScreenOverscanCompensationInsetBounds;
+		break;
+	default:
+		break;
+	}
 
 
 }

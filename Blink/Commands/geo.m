@@ -38,157 +38,157 @@
 
 
 NSString * _preauthorize_check_geo_premissions() {
-    if (!CLLocationManager.locationServicesEnabled) {
-        return @"Location services are disabled on this device.";
-    }
+	if (!CLLocationManager.locationServicesEnabled) {
+		return @"Location services are disabled on this device.";
+	}
 
-    CLAuthorizationStatus status = CLLocationManager.authorizationStatus;
-    switch(status) {
-    case kCLAuthorizationStatusNotDetermined:
-        return nil;
-    case kCLAuthorizationStatusDenied:
-        return @"Please allow blink to use geo in Settings.app.";
-    case kCLAuthorizationStatusRestricted:
-        return @"Geo services are restricted on this device.";
-    case kCLAuthorizationStatusAuthorizedWhenInUse:
-    case kCLAuthorizationStatusAuthorizedAlways:
-        return @"Already authorized. Use `geo track` to start track location.";
-        break;
-    }
+	CLAuthorizationStatus status = CLLocationManager.authorizationStatus;
+	switch(status) {
+	case kCLAuthorizationStatusNotDetermined:
+		return nil;
+	case kCLAuthorizationStatusDenied:
+		return @"Please allow blink to use geo in Settings.app.";
+	case kCLAuthorizationStatusRestricted:
+		return @"Geo services are restricted on this device.";
+	case kCLAuthorizationStatusAuthorizedWhenInUse:
+	case kCLAuthorizationStatusAuthorizedAlways:
+		return @"Already authorized. Use `geo track` to start track location.";
+		break;
+	}
 
-    return nil;
+	return nil;
 }
 
 NSString * _prestart_check_geo_premissions() {
-    if (!CLLocationManager.locationServicesEnabled) {
-        return @"Location services are disabled on this device.";
-    }
+	if (!CLLocationManager.locationServicesEnabled) {
+		return @"Location services are disabled on this device.";
+	}
 
-    CLAuthorizationStatus status = CLLocationManager.authorizationStatus;
-    switch(status) {
-    case kCLAuthorizationStatusNotDetermined:
-        return @"Please run `geo authorize` command first.";
-    case kCLAuthorizationStatusDenied:
-        return @"Please allow blink to use geo in Settings.app.";
-    case kCLAuthorizationStatusRestricted:
-        return @"Geo services are restricted on this device.";
-    case kCLAuthorizationStatusAuthorizedWhenInUse:
-    case kCLAuthorizationStatusAuthorizedAlways:
-        break;
-    }
+	CLAuthorizationStatus status = CLLocationManager.authorizationStatus;
+	switch(status) {
+	case kCLAuthorizationStatusNotDetermined:
+		return @"Please run `geo authorize` command first.";
+	case kCLAuthorizationStatusDenied:
+		return @"Please allow blink to use geo in Settings.app.";
+	case kCLAuthorizationStatusRestricted:
+		return @"Geo services are restricted on this device.";
+	case kCLAuthorizationStatusAuthorizedWhenInUse:
+	case kCLAuthorizationStatusAuthorizedAlways:
+		break;
+	}
 
-    return nil;
+	return nil;
 }
 
 NSNumber * _parse_distance(NSString *str) {
-    if (str == nil) {
-        return nil;
-    }
+	if (str == nil) {
+		return nil;
+	}
 
-    str = [str lowercaseString];
-    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    double scale = 1;
-    if ([str hasSuffix:@"km"]) {
-        scale = 1000;
-    } else if ([str hasSuffix:@"mi"]) {
-        scale = 1609.344;
-    } else if ([str hasSuffix:@"ft"]) {
-        scale = 0.3048;
-    } else if ([str hasSuffix:@"m"]) {
-        scale = 1;
-    }
+	str = [str lowercaseString];
+	str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	double scale = 1;
+	if ([str hasSuffix:@"km"]) {
+		scale = 1000;
+	} else if ([str hasSuffix:@"mi"]) {
+		scale = 1609.344;
+	} else if ([str hasSuffix:@"ft"]) {
+		scale = 0.3048;
+	} else if ([str hasSuffix:@"m"]) {
+		scale = 1;
+	}
 
-    return @(str.doubleValue * scale);
+	return @(str.doubleValue * scale);
 }
 
 int geo_main(int argc, char *argv[]) {
 
-    NSString *usage = @"Usage: geo track | geo lock Nm | stop | authorize | current | last N";
+	NSString *usage = @"Usage: geo track | geo lock Nm | stop | authorize | current | last N";
 
-    if (argc < 2) {
-        puts(usage.UTF8String);
-        return 1;
-    }
-    NSString *action = @(argv[1]);
-    __block NSString *output = nil;
+	if (argc < 2) {
+		puts(usage.UTF8String);
+		return 1;
+	}
+	NSString *action = @(argv[1]);
+	__block NSString *output = nil;
 
-    dispatch_sync(dispatch_get_main_queue(), ^ {
-        if ([@"track" isEqual:action] || [@"start" isEqual:action]) {
-            NSString *reason = _prestart_check_geo_premissions();
-            if (reason) {
-                output = reason;
-                return;
-            }
-            if (GeoManager.shared.traking) {
-                output = @"Location tracking is already started.";
-                return;
-            }
-            [[GeoManager shared] start];
-            output = @"Location tracking is started.";
-            return;
-        } else if ([@"lock" isEqual:action] && argc == 3) {
-            NSNumber *distance = _parse_distance(@(argv[2]));
-            if (distance == nil) {
-                output = @"Can't parse distance value. Example: 10m, 0.5km, 1mi";
-                return;
-            }
+	dispatch_sync(dispatch_get_main_queue(), ^ {
+		if ([@"track" isEqual:action] || [@"start" isEqual:action]) {
+		        NSString *reason = _prestart_check_geo_premissions();
+		        if (reason) {
+		                output = reason;
+		                return;
+			}
+		        if (GeoManager.shared.traking) {
+		                output = @"Location tracking is already started.";
+		                return;
+			}
+		        [[GeoManager shared] start];
+		        output = @"Location tracking is started.";
+		        return;
+		} else if ([@"lock" isEqual:action] && argc == 3) {
+		        NSNumber *distance = _parse_distance(@(argv[2]));
+		        if (distance == nil) {
+		                output = @"Can't parse distance value. Example: 10m, 0.5km, 1mi";
+		                return;
+			}
 
-            __block BOOL grantedNotifications = NO;
+		        __block BOOL grantedNotifications = NO;
 
-            dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+		        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
 
-            UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-            [center requestAuthorizationWithOptions:
-                    (UNAuthorizationOptionAlert )
-                   completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                       grantedNotifications = granted;
-                       dispatch_semaphore_signal(sema);
-            }];
+		        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+		        [center requestAuthorizationWithOptions:
+		         (UNAuthorizationOptionAlert )
+		         completionHandler:^(BOOL granted, NSError * _Nullable error) {
+		                 grantedNotifications = granted;
+		                 dispatch_semaphore_signal(sema);
+			 }];
 
-            dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-            NSString *reason = _prestart_check_geo_premissions();
-            if (reason) {
-                output = reason;
-                return;
-            }
-            if (GeoManager.shared.traking) {
-                output = @"Location tracking is already started.";
-                return;
-            }
-            [[GeoManager shared] lockInDistance:distance];
-            output = [NSString stringWithFormat:@"Location locked within %@ meters.", distance];
-            return;
-        } else if ([@"stop" isEqual:action]) {
-            [[GeoManager shared] stop];
-            output = @"Location tracking is stopped.";
-            return;
-        } else if ([@"current" isEqual:action]) {
-            output = [GeoManager.shared currentJSON];
-            return;
-        } else if ([@"last" isEqual:action] || [@"latest" isEqual:action]) {
-            int n = 1;
-            if (argc == 3) {
-                NSString *nStr = [NSString stringWithUTF8String:argv[2]];
-                n = [nStr intValue];
-            }
-            output = [GeoManager.shared lastJSONN:n];
-            return;
-        } else if ([@"authorize" isEqual:action]) {
-            NSString *reason = _preauthorize_check_geo_premissions();
-            if (reason) {
-                output = reason;
-                return;
-            }
-            [[GeoManager shared] authorize];
-        } else {
-            output = usage;
-            return;
-        }
-    });
+		        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+		        NSString *reason = _prestart_check_geo_premissions();
+		        if (reason) {
+		                output = reason;
+		                return;
+			}
+		        if (GeoManager.shared.traking) {
+		                output = @"Location tracking is already started.";
+		                return;
+			}
+		        [[GeoManager shared] lockInDistance:distance];
+		        output = [NSString stringWithFormat:@"Location locked within %@ meters.", distance];
+		        return;
+		} else if ([@"stop" isEqual:action]) {
+		        [[GeoManager shared] stop];
+		        output = @"Location tracking is stopped.";
+		        return;
+		} else if ([@"current" isEqual:action]) {
+		        output = [GeoManager.shared currentJSON];
+		        return;
+		} else if ([@"last" isEqual:action] || [@"latest" isEqual:action]) {
+		        int n = 1;
+		        if (argc == 3) {
+		                NSString *nStr = [NSString stringWithUTF8String:argv[2]];
+		                n = [nStr intValue];
+			}
+		        output = [GeoManager.shared lastJSONN:n];
+		        return;
+		} else if ([@"authorize" isEqual:action]) {
+		        NSString *reason = _preauthorize_check_geo_premissions();
+		        if (reason) {
+		                output = reason;
+		                return;
+			}
+		        [[GeoManager shared] authorize];
+		} else {
+		        output = usage;
+		        return;
+		}
+	});
 
-    if (output) {
-        puts(output.UTF8String);
-    }
+	if (output) {
+		puts(output.UTF8String);
+	}
 
-    return 0;
+	return 0;
 }
