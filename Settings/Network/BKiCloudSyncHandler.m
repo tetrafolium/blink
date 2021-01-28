@@ -107,13 +107,13 @@ static BKiCloudSyncHandler *sharedHandler = nil;
     // If Query Subscription class is available ie. iOS 10+
     if ([CKQuerySubscription class]) {
       NSPredicate *predicate = [NSPredicate predicateWithValue:YES];
-      CKQuerySubscription *subscripton = [[CKQuerySubscription alloc]
+      CKQuerySubscription *subscription = [[CKQuerySubscription alloc]
           initWithRecordType:@"BKHost"
                    predicate:predicate
                      options:(CKQuerySubscriptionOptionsFiresOnRecordCreation |
                               CKQuerySubscriptionOptionsFiresOnRecordUpdate |
                               CKQuerySubscriptionOptionsFiresOnRecordDeletion)];
-      if (!subscripton) {
+      if (!subscription) {
         return nil;
       }
 
@@ -121,7 +121,7 @@ static BKiCloudSyncHandler *sharedHandler = nil;
       info.shouldSendContentAvailable = YES;
       subscripton.notificationInfo = info;
 
-      [database saveSubscription:subscripton
+      [database saveSubscription:subscription
                completionHandler:^(CKSubscription *_Nullable subscription,
                                    NSError *_Nullable error) {
                  if (error) {

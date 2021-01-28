@@ -52,7 +52,7 @@ struct KBTraits: OptionSet, Hashable, Codable {
   static let cmdOn             = Self(rawValue: 1 << 10)
   static let cmdOff            = Self(rawValue: 1 << 11)
   
-  // appearence
+  // appearance
   static let dark              = Self(rawValue: 1 << 12)
   static let light             = Self(rawValue: 1 << 13)
   static let floatingKBOn      = Self(rawValue: 1 << 14)

@@ -36,7 +36,7 @@
 #import <UserNotifications/UserNotifications.h>
 #include <stdio.h>
 
-NSString *_preauthorize_check_geo_premissions() {
+NSString *_preauthorize_check_geo_permissions() {
   if (!CLLocationManager.locationServicesEnabled) {
     return @"Location services are disabled on this device.";
   }
@@ -58,7 +58,7 @@ NSString *_preauthorize_check_geo_premissions() {
   return nil;
 }
 
-NSString *_prestart_check_geo_premissions() {
+NSString *_prestart_check_geo_permissions() {
   if (!CLLocationManager.locationServicesEnabled) {
     return @"Location services are disabled on this device.";
   }
@@ -116,7 +116,7 @@ int geo_main(int argc, char *argv[]) {
 
   dispatch_sync(dispatch_get_main_queue(), ^{
     if ([@"track" isEqual:action] || [@"start" isEqual:action]) {
-      NSString *reason = _prestart_check_geo_premissions();
+      NSString *reason = _prestart_check_geo_permissions();
       if (reason) {
         output = reason;
         return;
@@ -149,7 +149,7 @@ int geo_main(int argc, char *argv[]) {
                             }];
 
       dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-      NSString *reason = _prestart_check_geo_premissions();
+      NSString *reason = _prestart_check_geo_permissions();
       if (reason) {
         output = reason;
         return;
@@ -178,7 +178,7 @@ int geo_main(int argc, char *argv[]) {
       output = [GeoManager.shared lastJSONN:n];
       return;
     } else if ([@"authorize" isEqual:action]) {
-      NSString *reason = _preauthorize_check_geo_premissions();
+      NSString *reason = _preauthorize_check_geo_permissions();
       if (reason) {
         output = reason;
         return;

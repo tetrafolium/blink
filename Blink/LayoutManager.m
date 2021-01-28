@@ -85,7 +85,7 @@ NSTimer *__debounceTimer = nil;
   if (window == ShadowWindow.shared ||
       window.windowScene.session.role ==
           UIWindowSceneSessionRoleExternalDisplay) {
-    // we are on external monitor, so we use device margins to accomodate
+    // we are on external monitor, so we use device margins to accommodate
     // overscan and ignore mode it is like BKLayoutModeSafeFit mode
     return ShadowWindow.shared.refWindow.safeAreaInsets;
   }

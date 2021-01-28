@@ -128,7 +128,7 @@ static int ssh_request_reply(int sock, struct sshbuf *request,
   return 0;
 }
 
-/* encode signature algoritm in flag bits, so we can keep the msg format */
+/* encode signature algorithm in flag bits, so we can keep the msg format */
 static u_int agent_encode_alg(const struct sshkey *key, const char *alg) {
   if (alg != NULL && key->type == KEY_RSA) {
     if (strcmp(alg, "rsa-sha2-256") == 0)

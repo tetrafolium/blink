@@ -350,7 +350,7 @@ enum SshKeyImportOrigin {
     if (selectionID.length) {
       if ([BKPubKey withID:selectionID]) {
         pos = [BKPubKey.all indexOfObject:[BKPubKey withID:selectionID]];
-        pos += 1; // To accomodate "None" value
+        pos += 1; // To accommodate "None" value
       } else {
         pos = 0;
       }
