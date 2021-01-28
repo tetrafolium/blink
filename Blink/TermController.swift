@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Combine
 import UserNotifications
 
@@ -46,8 +45,8 @@ import UserNotifications
 }
 
 private class ProxyView: UIView {
-  var controlledView: UIView? = nil
-  private var _cancelable: AnyCancellable? = nil
+  var controlledView: UIView?
+  private var _cancelable: AnyCancellable?
   
   override func willMove(toSuperview newSuperview: UIView?) {
     super.willMove(toSuperview: newSuperview)
@@ -94,7 +93,7 @@ class TermController: UIViewController {
   private let _meta: SessionMeta
   
   private var _termDevice = TermDevice()
-  private var _bag = Array<AnyCancellable>()
+  private var _bag = [AnyCancellable]()
   private var _termView = TermView(frame: .zero)
   private var _proxyView = ProxyView(frame: .zero)
   private var _sessionParams: MCPParams = {
@@ -110,19 +109,19 @@ class TermController: UIViewController {
     
     return params
   }()
-  private var _bgColor: UIColor? = nil
-  private var _fontSizeBeforeScaling: Int? = nil
+  private var _bgColor: UIColor?
+  private var _fontSizeBeforeScaling: Int?
   
-  @objc public var activityKey: String? = nil
+  @objc public var activityKey: String?
   @objc public var termDevice: TermDevice { _termDevice }
-  @objc weak var delegate: TermControlDelegate? = nil
+  @objc weak var delegate: TermControlDelegate?
   @objc var sessionParams: MCPParams { _sessionParams }
   @objc var bgColor: UIColor? {
     get { _bgColor }
     set { _bgColor = newValue }
   }
   
-  private var _session: MCPSession? = nil
+  private var _session: MCPSession?
   
   required init(meta: SessionMeta? = nil) {
     _meta = meta ?? SessionMeta()
@@ -161,7 +160,7 @@ class TermController: UIViewController {
     _termDevice.delegate = self
     _termDevice.attachView(_termView)
     _termView.backgroundColor = _bgColor
-    _proxyView.controlledView = _termView;
+    _proxyView.controlledView = _termView
     _proxyView.isUserInteractionEnabled = false
     view = _proxyView
   }
@@ -191,7 +190,7 @@ class TermController: UIViewController {
   }
   
   override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated);
+    super.viewWillAppear(animated)
     resumeIfNeeded()
   }
   
@@ -275,14 +274,14 @@ extension TermController: SessionDelegate {
   }
 }
 
-let _apiRoutes:[String: (MCPSession, String) -> AnyPublisher<String, Never>] = [
+let _apiRoutes: [String: (MCPSession, String) -> AnyPublisher<String, Never>] = [
   "history.search": History.searchAPI,
   "completion.for": Complete.forAPI
 ]
 
 extension TermController: TermDeviceDelegate {
   
-  func viewNotify(_ data: [AnyHashable : Any]!) {
+  func viewNotify(_ data: [AnyHashable: Any]!) {
     let content = UNMutableNotificationContent()
     content.title = (data["title"] as? String) ?? title ?? "Blink"
     content.body = (data["body"] as? String) ?? ""
@@ -293,7 +292,7 @@ extension TermController: TermDeviceDelegate {
     let req = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
     
     let center = UNUserNotificationCenter.current()
-    center.requestAuthorization(options: [.alert, .sound, .announcement]) { (granted, error) in
+    center.requestAuthorization(options: [.alert, .sound, .announcement]) { (granted, _) in
       if granted {
         center.add(req, withCompletionHandler: nil)
       }
@@ -393,7 +392,6 @@ extension TermController: SuspendableSession {
     }
   }
   
-  
   func resume(with unarchiver: NSKeyedUnarchiver) {
     guard
       unarchiver.containsValue(forKey: _decodableKey),
@@ -430,4 +428,3 @@ extension TermController: SuspendableSession {
     archiver.encode(_sessionParams, forKey: _decodableKey)
   }
 }
-

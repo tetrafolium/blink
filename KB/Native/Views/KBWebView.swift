@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import UIKit
 
 class BlinkCommand: UIKeyCommand {
@@ -72,7 +71,7 @@ class KBWebView: KBWebViewBase {
   }
   
   func matchCommand(input: String, flags: UIKeyModifierFlags) -> (UIKeyCommand, UIResponder)? {
-    var result: (UIKeyCommand, UIResponder)? = nil
+    var result: (UIKeyCommand, UIResponder)?
 
     var iterator: UIResponder? = self
 
@@ -80,8 +79,7 @@ class KBWebView: KBWebViewBase {
       if let cmd = responder.keyCommands?.first(
         where: { $0.input == input && $0.modifierFlags == flags}),
         let action = cmd.action,
-        responder.canPerformAction(action, withSender: self)
-        {
+        responder.canPerformAction(action, withSender: self) {
         result = (cmd, responder)
       }
       iterator = responder.next

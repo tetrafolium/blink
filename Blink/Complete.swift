@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import Combine
 import ios_system
@@ -83,7 +82,7 @@ struct Complete {
     __commandHintsCache = nil
   }
   
-  static var __allCommandsCache: Array<String>? = nil
+  static var __allCommandsCache: [String]?
   
   static func _allCommands() -> [String] {
     
@@ -91,7 +90,7 @@ struct Complete {
       return cache
     }
     
-    var result:Array<String> = []
+    var result: [String] = []
     if let commands = commandsAsArray() as? [String] {
       result.append(contentsOf: commands)
     }
@@ -105,7 +104,7 @@ struct Complete {
     return result
   }
   
-  static var __commandHintsCache: [String: String]? = nil
+  static var __commandHintsCache: [String: String]?
   
   static func _commandHints() -> [String: String] {
     if let cache = __commandHintsCache {
@@ -114,7 +113,7 @@ struct Complete {
     let result = [
       "awk": "Select particular records in a file and perform operations upon them.",
       "cat": "Concatenate and print files.",
-      "cd":  "Change directory.",
+      "cd": "Change directory.",
 //  //    "chflags": "chflags", // TODO
 //  //    "chksum": "chksum", // TODO
       "clear": "Clear the terminal screen. 🙈",
@@ -216,7 +215,7 @@ struct Complete {
     else {
       return ""
     }
-    var result = "";
+    var result = ""
     switch kind {
     case .command:
       if let hint = _commandHints()[first] {
@@ -228,7 +227,7 @@ struct Complete {
       result = candidates.prefix(5).joined(separator: ", ")
     }
     
-    return result;
+    return result
   }
   
   static func _loopIndex(arr: [String], n: Int) -> String {
@@ -325,11 +324,10 @@ struct Complete {
     return nil
   }
 
-
   static func forAPI(session: MCPSession, json: String) -> AnyPublisher<String, Never> {
     Just(json)
       .subscribe(on: _completionQueue)
-      .map( { _forAPI(session:session, json:$0) } )
+      .map({ _forAPI(session: session, json: $0) })
       .compactMap({ $0 })
       .eraseToAnyPublisher()
   }
@@ -339,15 +337,15 @@ struct Complete {
     
     switch kind {
     case .command: src = _allCommands()
-    case .file: src = _allPaths(prefix: input, skipFiles: false);
-    case .directory: src = _allPaths(prefix: input, skipFiles: true);
-    case .host: src = _allHosts();
-    case .blinkHost: src = _allBlinkHosts();
+    case .file: src = _allPaths(prefix: input, skipFiles: false)
+    case .directory: src = _allPaths(prefix: input, skipFiles: true)
+    case .host: src = _allHosts()
+    case .blinkHost: src = _allBlinkHosts()
     case .blinkGeo: src = ["track", "lock", "stop", "current", "authorize", "last"]
     default: break
     }
     
-    return src.filter( {$0.hasPrefix(input)} ).sorted()
+    return src.filter({$0.hasPrefix(input)}).sorted()
   }
   
   private static func _allHosts() -> [String] {
@@ -376,7 +374,7 @@ struct Complete {
     
     var hosts = Set<String>()
     
-    hostsFile.enumerateLines { (line, finish) in
+    hostsFile.enumerateLines { (line, _) in
       if let host = line.split(separator: " ", maxSplits: 1, omittingEmptySubsequences: true).first,
         !host.isEmpty {
         hosts.insert(String(host))
@@ -429,14 +427,14 @@ struct Complete {
         if skipFiles && !isDir.boolValue {
           continue
         }
-        if (cleanup) {
+        if cleanup {
           result.append(folder.replacingOccurrences(of: home, with: "~"))
         } else {
           result.append(folder)
         }
       }
     }
-    return result;
+    return result
   }
 
 }
@@ -451,7 +449,7 @@ struct Complete {
     
     let columns = max(width / (maxStr.count + 2), 1)
     
-    var lines:[String] = []
+    var lines: [String] = []
     for i in stride(from: 0, to: count, by: columns) {
       var line = ""
       for cmd in commands[i..<min(i + columns, count)] {

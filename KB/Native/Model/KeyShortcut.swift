@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 extension UIKeyModifierFlags {
@@ -103,17 +102,17 @@ class KeyShortcut: ObservableObject, Codable, Identifiable {
    
    func encode(to encoder: Encoder) throws {
      var c = encoder.container(keyedBy: Keys.self)
-     try c.encode(action,             forKey: .action)
+     try c.encode(action, forKey: .action)
      try c.encode(modifiers.rawValue, forKey: .modifiers)
-     try c.encode(input,              forKey: .input)
+     try c.encode(input, forKey: .input)
    }
    
    required convenience init(from decoder: Decoder) throws {
      let c = try decoder.container(keyedBy: Keys.self)
      
      let action        = try c.decode(KeyBindingAction.self, forKey: .action)
-     let modifiers     = try c.decode(Int.self,              forKey: .modifiers)
-     let input         = try c.decode(String.self,           forKey: .input)
+     let modifiers     = try c.decode(Int.self, forKey: .modifiers)
+     let input         = try c.decode(String.self, forKey: .input)
      
      self.init(
        action: action,
@@ -155,7 +154,7 @@ class KeyShortcut: ObservableObject, Codable, Identifiable {
       KeyShortcut(.zoomOut, .command, "-"),
       KeyShortcut(.zoomReset, .command, "="),
       
-      KeyShortcut(.configShow, [.command], ","),
+      KeyShortcut(.configShow, [.command], ",")
     ]
   }
 }

@@ -172,7 +172,6 @@ class CreateShellCommandControl: CommandControl {
   }
 }
 
-
 extension CreateShellCommandControl: UIDragInteractionDelegate {
   func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
     let stringItemProvider = NSItemProvider(object: "Hello World" as NSString)

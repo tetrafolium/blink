@@ -29,14 +29,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 
 struct CompleteToken {
   var value: String = ""
   
-  
-  var quote: String.Element? = nil
+  var quote: String.Element?
   var isRedirect: Bool = false
 
   var prefix: String = ""
@@ -44,7 +42,7 @@ struct CompleteToken {
   var query: String = ""
   
   // if cmd is detected
-  var cmd: String? = nil
+  var cmd: String?
   
   var jsStart: Int = 0
   var jsPos: Int = 0
@@ -79,10 +77,10 @@ struct CompleteUtils {
     var buf = Array(input)
     var len = buf.count
     var cursor = max(min(cursor, len), 0)
-    var start = 0;
-    var end = 0;
-    var i = 0;
-    var qch: String.Element? = nil
+    var start = 0
+    var end = 0
+    var i = 0
+    var qch: String.Element?
     let quotes = "\"'"
     var bs = 0
     var isRedirect = false
@@ -196,7 +194,6 @@ struct CompleteUtils {
       }
     }
     
-    
     let range = input.index(input.startIndex, offsetBy: start)..<input.index(input.startIndex, offsetBy: end)
     
     let canShowHint = range.upperBound == input.endIndex
@@ -213,7 +210,7 @@ struct CompleteUtils {
     var query = (cursor == 0 || pos >= len) ? "" : String(buf[pos..<cursor])
     
     query = query.replacingOccurrences(of: "\\\\", with: "\\")
-    if let q = qch  {
+    if let q = qch {
       let qq = String(q)
       query = query.replacingOccurrences(of: "\\" + qq, with: qq)
       query.removeFirst()
@@ -253,7 +250,6 @@ struct CompleteUtils {
     let jsStart = input.index(input.startIndex, offsetBy: start).utf16Offset(in: input)
     let jsPos = input.index(input.startIndex, offsetBy: pos).utf16Offset(in: input)
     let jsEnd = input.index(input.startIndex, offsetBy: end).utf16Offset(in: input)
-    
     
     return CompleteToken(
       value: String(input[range]),

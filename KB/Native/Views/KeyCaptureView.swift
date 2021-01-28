@@ -29,15 +29,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 class CaptureController: UIViewController {
-  var _keyCommands: Array<UIKeyCommand> = []
+  var _keyCommands: [UIKeyCommand] = []
   var shortcut: KeyShortcut = .init(.clipboardCopy, [], "")
   
-  private func _generateCommands() -> Array<UIKeyCommand> {
-    var result:Array<UIKeyCommand> = []
+  private func _generateCommands() -> [UIKeyCommand] {
+    var result: [UIKeyCommand] = []
     let chars = "`1234567890-=\u{8}\tqwertyuiop[]\\asdfghjkl;'\rzxcvbnm,./ "
       + "§±^°‹›|"
       + "<>" // for German dedicated key

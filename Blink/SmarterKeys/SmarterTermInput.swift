@@ -33,9 +33,9 @@ import UIKit
 import Combine
 
 class CaretHider {
-  var _cancelable: AnyCancellable? = nil
+  var _cancelable: AnyCancellable?
   init(view: UIView) {
-    _cancelable = view.layer.publisher(for: \.sublayers).sink { (layers) in
+    _cancelable = view.layer.publisher(for: \.sublayers).sink { (_) in
       if let caretView = view.value(forKeyPath: "caretView") as? UIView {
         caretView.isHidden = true
       }
@@ -47,7 +47,6 @@ class CaretHider {
   }
 }
 
-
 @objc class SmarterTermInput: KBWebView {
   
   var kbView = KBView()
@@ -56,7 +55,7 @@ class CaretHider {
     KBProxy(kbView: self.kbView)
   }()
   
-  private var _inputAccessoryView: UIView? = nil
+  private var _inputAccessoryView: UIView?
   
   var isHardwareKB: Bool { kbView.traits.isHKBAttached }
   
@@ -69,7 +68,6 @@ class CaretHider {
   override init(frame: CGRect, configuration: WKWebViewConfiguration) {
     
     super.init(frame: frame, configuration: configuration)
-
     
     kbView.keyInput = self
     kbView.lang = textInputMode?.primaryLanguage ?? ""
@@ -77,7 +75,6 @@ class CaretHider {
     // Assume hardware kb by default, since sometimes we don't have kbframe change events
     // if shortcuts toggle in Settings.app is off.
     kbView.traits.isHKBAttached = true
-
     
     if traitCollection.userInterfaceIdiom == .pad {
       _setupAssistantItem()
@@ -92,11 +89,10 @@ class CaretHider {
   override func layoutSubviews() {
     super.layoutSubviews()
     
-    
     kbView.setNeedsLayout()
   }
   
-  private var _caretHider: CaretHider? = nil
+  private var _caretHider: CaretHider?
   
   override func ready() {
     super.ready()
@@ -169,20 +165,19 @@ class CaretHider {
       traitCollection.userInterfaceIdiom == .pad,
       let assistantItem = contentView()?.inputAssistantItem
       else {
-        if (KBTracker.shared.hideSmartKeysWithHKB && kbView.traits.isHKBAttached) {
+        if KBTracker.shared.hideSmartKeysWithHKB && kbView.traits.isHKBAttached {
           _removeSmartKeys()
         }
         contentView()?.reloadInputViews()
         kbView.reset()
         //      _inputAccessoryView?.invalidateIntrinsicContentSize()
         reportStateReset()
-        return;
+        return
     }
-    
     
     assistantItem.leadingBarButtonGroups = [.init(barButtonItems: [UIBarButtonItem()], representativeItem: nil)]
     contentView()?.reloadInputViews()
-    if (KBTracker.shared.hideSmartKeysWithHKB && kbView.traits.isHKBAttached) {
+    if KBTracker.shared.hideSmartKeysWithHKB && kbView.traits.isHKBAttached {
       _removeSmartKeys()
     }
     contentView()?.reloadInputViews()
@@ -234,7 +229,6 @@ class CaretHider {
           kbView.traits.isPortrait = scene.interfaceOrientation.isPortrait
         }
       }
-      
       
       if needToReload {
         DispatchQueue.main.async {
@@ -357,7 +351,7 @@ extension SmarterTermInput {
     return nil
   }
   
-  override func onSelection(_ args: [AnyHashable : Any]) {
+  override func onSelection(_ args: [AnyHashable: Any]) {
     if let dir = args["dir"] as? String, let gran = args["gran"] as? String {
       device?.view?.modifySelection(inDirection: dir, granularity: gran)
     } else if let op = args["command"] as? String {
@@ -426,7 +420,6 @@ extension SmarterTermInput {
 //    }
   }
 }
-
 
 // - MARK: Commands
 
@@ -524,7 +517,6 @@ extension SmarterTermInput {
     vc.present(ctrl, animated: true, completion: nil)
   }
 }
-
 
 extension SmarterTermInput: TermInput {
   var secureTextEntry: Bool {

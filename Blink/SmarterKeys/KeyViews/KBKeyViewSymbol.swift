@@ -55,7 +55,6 @@ class KBKeyViewSymbol: KBKeyView {
 
     _imageView.tintColor = UIColor.label
     
-    
     addSubview(_imageView)
   }
   

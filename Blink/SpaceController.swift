@@ -29,15 +29,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import MBProgressHUD
 
 class SpaceController: UIViewController {
   
   struct UIState: UserActivityCodable {
     var keys: [UUID] = []
-    var currentKey: UUID? = nil
-    var bgColor: CodableColor? = nil
+    var currentKey: UUID?
+    var bgColor: CodableColor?
     
     static var activityType: String { "space.ctrl.ui.state" }
   }
@@ -52,14 +51,14 @@ class SpaceController: UIViewController {
   
   private var _viewportsKeys = [UUID]()
   private var _termControllers: Set<TermController> = Set()
-  private var _currentKey: UUID? = nil
+  private var _currentKey: UUID?
   
-  private var _hud: MBProgressHUD? = nil
+  private var _hud: MBProgressHUD?
   private let _commandsHUD = CommandsHUGView(frame: .zero)
   
   private var _overlay = UIView()
   private var _spaceControllerAnimating: Bool = false
-  var stuckKeyCode: KeyCode? = nil
+  var stuckKeyCode: KeyCode?
   
   public override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
@@ -114,7 +113,6 @@ class SpaceController: UIViewController {
     _viewportsController.dataSource = self
     _viewportsController.delegate = self
     
-    
     addChild(_viewportsController)
     
     if let v = _viewportsController.view {
@@ -143,7 +141,6 @@ class SpaceController: UIViewController {
     }
     
   }
-  
 
   public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     super.viewWillTransition(to: size, with: coordinator)
@@ -208,8 +205,7 @@ class SpaceController: UIViewController {
   func _createShell(
     userActivity: NSUserActivity?,
     animated: Bool,
-    completion: ((Bool) -> Void)? = nil)
-  {
+    completion: ((Bool) -> Void)? = nil) {
     let term = TermController(sceneRole: sceneRole)
     term.delegate = self
     term.userActivity = userActivity
@@ -269,7 +265,7 @@ class SpaceController: UIViewController {
     self._currentKey = term.meta.key
     
     _spaceControllerAnimating = true
-    _viewportsController.setViewControllers([term], direction: direction, animated: true) { (didComplete) in
+    _viewportsController.setViewControllers([term], direction: direction, animated: true) { (_) in
       self._displayHUD()
       if attachInput {
         self._attachInputToCurrentTerm()
@@ -463,9 +459,7 @@ extension SpaceController {
   public override var prefersHomeIndicatorAutoHidden: Bool { true }
 }
 
-
 // MARK: Commands
-
 
 extension SpaceController {
   
@@ -504,14 +498,14 @@ extension SpaceController {
     switch cmd.bindingAction {
     case .hex(let hex, comment: _):
       input.reportHex(hex)
-      break;
+      break
     case .press(let keyCode, mods: let mods):
       input.reportPress(UIKeyModifierFlags(rawValue: mods), keyId: keyCode.id)
-      break;
+      break
     case .command(let c):
       _onCommand(c)
     default:
-      break;
+      break
     }
   }
   
@@ -683,7 +677,6 @@ extension SpaceController {
     else {
       return
     }
-    
 
     _removeCurrentSpace(attachInput: false)
     nextSpaceCtrl._addTerm(term: term)
@@ -787,7 +780,7 @@ extension SpaceController {
     let direction: UIPageViewController.NavigationDirection = currentIdx < idx ? .forward : .reverse
 
     _spaceControllerAnimating = true
-    _viewportsController.setViewControllers([term], direction: direction, animated: animated) { (didComplete) in
+    _viewportsController.setViewControllers([term], direction: direction, animated: animated) { (_) in
       self._currentKey = term.meta.key
       self._displayHUD()
       self._attachInputToCurrentTerm()

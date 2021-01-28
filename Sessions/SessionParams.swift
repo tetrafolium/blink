@@ -29,14 +29,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import UIKit
 
-
 @objc class SessionParams: NSObject, NSSecureCoding {
 
-  @objc var encodedState: Data? = nil
+  @objc var encodedState: Data?
   
   @objc func cleanEncodedState() {
     encodedState = nil
@@ -64,13 +62,13 @@ import UIKit
 }
 
 @objc class MoshParams: SessionParams {
-  @objc var ip: String? = nil
-  @objc var port: String? = nil
-  @objc var key: String? = nil
-  @objc var predictionMode: String? = nil
-  @objc var startupCmd: String? = nil
-  @objc var serverPath: String? = nil
-  @objc var experimentalRemoteIp: String? = nil
+  @objc var ip: String?
+  @objc var port: String?
+  @objc var key: String?
+  @objc var predictionMode: String?
+  @objc var startupCmd: String?
+  @objc var serverPath: String?
+  @objc var experimentalRemoteIp: String?
   
   override init() {
     super.init()
@@ -110,21 +108,20 @@ import UIKit
     self.experimentalRemoteIp = coder.decode(for: Key.experimentalRemoteIp)
   }
   
-  
   static var secureCoding2 = true
   override class var supportsSecureCoding: Bool { secureCoding2 }
 }
 
 @objc class MCPParams: SessionParams {
-  @objc var childSessionType: String? = nil
-  @objc var childSessionParams: SessionParams? = nil
+  @objc var childSessionType: String?
+  @objc var childSessionParams: SessionParams?
   
   // TODO: Move to UIState?
   @objc var viewSize: CGSize = .zero
   @objc var rows: Int = 0
   @objc var cols: Int = 0
-  @objc var themeName: String? = nil
-  @objc var fontName: String? = nil
+  @objc var themeName: String?
+  @objc var fontName: String?
   @objc var fontSize: Int = 16
   @objc var layoutMode: Int = 0
   @objc var boldAsBright: Bool = false
@@ -195,7 +192,6 @@ import UIKit
     self.enableBold = coder.decode(for: Key.enableBold)
     self.layoutLocked = coder.decode(for: Key.layoutLocked)
     self.layoutLockedFrame = coder.decode(for: Key.u)
-    
     
   }
   

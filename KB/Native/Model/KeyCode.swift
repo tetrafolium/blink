@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 enum KeyCode: String, Codable, CaseIterable, Identifiable {
   
   case tab          = "Tab"
@@ -278,9 +277,9 @@ enum KeyCode: String, Codable, CaseIterable, Identifiable {
   public func encode(to encoder: Encoder) throws {
     var c = encoder.container(keyedBy: Keys.self)
     try c.encode(keyCode, forKey: .keyCode)
-    try c.encode(code,    forKey: .code)
-    try c.encode(key,     forKey: .key)
-    try c.encode(id,      forKey: .id)
+    try c.encode(code, forKey: .code)
+    try c.encode(key, forKey: .key)
+    try c.encode(id, forKey: .id)
   }
   
   init(from decoder: Decoder) throws {

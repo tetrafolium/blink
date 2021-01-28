@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 private func _bindingRowValue(_ binding: KeyBinding, keyCode: KeyCode) -> some View {
@@ -58,7 +57,6 @@ private func _bindingRow(_ binding: KeyBinding, keyCode: KeyCode) -> some View {
     )
   }
 }
-
 
 struct BindingConfigView: View {
   var title: String

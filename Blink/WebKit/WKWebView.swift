@@ -29,14 +29,13 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import UIKit
 import WebKit
 
 class UIScrollViewWithoutHitTest: UIScrollView {
   var isInfinit = false
   
-  var reportedScroll: CGPoint? = nil
+  var reportedScroll: CGPoint?
   
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
     let scrollBarWidth: CGFloat = 24
@@ -67,9 +66,9 @@ class UIScrollViewWithoutHitTest: UIScrollView {
   func recenterIfNeeded(force: Bool = false) {
     var currentOffset = contentOffset
     
-    let centerOffsetY = (contentSize.height - bounds.size.height) * 0.5;
+    let centerOffsetY = (contentSize.height - bounds.size.height) * 0.5
     
-    let distanceFromCenterY = abs(currentOffset.y - centerOffsetY);
+    let distanceFromCenterY = abs(currentOffset.y - centerOffsetY)
     
     if force || distanceFromCenterY > (contentSize.height / 4.0) {
       currentOffset = CGPoint(x: currentOffset.x, y: centerOffsetY)
@@ -88,8 +87,8 @@ class UIScrollViewWithoutHitTest: UIScrollView {
  */
 
 @objc class WKWebViewGesturesInteraction: NSObject, UIInteraction {
-  var view: UIView? = nil
-  private weak var _wkWebView: WKWebView? = nil
+  var view: UIView?
+  private weak var _wkWebView: WKWebView?
   private let _scrollView = UIScrollViewWithoutHitTest()
   private let _termScrollView = UIScrollViewWithoutHitTest()
   private let _jsScrollerPath: String
@@ -99,11 +98,11 @@ class UIScrollViewWithoutHitTest: UIScrollView {
   private let _3fTapRecognizer = UITapGestureRecognizer()
   private let _longPressRecognizer = UILongPressGestureRecognizer()
   private let _hoverRecognizer = UIHoverGestureRecognizer()
-  private var _characterSize: CGSize? = nil
-  private var _scrollPoint: CGPoint? = nil
-  private var _scrollPointTrackpad: CGPoint? = nil
+  private var _characterSize: CGSize?
+  private var _scrollPoint: CGPoint?
+  private var _scrollPointTrackpad: CGPoint?
   
-  @objc var focused: Bool = false;
+  @objc var focused: Bool = false
   @objc var hasSelection: Bool = false {
     didSet {
       _pinchRecognizer.isEnabled = !hasSelection
@@ -122,7 +121,7 @@ class UIScrollViewWithoutHitTest: UIScrollView {
     set { _scrollView.indicatorStyle = newValue }
   }
   
-  var allRecognizers:[UIGestureRecognizer] {
+  var allRecognizers: [UIGestureRecognizer] {
     let recognizers = [
       _1fTapRecognizer,
       _2fTapRecognizer,
@@ -138,11 +137,10 @@ class UIScrollViewWithoutHitTest: UIScrollView {
   
   func willMove(to view: UIView?) {
     if let webView = view as? WKWebView {
-      webView.scrollView.delaysContentTouches = false;
-      webView.scrollView.canCancelContentTouches = false;
-      webView.scrollView.isScrollEnabled = false;
-      webView.scrollView.panGestureRecognizer.isEnabled = false;
-      
+      webView.scrollView.delaysContentTouches = false
+      webView.scrollView.canCancelContentTouches = false
+      webView.scrollView.isScrollEnabled = false
+      webView.scrollView.panGestureRecognizer.isEnabled = false
       
       _scrollView.frame = webView.bounds
       webView.addSubview(_scrollView)
@@ -185,7 +183,6 @@ class UIScrollViewWithoutHitTest: UIScrollView {
     _scrollView.delaysContentTouches = false
     _scrollView.delegate = self
     
-    
     _termScrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     _termScrollView.alwaysBounceVertical = false
     _termScrollView.alwaysBounceHorizontal = false
@@ -219,11 +216,10 @@ class UIScrollViewWithoutHitTest: UIScrollView {
     _pinchRecognizer.delegate = self
     _pinchRecognizer.addTarget(self, action: #selector(_onPinch(_:)))
     
-    
     _hoverRecognizer.addTarget(self, action: #selector(_onHover(_:)))
   }
   
-  private var _reportedY:CGFloat = 0
+  private var _reportedY: CGFloat = 0
   
   @objc func _on1fTap(_ recognizer: UITapGestureRecognizer) {
     let point = recognizer.location(in: recognizer.view)
@@ -238,7 +234,6 @@ class UIScrollViewWithoutHitTest: UIScrollView {
       }
     default: break
     }
-    
     
   }
   
@@ -269,7 +264,7 @@ class UIScrollViewWithoutHitTest: UIScrollView {
   }
   
   @objc func _onPinch(_ recognizer: UIPinchGestureRecognizer) {
-    let dScale = 1.0 - recognizer.scale;
+    let dScale = 1.0 - recognizer.scale
     if abs(dScale) > 0.06 {
       recognizer.view?.superview?.dropSuperViewTouches()
       _scrollView.panGestureRecognizer.dropTouches()
@@ -319,8 +314,6 @@ extension WKWebViewGesturesInteraction: UIScrollViewDelegate {
       return
     }
     
-    
-    
     if scrollView === _termScrollView {
       guard var reportedScroll = _termScrollView.reportedScroll
       else {
@@ -339,7 +332,7 @@ extension WKWebViewGesturesInteraction: UIScrollViewDelegate {
       }
 
       var charHeight: CGFloat = _characterSize?.height ?? CGFloat(defaultFontSize)
-      if (charHeight <= 0) {
+      if charHeight <= 0 {
         charHeight = CGFloat(defaultFontSize)
       }
       
@@ -400,12 +393,11 @@ extension WKWebViewGesturesInteraction: WKScriptMessageHandler {
       
       _characterSize = characterSize
       _scrollView.contentSize = contentSize
-      let offset = CGPoint(x: 0, y: max(contentSize.height - _scrollView.bounds.height, 0));
+      let offset = CGPoint(x: 0, y: max(contentSize.height - _scrollView.bounds.height, 0))
       _scrollView.contentOffset = offset
       
       _scrollView.panGestureRecognizer.isEnabled = isPrimary
       _termScrollView.panGestureRecognizer.isEnabled = !isPrimary
-      
       
     case "scrollTo":
       let animated = msg["animated"] as? Bool == true
@@ -418,12 +410,11 @@ extension WKWebViewGesturesInteraction: WKScriptMessageHandler {
       _scrollView.panGestureRecognizer.isEnabled = isPrimary
       _termScrollView.panGestureRecognizer.isEnabled = !isPrimary
       
-      if (offset == _scrollView.contentOffset) {
+      if offset == _scrollView.contentOffset {
         return
       }
       // TODO: debounce?
       _scrollView.setContentOffset(offset, animated: animated)
-      
       
     default: break
     }

@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Combine
 
 enum KeyPress {
@@ -145,20 +144,20 @@ class KeyConfig: ObservableObject, Codable {
   
   public func encode(to encoder: Encoder) throws {
     var c = encoder.container(keyedBy: Keys.self)
-    try c.encode(code,          forKey: .code)
-    try c.encode(up,            forKey: .up)
-    try c.encode(mod,           forKey: .mod)
-    try c.encode(down,          forKey: .down)
+    try c.encode(code, forKey: .code)
+    try c.encode(up, forKey: .up)
+    try c.encode(mod, forKey: .mod)
+    try c.encode(down, forKey: .down)
     try c.encode(ignoreAccents, forKey: .ignoreAccents)
   }
   
   required convenience init(from decoder: Decoder) throws {
     let c = try decoder.container(keyedBy: Keys.self)
-    let code          = try c.decode(KeyCode.self,     forKey: .code)
-    let up            = try c.decode(KeyAction.self,   forKey: .up)
-    let down          = try c.decode(KeyAction.self,   forKey: .down)
+    let code          = try c.decode(KeyCode.self, forKey: .code)
+    let up            = try c.decode(KeyAction.self, forKey: .up)
+    let down          = try c.decode(KeyAction.self, forKey: .down)
     let mod           = try c.decode(KeyModifier.self, forKey: .mod)
-    let ignoreAccents = try c.decode(Bool.self,        forKey: .ignoreAccents)
+    let ignoreAccents = try c.decode(Bool.self, forKey: .ignoreAccents)
     self.init(code: code, up: up, down: down, mod: mod, ignoreAccents: ignoreAccents)
   }
 

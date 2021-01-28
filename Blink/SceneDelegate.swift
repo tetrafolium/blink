@@ -29,12 +29,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import SwiftUI
 
 class ExternalWindow: UIWindow {
-  var shadowWindow: UIWindow? = nil
+  var shadowWindow: UIWindow?
 }
 
 @objc class ShadowWindow: UIWindow {
@@ -64,8 +63,7 @@ class ExternalWindow: UIWindow {
     set { super.frame = _refWindow.frame }
   }
   
-  
-  @objc static var shared: ShadowWindow? = nil
+  @objc static var shared: ShadowWindow?
 }
 
 class DummyVC: UIViewController {
@@ -75,9 +73,9 @@ class DummyVC: UIViewController {
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-  var window: UIWindow? = nil
+  var window: UIWindow?
   private var _ctrl = DummyVC()
-  private var _lockCtrl: UIViewController? = nil
+  private var _lockCtrl: UIViewController?
   private var _spCtrl = SpaceController()
   
   func sceneDidDisconnect(_ scene: UIScene) {
@@ -106,8 +104,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   func scene(
     _ scene: UIScene,
     willConnectTo session: UISceneSession,
-    options connectionOptions: UIScene.ConnectionOptions)
-  {
+    options connectionOptions: UIScene.ConnectionOptions) {
     _ = KBTracker.shared
     
     guard let windowScene = scene as? UIWindowScene else {
@@ -162,7 +159,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       return
     }
     
-    if (scene.session.role == .windowExternalDisplay) {
+    if scene.session.role == .windowExternalDisplay {
       if LocalAuth.shared.lockRequired {
         if let lockCtrl = _lockCtrl {
           if window.rootViewController != lockCtrl {
@@ -171,7 +168,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
           
           return
         }
-
         
         _lockCtrl = UIHostingController(rootView: LockView(unlockAction: nil))
         window.rootViewController = _lockCtrl
@@ -188,7 +184,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       
       return
     }
-    
     
     // 1. Local Auth AutoLock Check
     
@@ -355,7 +350,7 @@ extension SceneDelegate {
        // No running command or shell found running, run the SSH command on the
        // available shell
        term.termDevice.write(sshCommand)
-       return;
+       return
     }
     
     // If a SSH/mosh connection is already open in the current terminal shell

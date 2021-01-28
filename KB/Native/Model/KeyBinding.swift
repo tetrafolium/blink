@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Combine
 
 struct KeyToken: Identifiable {
@@ -67,7 +66,7 @@ extension KeyToken: Comparable {
 }
 
 class KeyBinding: ObservableObject, Codable {
-  @Published var keys: Array<String> = []
+  @Published var keys: [String] = []
   @Published var shiftLoc: Int8 = 0
   @Published var controlLoc: Int8 = 0
   @Published var optionLoc: Int8 = 0
@@ -129,7 +128,6 @@ class KeyBinding: ObservableObject, Codable {
     }
   }
   
-  
   func cycle(keyCode: KeyCode) {
     guard let idx = keys.firstIndex(of: keyCode.id)
     else {
@@ -159,7 +157,7 @@ class KeyBinding: ObservableObject, Codable {
     }
     
     if loc == 0 {
-      keys.remove(at:idx)
+      keys.remove(at: idx)
     }
   }
   
@@ -223,12 +221,12 @@ class KeyBinding: ObservableObject, Codable {
   public func encode(to encoder: Encoder) throws {
     var c = encoder.container(keyedBy: Keys.self)
     
-    try c.encode(keys,         forKey: .keys)
-    try c.encode(action,       forKey: .action)
-    try c.encode(shiftLoc,     forKey: .shiftLoc)
-    try c.encode(controlLoc,   forKey: .controlLoc)
-    try c.encode(optionLoc,    forKey: .optionLoc)
-    try c.encode(commandLoc,   forKey: .commandLoc)
+    try c.encode(keys, forKey: .keys)
+    try c.encode(action, forKey: .action)
+    try c.encode(shiftLoc, forKey: .shiftLoc)
+    try c.encode(controlLoc, forKey: .controlLoc)
+    try c.encode(optionLoc, forKey: .optionLoc)
+    try c.encode(commandLoc, forKey: .commandLoc)
   }
   
   required convenience init(from decoder: Decoder) throws {

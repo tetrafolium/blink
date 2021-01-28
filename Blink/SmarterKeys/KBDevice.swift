@@ -47,7 +47,6 @@ enum KBDevice {
   case in10_9 // iPad Air 4 (2020)
   case in11
   case in12_9
-  
 
   func layoutFor(lang: String) -> KBLayout {
     switch self {

@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import UIKit
 import LocalAuthentication
@@ -39,7 +38,7 @@ import LocalAuthentication
   @objc static let shared = LocalAuth()
   
   private static var _maxInactiveInterval = TimeInterval(10 * 60)
-  private var _didEnterBackgroundAt: Date? = nil
+  private var _didEnterBackgroundAt: Date?
   private var _inProgress = false
   
   override init() {
@@ -112,7 +111,7 @@ import LocalAuthentication
       return
     }
 
-    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ) { success, error in
+    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason ) { success, _ in
       DispatchQueue.main.async {
         self._inProgress = false
         callback(success)

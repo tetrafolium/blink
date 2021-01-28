@@ -78,7 +78,7 @@ struct KBTraits: OptionSet, Hashable, Codable {
   static let suggestionsOn  = Self(rawValue: 1 << 25)
   
   // shortcuts
-  static let orientations:Self    = [.portrait, .landscape]
+  static let orientations: Self    = [.portrait, .landscape]
   static let kbs: Self            = [.hkb, .skb]
   
   static let esc: Self            = [.escOn, .escOff]
@@ -86,7 +86,7 @@ struct KBTraits: OptionSet, Hashable, Codable {
   static let ctrl: Self           = [.ctrlOn, .ctrlOff]
   static let cmd: Self            = [.cmdOn, .cmdOff]
   
-  static let modifiers:Self       = [.esc, .alt, .ctrl, .cmd]
+  static let modifiers: Self       = [.esc, .alt, .ctrl, .cmd]
   static let styles: Self         = [.light, .dark]
   static let floatingKB: Self     = [.floatingKBOn, .floatingKBOff]
   static let floatingCursor: Self = [.floatingCursorOn, .floatingCursorOff]
@@ -95,7 +95,7 @@ struct KBTraits: OptionSet, Hashable, Codable {
   static let ime: Self            = [.imeOn, .imeOff]
   static let suggestions: Self    = [.suggestionsOn, .suggestionsOff]
   
-  static let all:Self = [
+  static let all: Self = [
     .orientations,
     .kbs,
     .modifiers,
@@ -183,7 +183,7 @@ extension KBTraits {
 
 extension KBTraits {
   init?(cssSelector: String) {
-    let cssMap:[String: Self] = [
+    let cssMap: [String: Self] = [
       "all": .all,
       "orientations": .orientations,
       "kbs": .kbs,
@@ -195,7 +195,7 @@ extension KBTraits {
       "styles": .styles,
       "floatingKB": .floatingKB,
       "floatingKBOn": .floatingKBOn,
-      "floatingKBOff": .floatingKBOff,
+      "floatingKBOff": .floatingKBOff
       // TODO: fill the rest
     ]
     
@@ -245,7 +245,6 @@ extension KBTraits {
     return flags
   }
 }
-
 
 extension KBTraits {
   static func - (lhs: KBTraits, rhs: KBTraits) -> KBTraits {

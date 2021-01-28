@@ -41,10 +41,10 @@ class KBView: UIView {
   private let _scrollViewRightBorder = UIView()
   private let _indicatorLeft = UIView()
   private let _indicatorRight = UIView()
-  private var _timer: Timer? = nil
-  private var _repeatingKeyView: KBKeyView? = nil
+  private var _timer: Timer?
+  private var _repeatingKeyView: KBKeyView?
   
-  var repeatingSequence: String? = nil
+  var repeatingSequence: String?
   
   var safeBarWidth: CGFloat = 0
   var kbDevice: KBDevice = .detect() {
@@ -59,7 +59,7 @@ class KBView: UIView {
   private var _onModifiersSet: Set<KBKeyView> = []
   private var _untrackedModifiersSet: Set<KBKeyView> = []
   
-  weak var keyInput: SmarterTermInput? = nil
+  weak var keyInput: SmarterTermInput?
   
   var lang: String = "" {
     didSet {
@@ -85,10 +85,9 @@ class KBView: UIView {
   override init(frame: CGRect) {
     let layout = kbDevice.layoutFor(lang: lang)
     
-    _leftSection = KBSection(keys:layout.left)
-    _middleSection = KBSection(keys:layout.middle)
-    _rightSection = KBSection(keys:layout.right)
-    
+    _leftSection = KBSection(keys: layout.left)
+    _middleSection = KBSection(keys: layout.middle)
+    _rightSection = KBSection(keys: layout.right)
     
     super.init(frame: frame)
     _scrollView.alwaysBounceVertical = false
@@ -128,9 +127,9 @@ class KBView: UIView {
     
     let layout = kbDevice.layoutFor(lang: lang)
     
-    _leftSection   = KBSection(keys:layout.left)
-    _middleSection = KBSection(keys:layout.middle)
-    _rightSection  = KBSection(keys:layout.right)
+    _leftSection   = KBSection(keys: layout.left)
+    _middleSection = KBSection(keys: layout.middle)
+    _rightSection  = KBSection(keys: layout.right)
     
     setNeedsLayout()
   }
@@ -154,7 +153,7 @@ class KBView: UIView {
     let strictSpace = !traits.isHKBAttached && traits.hasSuggestions
     self.kbSizes = kbDevice.sizesFor(portrait: traits.isPortrait)
     
-    let top: CGFloat = 0;
+    let top: CGFloat = 0
 
     let height       = kbSizes.kb.height
     let iconWidth    = kbSizes.key.widths.icon
@@ -213,7 +212,7 @@ class KBView: UIView {
     let spaceLeft = _scrollView.frame.width - x
     if spaceLeft > 0 {
       // We can tune layout
-      let flexibleCount = middleViews.filter({ $0.key.isFlexible } ).count
+      let flexibleCount = middleViews.filter({ $0.key.isFlexible }).count
       if flexibleCount > 0 {
         var flexibleWidth = CGFloat(flexibleCount) * keyWidth
         flexibleWidth = (flexibleWidth + spaceLeft) / CGFloat(flexibleCount)
@@ -316,11 +315,10 @@ extension KBView: KBKeyViewDelegate {
     if value.isModifier {
       _onModifiersSet.insert(keyView)
     }
-    if (keyView.shouldAutoRepeat) {
+    if keyView.shouldAutoRepeat {
       _startTimer(with: keyView)
     }
   }
-  
   
   func keyViewOff(keyView: KBKeyView, value: KBKeyValue) {
     _toggleModifier(kbKeyValue: value, value: false)
@@ -345,13 +343,13 @@ extension KBView: KBKeyViewDelegate {
   private func _toggleModifier(kbKeyValue: KBKeyValue, value: Bool) {
     switch kbKeyValue {
     case .cmd:
-      traits.toggle(value, on: .cmdOn , off: .cmdOff)
+      traits.toggle(value, on: .cmdOn, off: .cmdOff)
     case .alt:
-      traits.toggle(value, on: .altOn , off: .altOff)
+      traits.toggle(value, on: .altOn, off: .altOff)
     case .esc:
-      traits.toggle(value, on: .escOn , off: .escOff)
+      traits.toggle(value, on: .escOn, off: .escOff)
     case .ctrl:
-      traits.toggle(value, on: .ctrlOn , off: .ctrlOff)
+      traits.toggle(value, on: .ctrlOn, off: .ctrlOff)
     default: break
     }
     
@@ -365,10 +363,10 @@ extension KBView: KBKeyViewDelegate {
   func reset() {
     stopRepeats()
     turnOffUntracked()
-    traits.toggle(false, on: .cmdOn , off: .cmdOff)
-    traits.toggle(false, on: .altOn , off: .altOff)
-    traits.toggle(false, on: .escOn , off: .escOff)
-    traits.toggle(false, on: .ctrlOn , off: .ctrlOff)
+    traits.toggle(false, on: .cmdOn, off: .cmdOff)
+    traits.toggle(false, on: .altOn, off: .altOff)
+    traits.toggle(false, on: .escOn, off: .escOff)
+    traits.toggle(false, on: .ctrlOn, off: .ctrlOff)
     _reportModifiers()
   }
   
@@ -399,7 +397,7 @@ extension KBView: KBKeyViewDelegate {
     if let input = value.input,
       flags.rawValue > 0,
       let (cmd, responder) = keyInput.matchCommand(input: input, flags: flags),
-      let action = cmd.action  {
+      let action = cmd.action {
       responder.perform(action, with: cmd)
       return
     }

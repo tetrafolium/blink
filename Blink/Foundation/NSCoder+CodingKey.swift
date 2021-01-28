@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import UIKit
 
@@ -39,7 +38,7 @@ extension NSCoder {
     encode(value, forKey: key.stringValue)
   }
   
-  func decode<T>(for key: CodingKey) -> T? where T : NSObject, T : NSCoding {
+  func decode<T>(for key: CodingKey) -> T? where T: NSObject, T: NSCoding {
     decodeObject(of: T.self, forKey: key.stringValue) as T?
   }
   
@@ -128,4 +127,3 @@ extension NSCoder {
   }
   
 }
-

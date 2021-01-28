@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import UIKit
 
@@ -37,25 +36,25 @@ import UIKit
 
 fileprivate extension UIEdgeInsets {
   static var symbolSmall: Self { Self(top: 0, left: 0, bottom: 2, right: 0) }
-  static var symbol:      Self { Self(top: 0, left: 0, bottom: 5, right: 0) }
+  static var symbol: Self { Self(top: 0, left: 0, bottom: 5, right: 0) }
 
-  static var keySmall:    Self { Self(top: 3, left: 1, bottom: 1, right: 1) }
-  static var key:         Self { Self(top: 5, left: 3, bottom: 6, right: 3) }
+  static var keySmall: Self { Self(top: 3, left: 1, bottom: 1, right: 1) }
+  static var key: Self { Self(top: 5, left: 3, bottom: 6, right: 3) }
 }
 
 fileprivate extension CGFloat {
   static var symbolSmall: Self { 16 }
-  static var symbol:      Self { 19 }
+  static var symbol: Self { 19 }
 
   static var textSmall: Self { 15 }
-  static var text:      Self { 26 }
+  static var text: Self { 26 }
 
   static var cornerSmall: Self { 4 }
-  static var corner:      Self { 6 }
+  static var corner: Self { 6 }
   
-  static var heightTiny:  Self { 38 }
+  static var heightTiny: Self { 38 }
   static var heightSmall: Self { 44 }
-  static var height:      Self { 55 }
+  static var height: Self { 55 }
   
   static var icon: Self { 48 }
 }
@@ -69,10 +68,10 @@ struct KBSizes {
   typealias Key = (fonts: Fonts, insets: Insets, corner: CGFloat, widths: Widths)
 
   fileprivate static let _fontsSmall: Fonts = (text: .textSmall, symbol: .symbolSmall)
-  fileprivate static let _fonts:      Fonts = (text: .text,      symbol: .symbol)
+  fileprivate static let _fonts: Fonts = (text: .text, symbol: .symbol)
 
   fileprivate static let _insetsSmall: Insets = (key: .keySmall, symbol: .symbolSmall)
-  fileprivate static let _insets:      Insets = (key: .key,      symbol: .symbol)
+  fileprivate static let _insets: Insets = (key: .key, symbol: .symbol)
   
   fileprivate static let _portraitPhoneKB: KB = (.heightSmall, padding: 0, spacer: 0)
   
@@ -186,4 +185,3 @@ extension KBSizes {
     Self(kb: (.height, padding: 1.5, spacer: 1), key: (_fonts, _insets, .corner, widths: (.icon, key: 80, wide: 100)))
   }
 }
-

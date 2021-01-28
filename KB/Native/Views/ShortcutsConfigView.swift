@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 struct ActionsList: View {
@@ -140,7 +139,7 @@ struct HexEditorView: View {
   private let _formatter = HexFormatter()
   
   var body: some View {
-    TextField("HEX", value: $value, formatter: _formatter, onEditingChanged: { focused in
+    TextField("HEX", value: $value, formatter: _formatter, onEditingChanged: { _ in
       self.shortcut.action = .hex(self._formatter.hexString(str: self.value), comment: nil)
     }) {
 //      self.shortcut.action = .hex(self._formatter.hexString(str: self.value), comment: nil)
@@ -149,7 +148,6 @@ struct HexEditorView: View {
     .keyboardType(.asciiCapable)
   }
 }
-
 
 struct ShortcutConfigView: View {
   @EnvironmentObject var nav: Nav
@@ -170,8 +168,7 @@ struct ShortcutConfigView: View {
         }
         Section(
           header: Text("Action"),
-          footer: Text(self.shortcut.action.isCustomHEX ? "Use hex encoded sequence" : ""))
-        {
+          footer: Text(self.shortcut.action.isCustomHEX ? "Use hex encoded sequence" : "")) {
           DefaultRow(title: shortcut.action.titleWithoutValue) {
             ActionsList(action: self.$shortcut.action, commandsMode: self.commandsMode)
           }

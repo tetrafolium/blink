@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 private func _row(_ key: KeyConfig) -> some View {
@@ -87,8 +86,8 @@ struct KBConfigView: View {
         _pairRow(config.control)
         _pairRow(config.option)
         _pairRow(config.command)
-        _bindingRow(config.fnBinding,     title: "Functional Keys", last: "[0-9]")
-        _bindingRow(config.cursorBinding, title: "Cursor Keys",     last: "[Arrow]")
+        _bindingRow(config.fnBinding, title: "Functional Keys", last: "[0-9]")
+        _bindingRow(config.cursorBinding, title: "Cursor Keys", last: "[Arrow]")
         DefaultRow(title: "Custom Presses") {
           ShortcutsConfigView(
             config: self.config,

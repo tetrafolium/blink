@@ -137,32 +137,32 @@ enum KeyBindingAction: Codable, Identifiable {
   
   static var pressList: [KeyBindingAction] {
     [
-      .press(.escape,    []),
-      .press(.space,     [.control]),
+      .press(.escape, []),
+      .press(.space, [.control]),
       .press(.backquote, []),
-      .press(.pageUp,    []),
-      .press(.pageDown,  []),
-      .press(.home,      []),
-      .press(.end,       []),
-      .press(.f1,        []),
-      .press(.f2,        []),
-      .press(.f3,        []),
-      .press(.f4,        []),
-      .press(.f5,        []),
-      .press(.f6,        []),
-      .press(.f7,        []),
-      .press(.f8,        []),
-      .press(.f9,        []),
-      .press(.f10,       []),
-      .press(.f11,       []),
-      .press(.f12,       []),
+      .press(.pageUp, []),
+      .press(.pageDown, []),
+      .press(.home, []),
+      .press(.end, []),
+      .press(.f1, []),
+      .press(.f2, []),
+      .press(.f3, []),
+      .press(.f4, []),
+      .press(.f5, []),
+      .press(.f6, []),
+      .press(.f7, []),
+      .press(.f8, []),
+      .press(.f9, []),
+      .press(.f10, []),
+      .press(.f11, []),
+      .press(.f12, []),
       .hex("3C", comment: "Press <"),
       .hex("3E", comment: "Press >"),
       .hex("A7", comment: "Press §"),
       .hex("B1", comment: "Press ±"),
       .hex("7E", comment: "Press ~"),
       .hex("7C", comment: "Press |"),
-      .hex("5C", comment: "Press \\"),
+      .hex("5C", comment: "Press \\")
     ]
   }
   
@@ -223,7 +223,7 @@ enum KeyBindingAction: Codable, Identifiable {
     case .press(let keyCode, let mods):
       try c.encode(Keys.press.stringValue, forKey: .type)
       try c.encode(keyCode, forKey: .key)
-      try c.encode(mods,    forKey: .mods)
+      try c.encode(mods, forKey: .mods)
     case .command(let cmd):
       try c.encode(Keys.command.stringValue, forKey: .type)
       try c.encode(cmd, forKey: .value)
@@ -244,7 +244,7 @@ enum KeyBindingAction: Codable, Identifiable {
       self = .hex(hex, comment: comment)
     case .press:
       let keyCode = try c.decode(KeyCode.self, forKey: .key)
-      let mods    = try c.decode(Int.self,     forKey: .mods)
+      let mods    = try c.decode(Int.self, forKey: .mods)
       self = .press(keyCode, mods: mods)
     case .command:
       let cmd = try c.decode(Command.self, forKey: .value)

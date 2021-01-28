@@ -33,9 +33,9 @@ import Foundation
 import AVFoundation
 
 struct KBLayout {
-  let left:   [KBKey]
+  let left: [KBKey]
   let middle: [KBKey]
-  let right:  [KBKey]
+  let right: [KBKey]
   
   init(_ left: [KBKey], _ middle: [KBKey], _ right: [KBKey]) {
     self.left   = left
@@ -50,47 +50,47 @@ extension KBLayout {
   
   static func iPhone(lang: String) -> Self {
     return Self([
-      .key(.esc,  traits: .default - .landscape),
-      .wideKey(.esc,  traits: .default - .portrait),
+      .key(.esc, traits: .default - .landscape),
+      .wideKey(.esc, traits: .default - .portrait),
       .key(.ctrl, traits: .default),
-      .key(.alt,  traits: .default),
-      .arrows(traits: .default - .cmdOff),
+      .key(.alt, traits: .default),
+      .arrows(traits: .default - .cmdOff)
     ], [
-      .key(.tab,  traits: .default - .cmdOn),
-      .vertical2("`", "~",  traits: .default - .cmdOn),
-      .vertical2("@", "#",  traits: .default - .cmdOn),
-      .vertical2("$", "^",  traits: .default - .cmdOn),
+      .key(.tab, traits: .default - .cmdOn),
+      .vertical2("`", "~", traits: .default - .cmdOn),
+      .vertical2("@", "#", traits: .default - .cmdOn),
+      .vertical2("$", "^", traits: .default - .cmdOn),
       
-      .vertical2("-", "_",  traits: .default - .cmdOn),
-      .vertical2("=", "+",  traits: .default - .cmdOn),
+      .vertical2("-", "_", traits: .default - .cmdOn),
+      .vertical2("=", "+", traits: .default - .cmdOn),
       
-      .vertical2("[", "{",  traits: .default - .cmdOn),
-      .vertical2("]", "}",  traits: .default - .cmdOn),
+      .vertical2("[", "{", traits: .default - .cmdOn),
+      .vertical2("]", "}", traits: .default - .cmdOn),
       
-      .vertical2("\\", "|",  traits: .default - .cmdOn),
+      .vertical2("\\", "|", traits: .default - .cmdOn),
       
-      .vertical2("<", "*",  traits: .default - .cmdOn),
-      .vertical2(">", "\"",  traits: .default - .cmdOn),
-      .vertical2("/", "?",  traits: .default - .cmdOn),
+      .vertical2("<", "*", traits: .default - .cmdOn),
+      .vertical2(">", "\"", traits: .default - .cmdOn),
+      .vertical2("/", "?", traits: .default - .cmdOn),
     
-      .vertical2(".", "!",  traits: .default - .cmdOff),
+      .vertical2(".", "!", traits: .default - .cmdOff),
           
-      .vertical2(",", "%",  traits: .default - .cmdOff),
-      .vertical2(";", ":",  traits: .default - .cmdOff),
-      .vertical2("&", "'",  traits: .default - .cmdOff),
+      .vertical2(",", "%", traits: .default - .cmdOff),
+      .vertical2(";", ":", traits: .default - .cmdOff),
+      .vertical2("&", "'", traits: .default - .cmdOff),
       
-      .vertical2(.f(1), .f(7),  traits: .default + .hkb - .cmdOff),
-      .vertical2(.f(2), .f(8),  traits: .default + .hkb - .cmdOff),
-      .vertical2(.f(3), .f(9),  traits: .default + .hkb - .cmdOff),
-      .vertical2(.f(4), .f(10),  traits: .default + .hkb - .cmdOff),
-      .vertical2(.f(5), .f(11),  traits: .default + .hkb - .cmdOff),
-      .vertical2(.f(6), .f(12),  traits: .default + .hkb - .cmdOff),
+      .vertical2(.f(1), .f(7), traits: .default + .hkb - .cmdOff),
+      .vertical2(.f(2), .f(8), traits: .default + .hkb - .cmdOff),
+      .vertical2(.f(3), .f(9), traits: .default + .hkb - .cmdOff),
+      .vertical2(.f(4), .f(10), traits: .default + .hkb - .cmdOff),
+      .vertical2(.f(5), .f(11), traits: .default + .hkb - .cmdOff),
+      .vertical2(.f(6), .f(12), traits: .default + .hkb - .cmdOff),
       //
-      .flexKey(.esc,  traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn),
+      .flexKey(.esc, traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn)
     ],
     [
       .arrows(traits: .default - .cmdOn),
-      .wideKey(.cmd, traits: .default + .hkb),
+      .wideKey(.cmd, traits: .default + .hkb)
     ])
   }
   
@@ -99,80 +99,80 @@ extension KBLayout {
   static func _iPad_9_7_middle(lang: String) -> [KBKey] {
     if lang.hasPrefix("ru-") ||  lang.hasPrefix("fr-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "/>",  traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "/>", traits: .default - .cmdOn)
       ]
     }
     
-    if lang.hasPrefix("de-"){
+    if lang.hasPrefix("de-") {
       return [
-        .vertical2("~", "_",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
+        .vertical2("~", "_", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "/>",  traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "/>", traits: .default - .cmdOn)
       ]
     }
     
     if lang.hasPrefix("es-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "/>",  traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "/>", traits: .default - .cmdOn)
       ]
     }
     
     return [
-      .vertical2("`", "~",  traits: .default - .cmdOn),
-      .vertical2("^", "_",  traits: .default - .cmdOn),
+      .vertical2("`", "~", traits: .default - .cmdOn),
+      .vertical2("^", "_", traits: .default - .cmdOn),
       .vertical2("\\", "|", traits: .default - .cmdOn),
-      .vertical2("[", "{",  traits: .default - .cmdOn),
-      .vertical2("]", "}",  traits: .default - .cmdOn),
-      .vertical2("<", "</",  traits: .default - .cmdOn),
-      .vertical2(">", "/>",  traits: .default - .cmdOn),
+      .vertical2("[", "{", traits: .default - .cmdOn),
+      .vertical2("]", "}", traits: .default - .cmdOn),
+      .vertical2("<", "</", traits: .default - .cmdOn),
+      .vertical2(">", "/>", traits: .default - .cmdOn)
     ]
   }
   
   static func iPad_9_7(lang: String) -> Self {
     return Self([
-     .wideKey(.esc,  traits: .default),
+     .wideKey(.esc, traits: .default),
      .wideKey(.ctrl, traits: .default),
-     .key(    .alt,  traits: .default),
+     .key(    .alt, traits: .default),
 
-     .icon(.esc,   traits: .defaultSuggestionsOnly),
-     .icon(.ctrl,  traits: .defaultSuggestionsOnly),
-     .icon(.alt,   traits: .defaultSuggestionsOnly),
-     .icon(.tab,   traits: .defaultSuggestionsOnly),
-     .arrows(traits: .default - .cmdOff),
+     .icon(.esc, traits: .defaultSuggestionsOnly),
+     .icon(.ctrl, traits: .defaultSuggestionsOnly),
+     .icon(.alt, traits: .defaultSuggestionsOnly),
+     .icon(.tab, traits: .defaultSuggestionsOnly),
+     .arrows(traits: .default - .cmdOff)
    ], [
-     .key(.tab,  traits: .default - .cmdOn),
+     .key(.tab, traits: .default - .cmdOn)
      ] + _iPad_9_7_middle(lang: lang) + [
      //
-     .vertical2(.f(1), .f(7),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-     .vertical2(.f(2), .f(8),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-     .vertical2(.f(3), .f(9),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
+     .vertical2(.f(1), .f(7), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+     .vertical2(.f(2), .f(8), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+     .vertical2(.f(3), .f(9), traits: .default - .cmdOff + .hkb + .suggestionsOn),
      .vertical2(.f(4), .f(10), traits: .default - .cmdOff + .hkb + .suggestionsOn),
      .vertical2(.f(5), .f(11), traits: .default - .cmdOff + .hkb + .suggestionsOn),
      .vertical2(.f(6), .f(12), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       //
-     .flexKey(.esc,  traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn),
+     .flexKey(.esc, traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn)
    ], [
-     .icon(   .copy,  traits: .all - .selectionOff - .skb),
+     .icon(   .copy, traits: .all - .selectionOff - .skb),
      .icon(   .paste, traits: .all - .clipboardOff - .skb),
      .arrows(traits: .default - .cmdOn),
-     .wideKey(    .cmd,   traits: .default + .hkb),
-     .icon(   .cmd,   traits: .defaultSuggestionsOnly + .hkb),
+     .wideKey(    .cmd, traits: .default + .hkb),
+     .icon(   .cmd, traits: .defaultSuggestionsOnly + .hkb)
    ])
   }
   
@@ -181,81 +181,81 @@ extension KBLayout {
   static func _iPad_10_5_middle(lang: String) -> [KBKey] {
     if lang.hasPrefix("ru-") ||  lang.hasPrefix("fr-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "/>",  traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "/>", traits: .default - .cmdOn)
       ]
     }
     
-    if lang.hasPrefix("de-"){
+    if lang.hasPrefix("de-") {
       return [
-        .vertical2("~", "_",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
+        .vertical2("~", "_", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "/>",  traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "/>", traits: .default - .cmdOn)
       ]
     }
     
     if lang.hasPrefix("es-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "/>",  traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "/>", traits: .default - .cmdOn)
       ]
     }
     
     return [
-      .vertical2("`", "~",  traits: .default - .cmdOn),
-      .vertical2("^", "_",  traits: .default - .cmdOn),
+      .vertical2("`", "~", traits: .default - .cmdOn),
+      .vertical2("^", "_", traits: .default - .cmdOn),
       .vertical2("\\", "|", traits: .default - .cmdOn),
-      .vertical2("[", "{",  traits: .default - .cmdOn),
-      .vertical2("]", "}",  traits: .default - .cmdOn),
-      .vertical2("<", "</",  traits: .default - .cmdOn),
-      .vertical2(">", "/>",  traits: .default - .cmdOn),
+      .vertical2("[", "{", traits: .default - .cmdOn),
+      .vertical2("]", "}", traits: .default - .cmdOn),
+      .vertical2("<", "</", traits: .default - .cmdOn),
+      .vertical2(">", "/>", traits: .default - .cmdOn)
     ]
   }
   
   static func iPad_10_5(lang: String) -> Self {
     
     return Self([
-      .wideKey(.esc,  traits: .default),
+      .wideKey(.esc, traits: .default),
       .wideKey(.ctrl, traits: .default),
-      .key(    .alt,  traits: .default),
+      .key(    .alt, traits: .default),
 
-      .icon(.esc,   traits: .defaultSuggestionsOnly),
-      .icon(.ctrl,  traits: .defaultSuggestionsOnly),
-      .icon(.alt,   traits: .defaultSuggestionsOnly),
-      .icon(.tab,   traits: .defaultSuggestionsOnly),
-      .arrows(traits: .default - .cmdOff),
+      .icon(.esc, traits: .defaultSuggestionsOnly),
+      .icon(.ctrl, traits: .defaultSuggestionsOnly),
+      .icon(.alt, traits: .defaultSuggestionsOnly),
+      .icon(.tab, traits: .defaultSuggestionsOnly),
+      .arrows(traits: .default - .cmdOff)
     ], [
-      .key(.tab,  traits: .default - .cmdOn),
+      .key(.tab, traits: .default - .cmdOn)
       ] + _iPad_10_5_middle(lang: lang) + [
       //
-      .vertical2(.f(1), .f(7),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-      .vertical2(.f(2), .f(8),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-      .vertical2(.f(3), .f(9),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(1), .f(7), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(2), .f(8), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(3), .f(9), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(4), .f(10), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(5), .f(11), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(6), .f(12), traits: .default - .cmdOff + .hkb + .suggestionsOn),
        //
-      .flexKey(    .esc     ,  traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn),
+      .flexKey(    .esc, traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn)
     ], [
-      .icon(.copy,  traits: .all - .selectionOff - .skb),
+      .icon(.copy, traits: .all - .selectionOff - .skb),
       .icon(.paste, traits: .all - .clipboardOff - .skb),
       .arrows(traits: .default - .cmdOn),
-      .wideKey(    .cmd,   traits: .default + .hkb),
-      .icon(.cmd,    traits: .defaultSuggestionsOnly + .hkb),
+      .wideKey(    .cmd, traits: .default + .hkb),
+      .icon(.cmd, traits: .defaultSuggestionsOnly + .hkb)
     ])
   }
   
@@ -264,73 +264,73 @@ extension KBLayout {
   static func _iPad_11_middle(lang: String) -> [KBKey] {
     if lang.hasPrefix("ru-") ||  lang.hasPrefix("fr-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
-        .vertical2("<", "</",  traits: .default - .cmdOn),
-        .vertical2(">", "'", traits: .default - .cmdOn),
+        .vertical2("<", "</", traits: .default - .cmdOn),
+        .vertical2(">", "'", traits: .default - .cmdOn)
       ]
     }
     
     if lang.hasPrefix("de-") {
       return [
-        .vertical2("~", "_",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
+        .vertical2("~", "_", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
         .vertical2("<", "</", traits: .default - .cmdOn),
-        .vertical2(">", "'",  traits: .default - .cmdOn),
+        .vertical2(">", "'", traits: .default - .cmdOn)
       ]
     }
     
     if lang.hasPrefix("es-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
         .vertical2("<", "</", traits: .default - .cmdOn),
-        .vertical2(">", "'",  traits: .default - .cmdOn),
+        .vertical2(">", "'", traits: .default - .cmdOn)
       ]
     }
     
     return [
-      .vertical2("`", "~",  traits: .default - .cmdOn),
-      .vertical2("^", "_",  traits: .default - .cmdOn),
-      .vertical2("[", "{",  traits: .default - .cmdOn),
-      .vertical2("]", "}",  traits: .default - .cmdOn),
+      .vertical2("`", "~", traits: .default - .cmdOn),
+      .vertical2("^", "_", traits: .default - .cmdOn),
+      .vertical2("[", "{", traits: .default - .cmdOn),
+      .vertical2("]", "}", traits: .default - .cmdOn),
       .vertical2("\\", "|", traits: .default - .cmdOn),
       .vertical2("<", "</", traits: .default - .cmdOn),
-      .vertical2(">", "'",  traits: .default - .cmdOn),
+      .vertical2(">", "'", traits: .default - .cmdOn)
     ]
   }
   
   static func iPad_11(lang: String) -> Self {
     return Self([
-      .wideKey(.esc,  traits: .default),
+      .wideKey(.esc, traits: .default),
       .wideKey(.ctrl, traits: .default),
-      .wideKey(.alt,  traits: .default),
+      .wideKey(.alt, traits: .default),
 
-      .key(   .esc,  traits: .defaultSuggestionsOnly),
-      .key(  .ctrl,  traits: .defaultSuggestionsOnly),
-      .icon(  .alt,  traits: .defaultSuggestionsOnly),
-      .arrows(traits: .default - .cmdOff),
+      .key(   .esc, traits: .defaultSuggestionsOnly),
+      .key(  .ctrl, traits: .defaultSuggestionsOnly),
+      .icon(  .alt, traits: .defaultSuggestionsOnly),
+      .arrows(traits: .default - .cmdOff)
     ], _iPad_11_middle(lang: lang) + [
       //
-      .vertical2(.f(1), .f(7),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-      .vertical2(.f(2), .f(8),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-      .vertical2(.f(3), .f(9),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(1), .f(7), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(2), .f(8), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(3), .f(9), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(4), .f(10), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(5), .f(11), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(6), .f(12), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       //
-      .flexKey(.esc, traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn),
+      .flexKey(.esc, traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn)
     ], [
-      .icon(   .copy,  traits: .all - .selectionOff - .skb),
+      .icon(   .copy, traits: .all - .selectionOff - .skb),
       .icon(   .paste, traits: .all - .clipboardOff - .skb),
 //      .key(    .left,  traits: .default),
 //      .key(    .down,  traits: .default),
@@ -338,9 +338,9 @@ extension KBLayout {
 //      .key(    .right, traits: .default),
       .arrows(traits: .default - .cmdOn),
 
-      .wideKey(.cmd,   traits: .default),
-      .key(    .cmd,   traits: .default + .hkb - .skb),
-      .icon(   .cmd,   traits: .defaultSuggestionsOnly + .hkb),
+      .wideKey(.cmd, traits: .default),
+      .key(    .cmd, traits: .default + .hkb - .skb),
+      .icon(   .cmd, traits: .defaultSuggestionsOnly + .hkb)
     ])
   }
   
@@ -349,42 +349,42 @@ extension KBLayout {
   static func _iPad_12_9_middle(lang: String) -> [KBKey] {
     if lang.hasPrefix("ru-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
         .vertical2("\\", "|", traits: .default - .cmdOn),
         .vertical2("<", "</", traits: .default - .cmdOn),
-        .vertical2(">", "'",  traits: .default - .cmdOn),
+        .vertical2(">", "'", traits: .default - .cmdOn)
       ]
     }
     
     if lang.hasPrefix("fr-") {
        return [
-         .vertical2("~", "'",  traits: .default - .cmdOn),
-         .vertical2("$", "^",  traits: .default - .cmdOn),
-         .vertical2("[", "{",  traits: .default - .cmdOn),
-         .vertical2("]", "}",  traits: .default - .cmdOn),
-         .vertical2("\\", "|", traits: .default - .cmdOn),
+         .vertical2("~", "'", traits: .default - .cmdOn),
+         .vertical2("$", "^", traits: .default - .cmdOn),
+         .vertical2("[", "{", traits: .default - .cmdOn),
+         .vertical2("]", "}", traits: .default - .cmdOn),
+         .vertical2("\\", "|", traits: .default - .cmdOn)
        ]
      }
     
-    if lang.hasPrefix("de-"){
+    if lang.hasPrefix("de-") {
       return [
-        .vertical2("~", "'",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("\\", "|", traits: .default - .cmdOn),
+        .vertical2("~", "'", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("\\", "|", traits: .default - .cmdOn)
       ]
     }
-    if lang.hasPrefix("es-"){
+    if lang.hasPrefix("es-") {
       return [
-        .vertical2("`", "~",  traits: .default - .cmdOn),
-        .vertical2("$", "^",  traits: .default - .cmdOn),
-        .vertical2("[", "{",  traits: .default - .cmdOn),
-        .vertical2("]", "}",  traits: .default - .cmdOn),
-        .vertical2("\\", "|", traits: .default - .cmdOn),
+        .vertical2("`", "~", traits: .default - .cmdOn),
+        .vertical2("$", "^", traits: .default - .cmdOn),
+        .vertical2("[", "{", traits: .default - .cmdOn),
+        .vertical2("]", "}", traits: .default - .cmdOn),
+        .vertical2("\\", "|", traits: .default - .cmdOn)
       ]
     }
     return []
@@ -393,35 +393,35 @@ extension KBLayout {
   static func iPad_12_9(lang: String) -> Self {
     
     return Self([
-      .wideKey(.esc,  traits: .default),
+      .wideKey(.esc, traits: .default),
       .wideKey(.ctrl, traits: .default),
-      .wideKey(.alt,  traits: .default),
+      .wideKey(.alt, traits: .default),
 
-      .wideKey(.esc,  traits: .defaultSuggestionsOnly),
+      .wideKey(.esc, traits: .defaultSuggestionsOnly),
       .wideKey(.ctrl, traits: .defaultSuggestionsOnly),
-      .wideKey(.alt,  traits: .defaultSuggestionsOnly),
+      .wideKey(.alt, traits: .defaultSuggestionsOnly)
     ], _iPad_12_9_middle(lang: lang) + [
       // -
-      .vertical2(.f(1), .f(7),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-      .vertical2(.f(2), .f(8),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
-      .vertical2(.f(3), .f(9),  traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(1), .f(7), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(2), .f(8), traits: .default - .cmdOff + .hkb + .suggestionsOn),
+      .vertical2(.f(3), .f(9), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(4), .f(10), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(5), .f(11), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       .vertical2(.f(6), .f(12), traits: .default - .cmdOff + .hkb + .suggestionsOn),
       // -
-      .flexKey(.esc,  traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn),
+      .flexKey(.esc, traits: .default - .cmdOn - .skb + .hkb + .suggestionsOn)
     ], [
-      .icon(.copy,  traits: .all - .selectionOff - .skb),
+      .icon(.copy, traits: .all - .selectionOff - .skb),
       .icon(.paste, traits: .all - .clipboardOff - .skb),
-      .key(.left,   traits: .default),
-      .key(.down,   traits: .default),
-      .key(.up,     traits: .default),
-      .key(.right,  traits: .default),
+      .key(.left, traits: .default),
+      .key(.down, traits: .default),
+      .key(.up, traits: .default),
+      .key(.right, traits: .default),
 
       .wideKey(.cmd, traits: .default - .portrait),
       .key(    .cmd, traits: .default - .landscape),
       .key(    .cmd, traits: .default + .hkb - .skb),
-      .wideKey(.cmd, traits: .defaultSuggestionsOnly + .hkb),
+      .wideKey(.cmd, traits: .defaultSuggestionsOnly + .hkb)
     ])
   }
 }

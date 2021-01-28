@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import XCTest
 
 class SessionParamsTests: XCTestCase {
@@ -50,7 +49,6 @@ class SessionParamsTests: XCTestCase {
     mcpParams.childSessionType = "test"
     mcpParams.viewSize = CGSize(width: 10, height: 10)
     mcpParams.layoutLockedFrame = CGRect(x: 10, y: 10, width: 10, height: 10)
-    
     
     let moshParams = MoshParams()
     moshParams.ip = "192.168.1.1"

@@ -38,7 +38,7 @@ class KBKeyViewVertical2: KBKeyView {
   private var _touchFirstLocation: CGPoint = .zero
   private var _progress: CGFloat = 0
   
-  private var _accessibilityElements:[KBKeyAccessibilityElement]? = nil
+  private var _accessibilityElements: [KBKeyAccessibilityElement]?
   
   override init(key: KBKey, keyDelegate: KBKeyViewDelegate) {
     super.init(key: key, keyDelegate: keyDelegate)
@@ -183,8 +183,6 @@ class KBKeyViewVertical2: KBKeyView {
   }
 }
 
-
-
 extension KBKeyViewVertical2: KBKeyAccessibilityElementDelegate {
   override var accessibilityElements: [Any]? {
     get {
@@ -239,6 +237,5 @@ extension KBKeyViewVertical2: KBKeyAccessibilityElementDelegate {
     
     return true
   }
-  
   
 }

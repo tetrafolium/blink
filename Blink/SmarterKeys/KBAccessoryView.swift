@@ -33,7 +33,7 @@ import UIKit
 
 class KBAccessoryView: UIInputView {
   private let _kbView: KBView
-  private var _heightContraint: NSLayoutConstraint? = nil
+  private var _heightContraint: NSLayoutConstraint?
   
   init(kbView: KBView) {
     _kbView = kbView

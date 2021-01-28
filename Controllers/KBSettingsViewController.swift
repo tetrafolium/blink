@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 import UIKit
 
@@ -41,6 +40,6 @@ import UIKit
     else {
       return UIHostingController(rootView: rootView)
     }
-    return UIHostingController(rootView: NavView(navController: nav)  { rootView } )
+    return UIHostingController(rootView: NavView(navController: nav) { rootView })
   }
 }

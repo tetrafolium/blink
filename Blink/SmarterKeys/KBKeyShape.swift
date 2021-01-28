@@ -68,7 +68,7 @@ enum KBKeyShape: Hashable {
     }
     
     if let values = try container.decodeIfPresent([KBKeyValue].self, forKey: .vertical2),
-      values.count == 2  {
+      values.count == 2 {
       self = .vertical2(a: values[0], b: values[1])
       return
     }
@@ -91,7 +91,6 @@ extension KBKeyShape: Identifiable {
 }
 
 extension KBKeyShape {
-  
   
   var primaryValue: KBKeyValue {
     switch self {

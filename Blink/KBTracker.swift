@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import UIKit
 
@@ -41,7 +40,7 @@ class KBTracker {
   private(set) var kbTraits = KBTraits.initial
   private(set) var kbDevice = KBDevice.detect()
   
-  private(set) var input: SmarterTermInput? = nil
+  private(set) var input: SmarterTermInput?
   
   var isHardwareKB: Bool { kbTraits.isHKBAttached }
   
@@ -62,7 +61,7 @@ class KBTracker {
       else {
         return KBConfig()
     }
-    return cfg;
+    return cfg
   }
   
   func saveAndApply(config: KBConfig) {
@@ -130,7 +129,6 @@ class KBTracker {
     let screenHeight = mainScreen.bounds.height
     let isIPad       = UIDevice.current.userInterfaceIdiom == .pad
     
-    
     var isOnScreenKB = isIPad ? kbFrameEnd.size.height > 116 : screenHeight >= kbFrameEnd.maxY
     
     // External screen kb workaround
@@ -147,7 +145,7 @@ class KBTracker {
       input?.sync(traits: kbTraits, device: kbDevice, hideSmartKeysWithHKB: hideSmartKeysWithHKB)
     }
     
-    if !kbTraits.isHKBAttached && isOnScreenKB  {
+    if !kbTraits.isHKBAttached && isOnScreenKB {
       if isIPad {
         if isFloatingKB {
           kbDevice = .in6_5
@@ -198,7 +196,7 @@ class KBTracker {
       bottomInset = screenMaxY - kbMinY
     }
     
-    if (bottomInset < 30) {
+    if bottomInset < 30 {
       bottomInset = 0
     }
     
@@ -221,7 +219,7 @@ class KBTracker {
     //      bottomInset = _kbView.intrinsicContentSize.height + safeInsets.bottom
     //    }
     
-    LayoutManager.updateMainWindowKBBottomInset(bottomInset);
+    LayoutManager.updateMainWindowKBBottomInset(bottomInset)
   }
   
   @objc private func _keyboardWillShow(_ notification: Notification) {

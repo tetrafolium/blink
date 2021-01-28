@@ -29,15 +29,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 struct StuckView: View {
   private var _emojies = ["😱", "🤪", "🧐", "🥺", "🤔", "🤭", "🙈", "🙊"]
   var keyCode: KeyCode
-  var dismissAction: () -> ()
+  var dismissAction: () -> Void
   
-  init(keyCode: KeyCode, dismissAction: @escaping () -> ()) {
+  init(keyCode: KeyCode, dismissAction: @escaping () -> Void) {
     self.keyCode = keyCode
     self.dismissAction = dismissAction
   }
@@ -63,7 +62,6 @@ struct StuckView: View {
       }
   }
 }
-
 
 struct StuckView_Previews: PreviewProvider {
     static var previews: some View {

@@ -29,12 +29,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 struct Row<Content: View, Details: View>: View {
-  var content: () ->  Content
-  var details: () ->  Details
+  var content: () -> Content
+  var details: () -> Details
   
   var body: some View {
     HStack {

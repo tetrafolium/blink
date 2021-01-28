@@ -31,17 +31,16 @@
 
 import UIKit
 
-
 class KBKeyViewArrows: KBKeyView {
   let _symbols: [UIImageView]
   private var _touchFirstLocation: CGPoint = .zero
   
-  private var _prevValue: KBKeyValue? = nil
-  private var _keyValue: KBKeyValue? = nil
+  private var _prevValue: KBKeyValue?
+  private var _keyValue: KBKeyValue?
   private var _values: [KBKeyValue]
   
-  private var _accessibilityElements:[KBKeyAccessibilityElement]? = nil
-  private var _timer: Timer? = nil
+  private var _accessibilityElements: [KBKeyAccessibilityElement]?
+  private var _timer: Timer?
   private var _repeating: Bool = false
   private var _repeatingSpeed: TimeInterval = 0.1
   
@@ -72,7 +71,6 @@ class KBKeyViewArrows: KBKeyView {
     }
   }
   
-  
   func _startTimer() {
     _timer?.invalidate()
     weak var weakSelf = self
@@ -102,7 +100,6 @@ class KBKeyViewArrows: KBKeyView {
     _timer?.invalidate()
     _timer = nil
   }
-  
   
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let touch = touches.first else {
@@ -152,10 +149,10 @@ class KBKeyViewArrows: KBKeyView {
     
     if _repeating {
       var speed = 0.1
-      if abs(delta.x) > keyBounds.width * 0.9 || abs(delta.y) > keyBounds.height * 3  {
+      if abs(delta.x) > keyBounds.width * 0.9 || abs(delta.y) > keyBounds.height * 3 {
         speed = 0.08
       }
-      if abs(delta.x) > keyBounds.width * 2 || abs(delta.y) > keyBounds.height * 4  {
+      if abs(delta.x) > keyBounds.width * 2 || abs(delta.y) > keyBounds.height * 4 {
         speed = 0.05
       }
       if speed !=  _repeatingSpeed {
@@ -196,7 +193,7 @@ class KBKeyViewArrows: KBKeyView {
       .init(x: -width * 0.25, y: 0),
       .init(x: 0, y: height * 0.15),
       .init(x: 0, y: -height * 0.15),
-      .init(x: width * 0.25, y: 0),
+      .init(x: width * 0.25, y: 0)
     ]
     
     for (i, symbol) in _symbols.enumerated() {
@@ -205,7 +202,7 @@ class KBKeyViewArrows: KBKeyView {
       let alpha: CGFloat = current ? 1.0 : 0.3
       symbol.frame = symbolFrame
       let translate = translates[i]
-      symbol.center = CGPoint(x:symbol.center.x + translate.x, y: symbol.center.y + translate.y)
+      symbol.center = CGPoint(x: symbol.center.x + translate.x, y: symbol.center.y + translate.y)
       symbol.transform = CGAffineTransform(scaleX: scale, y: scale)
       symbol.alpha = alpha
     }
@@ -223,7 +220,6 @@ class KBKeyViewArrows: KBKeyView {
     }
   }
 }
-
 
 extension KBKeyViewArrows: KBKeyAccessibilityElementDelegate {
   override var accessibilityElements: [Any]? {
@@ -289,6 +285,5 @@ extension KBKeyViewArrows: KBKeyAccessibilityElementDelegate {
     
     return true
   }
-  
   
 }

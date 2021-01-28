@@ -39,7 +39,7 @@ protocol KBKeyAccessibilityElementDelegate: class {
 
 class KBKeyAccessibilityElement: UIAccessibilityElement {
   
-  weak var elementDelegate: KBKeyAccessibilityElementDelegate? = nil
+  weak var elementDelegate: KBKeyAccessibilityElementDelegate?
   
   var accessibilityKBKeyValue: KBKeyValue? = nil {
     didSet {

@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 
 struct CodableColor: Codable {
@@ -65,4 +64,3 @@ extension UIColor {
     self.init(codableColor: color)
   }
 }
-

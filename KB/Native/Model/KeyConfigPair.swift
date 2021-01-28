@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Combine
 
 class KeyConfigPair: ObservableObject, Codable {
@@ -117,8 +116,8 @@ class KeyConfigPair: ObservableObject, Codable {
     }
     
     var c = encoder.container(keyedBy: Keys.self)
-    try c.encode(left,       forKey: .left)
-    try c.encode(right,      forKey: .right)
+    try c.encode(left, forKey: .left)
+    try c.encode(right, forKey: .right)
     try c.encode(bothAsLeft, forKey: .same)
   }
   
@@ -126,8 +125,7 @@ class KeyConfigPair: ObservableObject, Codable {
     let c = try decoder.container(keyedBy: Keys.self)
     let left =       try c.decode(KeyConfig.self, forKey: .left)
     let right =      try c.decode(KeyConfig.self, forKey: .right)
-    let bothAsLeft = try c.decode(Bool.self,      forKey: .same)
+    let bothAsLeft = try c.decode(Bool.self, forKey: .same)
     self.init(left: left, right: right, bothAsLeft: bothAsLeft)
   }
 }
-

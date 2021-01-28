@@ -29,12 +29,11 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 struct NavButton<Details: View>: View {
   @EnvironmentObject var nav: Nav
-  var details: () ->  Details
+  var details: () -> Details
   
   var body: some View {
     Button(action: {

@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import XCTest
 
 extension String {
@@ -56,7 +55,7 @@ class CompletionTests: XCTestCase {
     for token in [
       "  ".token(cursor: -1),
       "".token(cursor: 0),
-      "".token(cursor: 10),
+      "".token(cursor: 10)
       ] {
       assert(token.value == "")
       assert(token.cmd == nil)
@@ -139,7 +138,6 @@ class CompletionTests: XCTestCase {
     assert(token.isRedirect == false)
     assert(token.jsPos == 4)
     assert(token.jsLen == 2)
-    
     
     token = "ssh -v host".token(cursor: 4)
     assert(token.value == "ssh -v")

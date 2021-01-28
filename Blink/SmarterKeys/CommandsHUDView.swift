@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import UIKit
 import Combine
 
@@ -39,10 +38,10 @@ import Combine
 }
 
 class CommandsHUGView: UIView {
-  var _alphaCancable: AnyCancellable? = nil
-  var _layerCancable: AnyCancellable? = nil
-  weak var _window: UIWindow? = nil
-  weak var delegate: CommandsHUDViewDelegate? = nil
+  var _alphaCancable: AnyCancellable?
+  var _layerCancable: AnyCancellable?
+  weak var _window: UIWindow?
+  weak var delegate: CommandsHUDViewDelegate?
   var _shadowEffectView: UIVisualEffectView
   var _visualEffect2: UIVisualEffectView
   var _contentView = UIView()
@@ -55,7 +54,7 @@ class CommandsHUGView: UIView {
     static var dark: Self {
       Colors(
         bg: UIColor(red: 0.33, green: 0.33, blue: 0.35, alpha: 0.33),
-        button: UIColor(red: 0.11, green: 0.11, blue: 0.12, alpha:1),
+        button: UIColor(red: 0.11, green: 0.11, blue: 0.12, alpha: 1),
         shadow: UIColor.clear
       )
     }
@@ -97,7 +96,7 @@ class CommandsHUGView: UIView {
       CommandControl(title: "Close", symbol: "xmark.rectangle", accessibilityLabel: "Close shell")
         .with(target: self, action: #selector(_closeShell)),
       CreateShellCommandControl()
-        .with(target: self, action: #selector(_newShell)),
+        .with(target: self, action: #selector(_newShell))
     ]
     
     if DeviceInfo.shared().hasCorners {
@@ -114,7 +113,7 @@ class CommandsHUGView: UIView {
     let v = UIVisualEffectView(effect: vibrancy)
     _visualEffect2.contentView.addSubview(v)
 
-    _style();
+    _style()
   }
   
   func _style() {
@@ -163,7 +162,7 @@ class CommandsHUGView: UIView {
     
     let params = term.sessionParams
     params.layoutMode = _nextLayoutMode(mode: BKLayoutMode(rawValue: params.layoutMode)).rawValue
-    if (params.layoutLocked) {
+    if params.layoutLocked {
       term.unlockLayout()
     }
     term.view?.setNeedsLayout()
@@ -192,22 +191,22 @@ class CommandsHUGView: UIView {
       _lockControl.setSymbol(symbol: "lock")
     }
     
-    let modeName = LayoutManager.layoutMode(toString: BKLayoutMode(rawValue: params.layoutMode) ?? .default);
+    let modeName = LayoutManager.layoutMode(toString: BKLayoutMode(rawValue: params.layoutMode) ?? .default)
     
     _layoutControl.setTitle(title: modeName, accessibilityLabel: modeName)
   }
   
   func _nextLayoutMode(mode: BKLayoutMode?) -> BKLayoutMode {
-    switch (mode) {
+    switch mode {
     case nil: fallthrough
     case .default:
-      return .safeFit;
+      return .safeFit
     case .safeFit:
-      return .fill;
+      return .fill
     case .fill:
-      return .cover;
+      return .cover
     case .cover:
-      return .safeFit;
+      return .safeFit
     @unknown default:
       return .safeFit
     }
@@ -221,18 +220,17 @@ class CommandsHUGView: UIView {
     else {
       return
     }
-    _window = inputWin;
+    _window = inputWin
     
     gestureOverlayView.addSubview(self)
     
     let sublayers: ReferenceWritableKeyPath<CALayer, [CALayer]?> = \CALayer.sublayers
-    _layerCancable = gestureOverlayView.layer.publisher(for: sublayers).sink(receiveValue: { (layers) in
+    _layerCancable = gestureOverlayView.layer.publisher(for: sublayers).sink(receiveValue: { (_) in
       let hud = gestureOverlayView.subviews.filter { NSStringFromClass($0.classForCoder).hasPrefix("UI") }.first
       self._bindAlpha(hudView: hud)
       self.superview?.bringSubviewToFront(self)
     })
   }
-  
   
   private func _bindAlpha(hudView: UIView?) {
     guard let hud = hudView else {
@@ -261,7 +259,6 @@ class CommandsHUGView: UIView {
     else {
       return
     }
-    
     
     var x: CGFloat = 0
     var width: CGFloat = 87.5

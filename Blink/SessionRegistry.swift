@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import UIKit
 
@@ -54,7 +53,6 @@ extension SuspendableSession {
     SessionRegistry.shared.resumeIfNeeded(session: self)
   }
 }
-
 
 @objc class SessionRegistry: NSObject {
   private var _sessionsIndex: [UUID: SuspendableSession] = [:]
@@ -174,7 +172,7 @@ extension SuspendableSession {
     session.meta.isSuspended = false
   }
   
-  private var _fsSessionsFolderURL: URL? = nil
+  private var _fsSessionsFolderURL: URL?
   
   private func _fsSessionsFolder() throws -> URL {
     if let fsSessionFolderURL = _fsSessionsFolderURL {
@@ -190,7 +188,7 @@ extension SuspendableSession {
     )
     
     supporDirUrl.appendPathComponent("sessions")
-    var isDir:ObjCBool = false
+    var isDir: ObjCBool = false
     if !fm.fileExists(atPath: supporDirUrl.path, isDirectory: &isDir) {
       try fm.createDirectory(at: supporDirUrl, withIntermediateDirectories: true, attributes: nil)
     }

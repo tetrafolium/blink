@@ -192,7 +192,6 @@ enum KBKeyValue: Hashable, Identifiable, Codable {
     case .right: return "arrow.right"
     case .up:    return "arrow.up"
     case .down:  return "arrow.down"
-
       
     case .copy:  return "doc.on.doc"
     case .paste: return "doc.on.clipboard"

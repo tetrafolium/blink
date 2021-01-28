@@ -29,13 +29,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 struct DefaultRow<Details: View>: View {
   @Binding var title: String
   @Binding var description: String?
-  var details: () ->  Details
+  var details: () -> Details
   
   init(title: String, description: String? = nil, details: @escaping () -> Details) {
     _title = .constant(title)

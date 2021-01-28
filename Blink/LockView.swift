@@ -29,11 +29,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import SwiftUI
 
 struct LockView: View {
-  var unlockAction: (() -> ())?
+  var unlockAction: (() -> Void)?
   
   var body: some View {
     VStack {

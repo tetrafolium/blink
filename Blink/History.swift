@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Foundation
 import SwiftUI
 import Combine
@@ -60,8 +59,8 @@ struct History {
     let after: Int
   }
 
-  private static var _lastCommand: String = "";
-  static private var _lines: [String]? = nil
+  private static var _lastCommand: String = ""
+  static private var _lines: [String]?
   static private let linesLimit = 5000
   
   static func appendIfNeeded(command: String) {
@@ -74,7 +73,7 @@ struct History {
       _lastCommand = command
       
       if lines.last == command {
-        return;
+        return
       }
       
       lines.append(command)
@@ -110,7 +109,7 @@ struct History {
   private static func _getLines() -> [String] {
     if let lines = _lines {
       // Keep history for more time
-      return lines;
+      return lines
     }
     
     guard
@@ -133,7 +132,7 @@ struct History {
   }
   
   static func _filter(lines: [String], pattern: String) -> (total: Int, lines: [Line]) {
-    var result: [Line] = [];
+    var result: [Line] = []
     var num = 0
     let all = pattern.isEmpty
     for line in lines {
@@ -151,9 +150,9 @@ struct History {
   
   static func _slice(lines: [Line], with request: SearchRequest) -> [Line] {
     var cursorIndex = 0
-    if (request.cursor == 0) {
+    if request.cursor == 0 {
       cursorIndex = lines.startIndex
-    } else if (request.cursor == -1) {
+    } else if request.cursor == -1 {
       cursorIndex = lines.endIndex
     } else if let idx = lines.firstIndex(where: { $0.num == request.cursor }) {
       cursorIndex = idx
@@ -191,7 +190,6 @@ struct History {
     }
     return nil
   }
-  
 
   static func searchAPI(session: MCPSession, json: String) -> AnyPublisher<String, Never> {
     Just(json)
@@ -201,7 +199,6 @@ struct History {
       .eraseToAnyPublisher()
   }
 }
-
 
 @objc class HistoryObj: NSObject {
   @objc static func appendIfNeeded(command: String) {

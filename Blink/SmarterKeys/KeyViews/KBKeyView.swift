@@ -46,7 +46,7 @@ protocol KBKeyViewDelegate: class {
 
 class KBKeyView: UIView {
   let key: KBKey
-  private(set) var trackingTouch: UITouch? = nil
+  private(set) var trackingTouch: UITouch?
   
   open var shouldAutoRepeat: Bool { false }
   
@@ -103,7 +103,6 @@ class KBKeyView: UIView {
     turnOff()
     keyDelegate.keyViewCancelled(keyView: self)
   }
-  
   
   override func layoutSubviews() {
     super.layoutSubviews()

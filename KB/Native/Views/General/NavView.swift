@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import UIKit
 import SwiftUI
 
@@ -54,4 +53,3 @@ struct NavView<Content: View>: View {
     content().environmentObject(nav)
   }
 }
-

@@ -29,32 +29,31 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 import Combine
 
 class KBConfig: ObservableObject, Codable {
   @Published var capsLock: KeyConfig
-  @Published var shift:    KeyConfigPair
-  @Published var control:  KeyConfigPair
-  @Published var option:   KeyConfigPair
-  @Published var command:  KeyConfigPair
+  @Published var shift: KeyConfigPair
+  @Published var control: KeyConfigPair
+  @Published var option: KeyConfigPair
+  @Published var command: KeyConfigPair
 
-  @Published var fnBinding:     KeyBinding
+  @Published var fnBinding: KeyBinding
   @Published var cursorBinding: KeyBinding
 
-  @Published var shortcuts:     [KeyShortcut]
+  @Published var shortcuts: [KeyShortcut]
   
   private var _cancellable = Set<AnyCancellable>()
   
   init(
-    capsLock:      KeyConfig     = .capsLock,
-    shift:         KeyConfigPair = .shift,
-    control:       KeyConfigPair = .control,
-    option:        KeyConfigPair = .option,
-    command:       KeyConfigPair = .command,
-    fnBinding:     KeyBinding    = KeyBinding(keys: [KeyCode.commandLeft.id]),
+    capsLock: KeyConfig     = .capsLock,
+    shift: KeyConfigPair = .shift,
+    control: KeyConfigPair = .control,
+    option: KeyConfigPair = .option,
+    command: KeyConfigPair = .command,
+    fnBinding: KeyBinding    = KeyBinding(keys: [KeyCode.commandLeft.id]),
     cursorBinding: KeyBinding    = KeyBinding(keys: [KeyCode.commandLeft.id]),
-    shortcuts:     [KeyShortcut] = KeyShortcut.defaultList
+    shortcuts: [KeyShortcut] = KeyShortcut.defaultList
   ) {
     self.capsLock      = capsLock
     self.shift         = shift
@@ -112,26 +111,26 @@ class KBConfig: ObservableObject, Codable {
   
   public func encode(to encoder: Encoder) throws {
     var c = encoder.container(keyedBy: Keys.self)
-    try c.encode(capsLock,      forKey: .capsLock)
-    try c.encode(shift,         forKey: .shift)
-    try c.encode(control,       forKey: .control)
-    try c.encode(option,        forKey: .option)
-    try c.encode(command,       forKey: .command)
-    try c.encode(fnBinding,     forKey: .fn)
+    try c.encode(capsLock, forKey: .capsLock)
+    try c.encode(shift, forKey: .shift)
+    try c.encode(control, forKey: .control)
+    try c.encode(option, forKey: .option)
+    try c.encode(command, forKey: .command)
+    try c.encode(fnBinding, forKey: .fn)
     try c.encode(cursorBinding, forKey: .cursor)
-    try c.encode(shortcuts,     forKey: .shortcuts)
+    try c.encode(shortcuts, forKey: .shortcuts)
   }
   
   required convenience init(from decoder: Decoder) throws {
     let c = try decoder.container(keyedBy: Keys.self)
     
-    let capsLock      = try c.decode(KeyConfig.self,     forKey: .capsLock)
+    let capsLock      = try c.decode(KeyConfig.self, forKey: .capsLock)
     let shift         = try c.decode(KeyConfigPair.self, forKey: .shift)
     let control       = try c.decode(KeyConfigPair.self, forKey: .control)
     let option        = try c.decode(KeyConfigPair.self, forKey: .option)
     let command       = try c.decode(KeyConfigPair.self, forKey: .command)
-    let fnBinding     = try c.decode(KeyBinding.self,    forKey: .fn)
-    let cursorBinding = try c.decode(KeyBinding.self,    forKey: .cursor)
+    let fnBinding     = try c.decode(KeyBinding.self, forKey: .fn)
+    let cursorBinding = try c.decode(KeyBinding.self, forKey: .cursor)
     let shortcuts     = try c.decode([KeyShortcut].self, forKey: .shortcuts)
     
     self.init(
