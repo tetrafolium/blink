@@ -29,20 +29,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef Blink_bridge_h
 #define Blink_bridge_h
 
 #import "BKDefaults.h"
 #import "BKHosts.h"
+#import "BKUserConfigurationManager.h"
 #import "BlinkPaths.h"
 #import "DeviceInfo.h"
-#import "LayoutManager.h"
-#import "BKUserConfigurationManager.h"
-#import "Session.h"
-#import "MCPSession.h"
-#import "TermDevice.h"
 #import "KBWebViewBase.h"
+#import "LayoutManager.h"
+#import "MCPSession.h"
+#import "Session.h"
+#import "TermDevice.h"
 #import "openurl.h"
 
 #endif /* Blink_bridge_h */

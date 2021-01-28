@@ -29,82 +29,84 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#import "UIApplication+Version.h"
 #import "BKSettingsViewController.h"
 #import "BKDefaults.h"
 #import "BKUserConfigurationManager.h"
 #import "BKiCloudConfigurationViewController.h"
 #import "BKiCloudSyncHandler.h"
 #import "Blink-Swift.h"
-
+#import "UIApplication+Version.h"
 
 @interface BKSettingsViewController ()
 
-@property (nonatomic, weak) IBOutlet UILabel *userNameLabel;
-@property (nonatomic, weak) IBOutlet UILabel *iCloudSyncStatusLabel;
-@property (nonatomic, weak) IBOutlet UILabel *autoLockStatusLabel;
-@property (nonatomic, weak) IBOutlet UILabel *xCallbackStatusLabel;
-@property (nonatomic, weak) IBOutlet UILabel *versionLabel;
+@property(nonatomic, weak) IBOutlet UILabel *userNameLabel;
+@property(nonatomic, weak) IBOutlet UILabel *iCloudSyncStatusLabel;
+@property(nonatomic, weak) IBOutlet UILabel *autoLockStatusLabel;
+@property(nonatomic, weak) IBOutlet UILabel *xCallbackStatusLabel;
+@property(nonatomic, weak) IBOutlet UILabel *versionLabel;
 
 @end
 
-@implementation BKSettingsViewController
-{
-
+@implementation BKSettingsViewController {
 }
 
-- (void)viewDidLoad
-{
-	[super viewDidLoad];
+- (void)viewDidLoad {
+  [super viewDidLoad];
 
+  // Uncomment the following line to preserve selection between presentations.
+  // self.clearsSelectionOnViewWillAppear = NO;
 
-	// Uncomment the following line to preserve selection between presentations.
-	// self.clearsSelectionOnViewWillAppear = NO;
-
-	// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-	// self.navigationItem.rightBarButtonItem = self.editButtonItem;
-	self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
+  // Uncomment the following line to display an Edit button in the navigation
+  // bar for this view controller. self.navigationItem.rightBarButtonItem =
+  // self.editButtonItem;
+  self.navigationItem.largeTitleDisplayMode =
+      UINavigationItemLargeTitleDisplayModeAlways;
 }
 
-- (void)_closeConfig:(UIKeyCommand *)cmd
-{
-	[self dismissViewControllerAnimated:YES completion:nil];
+- (void)_closeConfig:(UIKeyCommand *)cmd {
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (BOOL)canBecomeFirstResponder
-{
-	return YES;
+- (BOOL)canBecomeFirstResponder {
+  return YES;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
+- (void)viewWillAppear:(BOOL)animated {
+  [super viewWillAppear:animated];
 
-	self.userNameLabel.text = [BKDefaults defaultUserName];;
-	self.iCloudSyncStatusLabel.text = [BKUserConfigurationManager userSettingsValueForKey:BKUserConfigiCloud] ? @"On" : @"Off";
-	self.autoLockStatusLabel.text = [BKUserConfigurationManager userSettingsValueForKey:BKUserConfigAutoLock] ? @"On" : @"Off";
-	self.xCallbackStatusLabel.text = [BKDefaults isXCallBackURLEnabled] ? @"On" : @"Off";
-	self.versionLabel.text = [UIApplication blinkShortVersion];
+  self.userNameLabel.text = [BKDefaults defaultUserName];
+  ;
+  self.iCloudSyncStatusLabel.text =
+      [BKUserConfigurationManager userSettingsValueForKey:BKUserConfigiCloud]
+          ? @"On"
+          : @"Off";
+  self.autoLockStatusLabel.text =
+      [BKUserConfigurationManager userSettingsValueForKey:BKUserConfigAutoLock]
+          ? @"On"
+          : @"Off";
+  self.xCallbackStatusLabel.text =
+      [BKDefaults isXCallBackURLEnabled] ? @"On" : @"Off";
+  self.versionLabel.text = [UIApplication blinkShortVersion];
 
-	// Layout tableview so it will place labels correctly
-	[self.tableView layoutIfNeeded];
+  // Layout tableview so it will place labels correctly
+  [self.tableView layoutIfNeeded];
 }
 
-- (IBAction)unwindFromDefaultUser:(UIStoryboardSegue *)sender
-{
+- (IBAction)unwindFromDefaultUser:(UIStoryboardSegue *)sender {
 }
 
-- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
+- (BOOL)tableView:(UITableView *)tableView
+    shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
+  return YES;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	if (indexPath.section == 1 && indexPath.row == 1) {
-		UIViewController *vc = [KBSettingsViewController createWithNav:self.navigationController];
-		[self.navigationController pushViewController:vc animated:YES];
-	}
+- (void)tableView:(UITableView *)tableView
+    didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  if (indexPath.section == 1 && indexPath.row == 1) {
+    UIViewController *vc =
+        [KBSettingsViewController createWithNav:self.navigationController];
+    [self.navigationController pushViewController:vc animated:YES];
+  }
 }
-
 
 @end

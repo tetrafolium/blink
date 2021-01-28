@@ -29,21 +29,19 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-
 @interface KBWebViewBase : WKWebView
 
-@property (readonly) UIKeyModifierFlags trackingModifierFlags;
+@property(readonly) UIKeyModifierFlags trackingModifierFlags;
 
-- ( UIView * _Nullable )selectionView;
-- (void)reportFocus:(BOOL) value;
+- (UIView *_Nullable)selectionView;
+- (void)reportFocus:(BOOL)value;
 - (void)reportStateReset:(BOOL)hasSelection;
-- (void)reportLang:(NSString *) lang isHardwareKB: (BOOL)isHardwareKB;
-- (void)reportHex:(NSString *) hex;
+- (void)reportLang:(NSString *)lang isHardwareKB:(BOOL)isHardwareKB;
+- (void)reportHex:(NSString *)hex;
 - (void)reportPress:(UIKeyModifierFlags)mods keyId:(NSString *)keyId;
 - (void)reportToolbarPress:(UIKeyModifierFlags)mods keyId:(NSString *)keyId;
 - (void)reportToolbarModifierFlags:(UIKeyModifierFlags)flags;
@@ -64,7 +62,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)_keyboardWillHide:(NSNotification *)notification;
 - (void)_keyboardDidHide:(NSNotification *)notification;
 - (void)_keyboardDidShow:(NSNotification *)notification;
-
 
 @end
 

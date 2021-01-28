@@ -44,16 +44,16 @@
 @end
 
 @interface Session : NSObject {
-	pthread_t _tid;
-	TermStream *_stream;
-	TermDevice *_device;
+  pthread_t _tid;
+  TermStream *_stream;
+  TermDevice *_device;
 }
 
-@property (strong, atomic) SessionParams *sessionParams;
-@property (strong) TermStream *stream;
-@property (strong) TermDevice *device;
+@property(strong, atomic) SessionParams *sessionParams;
+@property(strong) TermStream *stream;
+@property(strong) TermDevice *device;
 
-@property (weak) id<SessionDelegate> delegate;
+@property(weak) id<SessionDelegate> delegate;
 
 - (id)init __unavailable;
 - (id)initWithDevice:(TermDevice *)device andParams:(SessionParams *)params;

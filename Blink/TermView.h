@@ -37,7 +37,6 @@
 @class TermInput;
 @class MCPParams;
 
-
 @protocol TermViewDeviceProtocol
 
 @property BOOL rawMode;
@@ -56,23 +55,21 @@
 
 @end
 
-
 @class SmarterTermInput;
 
 @interface TermView : UIView
 
-@property (nonatomic, readonly) NSString *title;
-@property (nonatomic, readonly) BOOL hasSelection;
-@property (nonatomic, readonly) NSURL *detectedLink;
-@property (nonatomic, readonly) NSString *selectedText;
-@property (nonatomic) id<TermViewDeviceProtocol> device;
-@property (nonatomic) UIEdgeInsets additionalInsets;
-@property (nonatomic) BOOL layoutLocked;
-@property (nonatomic) CGRect layoutLockedFrame;
-@property (nonatomic, readonly) BOOL isReady;
-@property (nonatomic, readonly) CGRect selectionRect;
-@property (nonatomic, readonly) SmarterTermInput *webView;
-
+@property(nonatomic, readonly) NSString *title;
+@property(nonatomic, readonly) BOOL hasSelection;
+@property(nonatomic, readonly) NSURL *detectedLink;
+@property(nonatomic, readonly) NSString *selectedText;
+@property(nonatomic) id<TermViewDeviceProtocol> device;
+@property(nonatomic) UIEdgeInsets additionalInsets;
+@property(nonatomic) BOOL layoutLocked;
+@property(nonatomic) CGRect layoutLockedFrame;
+@property(nonatomic, readonly) BOOL isReady;
+@property(nonatomic, readonly) CGRect selectionRect;
+@property(nonatomic, readonly) SmarterTermInput *webView;
 
 - (CGRect)webViewFrame;
 - (void)loadWith:(MCPParams *)params;
@@ -86,7 +83,7 @@
 - (void)setBoldAsBright:(BOOL)state;
 - (void)setBoldEnabled:(NSUInteger)state;
 - (void)applyTheme:(NSString *)themeName;
-- (void)copy:(id _Nullable )sender;
+- (void)copy:(id _Nullable)sender;
 - (void)pasteSelection:(id _Nullable)sender;
 - (void)terminate;
 - (void)reset;
@@ -105,5 +102,6 @@
 - (void)apiResponse:(NSString *)name response:(NSString *)response;
 
 - (void)modifySideOfSelection;
-- (void)modifySelectionInDirection:(NSString *)direction granularity:(NSString *)granularity;
+- (void)modifySelectionInDirection:(NSString *)direction
+                       granularity:(NSString *)granularity;
 @end

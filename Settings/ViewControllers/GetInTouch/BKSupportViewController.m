@@ -34,28 +34,28 @@
 
 @interface BKSupportViewController ()
 
-@property (weak, nonatomic) IBOutlet UITableViewCell *issuesCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *reportCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *emailCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *discordCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *issuesCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *reportCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *emailCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *discordCell;
 
 @end
 
 @implementation BKSupportViewController
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	UITableViewCell *clickedCell = [tableView cellForRowAtIndexPath:indexPath];
+- (void)tableView:(UITableView *)tableView
+    didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  UITableViewCell *clickedCell = [tableView cellForRowAtIndexPath:indexPath];
 
-	if (clickedCell == self.issuesCell) {
-		[BKLinkActions sendToGitHub:@"blink/issues"];
-	} else if (clickedCell == self.reportCell) {
-		[BKLinkActions sendToGitHub:@"blink/issues/new"];
-	} else if (clickedCell == self.emailCell) {
-		[BKLinkActions sendToEmailApp];
-	} else if (clickedCell == self.discordCell) {
-		[BKLinkActions sendToDiscordSupport];
-	}
+  if (clickedCell == self.issuesCell) {
+    [BKLinkActions sendToGitHub:@"blink/issues"];
+  } else if (clickedCell == self.reportCell) {
+    [BKLinkActions sendToGitHub:@"blink/issues/new"];
+  } else if (clickedCell == self.emailCell) {
+    [BKLinkActions sendToEmailApp];
+  } else if (clickedCell == self.discordCell) {
+    [BKLinkActions sendToDiscordSupport];
+  }
 }
 
 @end

@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,7 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol SSHClientPortListenerDelegate <NSObject>
 
-- (void)sshClientPortListener:(SSHClientPortListener *)listener acceptedSocket:(dispatch_fd_t) socket;
+- (void)sshClientPortListener:(SSHClientPortListener *)listener
+               acceptedSocket:(dispatch_fd_t)socket;
 
 @end
 
@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property int localport;
 @property NSString *sourcehost;
 
-@property (nonatomic, weak) id<SSHClientPortListenerDelegate> delegate;
+@property(nonatomic, weak) id<SSHClientPortListenerDelegate> delegate;
 
 - (instancetype)initInitWithAddress:(NSString *)address;
 - (int)listen;

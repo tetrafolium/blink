@@ -29,84 +29,86 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <Foundation/Foundation.h>
 #include <libssh/libssh.h>
 
-
 NS_ASSUME_NONNULL_BEGIN
 
-extern const NSString * SSHOptionStrictHostKeyChecking;
-extern const NSString * SSHOptionHostName;
-extern const NSString * SSHOptionPort; // -p
-extern const NSString * SSHOptionLogLevel; // -v
-extern const NSString * SSHOptionIdentityFile; // -i
-extern const NSString * SSHOptionRequestTTY; // -tT
-extern const NSString * SSHOptionUser; // -l
-extern const NSString * SSHOptionProxyCommand; // ?
-extern const NSString * SSHOptionConfigFile; // -F
-extern const NSString * SSHOptionRemoteCommand;
-extern const NSString * SSHOptionConnectTimeout; // -o
-extern const NSString * SSHOptionConnectionAttempts; // -o
-extern const NSString * SSHOptionCompression; //-C -o
-extern const NSString * SSHOptionCompressionLevel; // -o
-extern const NSString * SSHOptionTCPKeepAlive;
-extern const NSString * SSHOptionNumberOfPasswordPrompts; // -o
-extern const NSString * SSHOptionServerAliveCountMax; // -o
-extern const NSString * SSHOptionServerAliveInterval; // -o
-extern const NSString * SSHOptionLocalForward; // -L
-extern const NSString * SSHOptionRemoteForward; // -R
+extern const NSString *SSHOptionStrictHostKeyChecking;
+extern const NSString *SSHOptionHostName;
+extern const NSString *SSHOptionPort;         // -p
+extern const NSString *SSHOptionLogLevel;     // -v
+extern const NSString *SSHOptionIdentityFile; // -i
+extern const NSString *SSHOptionRequestTTY;   // -tT
+extern const NSString *SSHOptionUser;         // -l
+extern const NSString *SSHOptionProxyCommand; // ?
+extern const NSString *SSHOptionConfigFile;   // -F
+extern const NSString *SSHOptionRemoteCommand;
+extern const NSString *SSHOptionConnectTimeout;     // -o
+extern const NSString *SSHOptionConnectionAttempts; // -o
+extern const NSString *SSHOptionCompression;        //-C -o
+extern const NSString *SSHOptionCompressionLevel;   // -o
+extern const NSString *SSHOptionTCPKeepAlive;
+extern const NSString *SSHOptionNumberOfPasswordPrompts; // -o
+extern const NSString *SSHOptionServerAliveCountMax;     // -o
+extern const NSString *SSHOptionServerAliveInterval;     // -o
+extern const NSString *SSHOptionLocalForward;            // -L
+extern const NSString *SSHOptionRemoteForward;           // -R
 
-extern const NSString * SSHOptionForwardAgent; // -a -A
-extern const NSString * SSHOptionForwardX11; // -x -X
-extern const NSString * SSHOptionExitOnForwardFailure; // -o
-extern const NSString * SSHOptionSendEnv; // -o
+extern const NSString *SSHOptionForwardAgent;         // -a -A
+extern const NSString *SSHOptionForwardX11;           // -x -X
+extern const NSString *SSHOptionExitOnForwardFailure; // -o
+extern const NSString *SSHOptionSendEnv;              // -o
 
 // Auth
 
-extern NSString * SSHOptionKbdInteractiveAuthentication; // -o
-extern NSString * SSHOptionPubkeyAuthentication; // -o
-extern NSString * SSHOptionPasswordAuthentication; // -o
+extern NSString *SSHOptionKbdInteractiveAuthentication; // -o
+extern NSString *SSHOptionPubkeyAuthentication;         // -o
+extern NSString *SSHOptionPasswordAuthentication;       // -o
 
-extern NSString * SSHOptionIdentitiesOnly; // -o
-
+extern NSString *SSHOptionIdentitiesOnly; // -o
 
 // Non standart
-extern const NSString * SSHOptionPassword; //
-extern const NSString * SSHOptionPrintConfiguration; // -G
-extern const NSString * SSHOptionPrintVersion; // -V
-extern const NSString * SSHOptionSTDIOForwarding; // -W
-extern const NSString * SSHOptionPrintAddress; // -o
+extern const NSString *SSHOptionPassword;           //
+extern const NSString *SSHOptionPrintConfiguration; // -G
+extern const NSString *SSHOptionPrintVersion;       // -V
+extern const NSString *SSHOptionSTDIOForwarding;    // -W
+extern const NSString *SSHOptionPrintAddress;       // -o
 
 // Possibale values
-extern const NSString * SSHOptionValueYES;
-extern const NSString * SSHOptionValueNO;
-extern const NSString * SSHOptionValueASK;
-extern const NSString * SSHOptionValueAUTO;
-extern const NSString * SSHOptionValueANY;
-extern const NSString * SSHOptionValueNONE;
+extern const NSString *SSHOptionValueYES;
+extern const NSString *SSHOptionValueNO;
+extern const NSString *SSHOptionValueASK;
+extern const NSString *SSHOptionValueAUTO;
+extern const NSString *SSHOptionValueANY;
+extern const NSString *SSHOptionValueNONE;
 
 // QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3.
 // Client log level
-extern const NSString * SSHOptionValueQUIET; // -q                  ; SSH_LOG_NOLOG
-extern const NSString * SSHOptionValueFATAL; // -v -q -v            ; SSH_LOG_NOLOG
-extern const NSString * SSHOptionValueERROR; // -v -q -vv           ; SSH_LOG_NOLOG
-extern const NSString * SSHOptionValueINFO;  // no -v or -v -q -vvv ; SSH_LOG_NOLOG
-extern const NSString * SSHOptionValueVERBOSE; // -v -q -vvvv       ; SSH_LOG_NOLOG
+extern const NSString
+    *SSHOptionValueQUIET; // -q                  ; SSH_LOG_NOLOG
+extern const NSString
+    *SSHOptionValueFATAL; // -v -q -v            ; SSH_LOG_NOLOG
+extern const NSString
+    *SSHOptionValueERROR; // -v -q -vv           ; SSH_LOG_NOLOG
+extern const NSString
+    *SSHOptionValueINFO; // no -v or -v -q -vvv ; SSH_LOG_NOLOG
+extern const NSString
+    *SSHOptionValueVERBOSE; // -v -q -vvvv       ; SSH_LOG_NOLOG
 
 // libssh log level
-extern const NSString * SSHOptionValueDEBUG;  // -v   ; SSH_LOG_WARNING
-extern const NSString * SSHOptionValueDEBUG1; // same as DEBUG
-extern const NSString * SSHOptionValueDEBUG2; // -vv  ; SSH_LOG_PROTOCOL
-extern const NSString * SSHOptionValueDEBUG3; // -vvv ; SSH_LOG_PACKET
+extern const NSString *SSHOptionValueDEBUG;  // -v   ; SSH_LOG_WARNING
+extern const NSString *SSHOptionValueDEBUG1; // same as DEBUG
+extern const NSString *SSHOptionValueDEBUG2; // -vv  ; SSH_LOG_PROTOCOL
+extern const NSString *SSHOptionValueDEBUG3; // -vvv ; SSH_LOG_PACKET
 
 @interface SSHClientOptions : NSObject
 
-@property (nonatomic) NSString *exitMessage;
+@property(nonatomic) NSString *exitMessage;
 
-- (int)parseArgs:(int) argc argv:(char **) argv;
+- (int)parseArgs:(int)argc argv:(char **)argv;
 - (nullable id)objectForKeyedSubscript:(const NSString *)key;
-- (void)setObject:(NSString *)obj forKeyedSubscript:(NSString <NSCopying> *)key;
+- (void)setObject:(NSString *)obj forKeyedSubscript:(NSString<NSCopying> *)key;
 - (int)configureSSHSession:(ssh_session)session;
 - (NSString *)configurationAsText;
 

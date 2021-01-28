@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -38,15 +37,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (DeviceInfo *)shared;
 
-@property (readonly) NSString *sysname;
-@property (readonly) NSString *nodename;
-@property (readonly) NSString *release_;
-@property (readonly) NSString *version;
-@property (readonly) NSString *machine;
-@property (readonly) NSString *marketingName;
+@property(readonly) NSString *sysname;
+@property(readonly) NSString *nodename;
+@property(readonly) NSString *release_;
+@property(readonly) NSString *version;
+@property(readonly) NSString *machine;
+@property(readonly) NSString *marketingName;
 
-@property (readonly) BOOL hasNotch;
-@property (readonly) BOOL hasCorners;
+@property(readonly) BOOL hasNotch;
+@property(readonly) BOOL hasCorners;
 
 @end
 

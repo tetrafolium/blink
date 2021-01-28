@@ -14,6 +14,5 @@ FOUNDATION_EXPORT double SmartKeysVersionNumber;
 //! Project version string for SmartKeys.
 FOUNDATION_EXPORT const unsigned char SmartKeysVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <SmartKeys/PublicHeader.h>
-
-
+// In this header, you should import all the public headers of your framework
+// using statements like #import <SmartKeys/PublicHeader.h>

@@ -19,8 +19,8 @@
 #include <openssl/bn.h>
 #include <openssl/rsa.h>
 
-int      rsa_public_encrypt(BIGNUM *, BIGNUM *, RSA *);
-int      rsa_private_decrypt(BIGNUM *, BIGNUM *, RSA *);
-int      rsa_generate_additional_parameters(RSA *);
+int rsa_public_encrypt(BIGNUM *, BIGNUM *, RSA *);
+int rsa_private_decrypt(BIGNUM *, BIGNUM *, RSA *);
+int rsa_generate_additional_parameters(RSA *);
 
-#endif                          /* RSA_H */
+#endif /* RSA_H */

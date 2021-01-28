@@ -33,44 +33,44 @@
 
 extern NSString *const BKAppearanceChanged;
 
-typedef NS_ENUM (NSInteger, BKLayoutMode) {
-	BKLayoutModeDefault = 0,
-	BKLayoutModeFill, // Fit screen
-	BKLayoutModeCover, //  Cover screen
-	BKLayoutModeSafeFit, // Honors safe layout guides
+typedef NS_ENUM(NSInteger, BKLayoutMode) {
+  BKLayoutModeDefault = 0,
+  BKLayoutModeFill,    // Fit screen
+  BKLayoutModeCover,   //  Cover screen
+  BKLayoutModeSafeFit, // Honors safe layout guides
 };
 
-typedef NS_ENUM (NSInteger, BKOverscanCompensation) {
-	BKBKOverscanCompensationScale = 0,
-	BKBKOverscanCompensationInsetBounds,
-	BKBKOverscanCompensationNone,
-	BKBKOverscanCompensationMirror,
+typedef NS_ENUM(NSInteger, BKOverscanCompensation) {
+  BKBKOverscanCompensationScale = 0,
+  BKBKOverscanCompensationInsetBounds,
+  BKBKOverscanCompensationNone,
+  BKBKOverscanCompensationMirror,
 };
 
-typedef NS_ENUM (NSInteger, BKKeyboardStyle) {
-	BKKeyboardStyleDark = 0,
-	BKKeyboardStyleLight,
-	BKKeyboardStyleSystem,
+typedef NS_ENUM(NSInteger, BKKeyboardStyle) {
+  BKKeyboardStyleDark = 0,
+  BKKeyboardStyleLight,
+  BKKeyboardStyleSystem,
 };
 
 @interface BKDefaults : NSObject <NSCoding>
 
-@property (nonatomic, strong) NSString *themeName;
-@property (nonatomic, strong) NSString *fontName;
-@property (nonatomic, strong) NSNumber *fontSize;
-@property (nonatomic, strong) NSNumber *externalDisplayFontSize;
-@property (nonatomic, strong) NSString *defaultUser;
-@property (nonatomic) BOOL cursorBlink;
-@property (nonatomic) NSUInteger enableBold;
-@property (nonatomic) BOOL boldAsBright;
-@property (nonatomic) BKKeyboardStyle keyboardStyle;
-@property (nonatomic) BOOL alternateAppIcon;
-@property (nonatomic) BOOL keycasts;
-@property (nonatomic) BKLayoutMode layoutMode;
-@property (nonatomic) BKOverscanCompensation overscanCompensation;
-@property (nonatomic) BOOL xCallBackURLEnabled;
-@property (nonatomic) NSString *xCallBackURLKey;
-@property (nonatomic) BOOL disableCustomKeyboards;
+@property(nonatomic, strong) NSString *themeName;
+@property(nonatomic, strong) NSString *fontName;
+@property(nonatomic, strong) NSNumber *fontSize;
+@property(nonatomic, strong) NSNumber *externalDisplayFontSize;
+@property(nonatomic, strong) NSString *defaultUser;
+@property(nonatomic) BOOL cursorBlink;
+@property(nonatomic) NSUInteger enableBold;
+@property(nonatomic) BOOL boldAsBright;
+@property(nonatomic) BKKeyboardStyle keyboardStyle;
+@property(nonatomic) BOOL alternateAppIcon;
+@property(nonatomic) BOOL keycasts;
+@property(nonatomic) BKLayoutMode layoutMode;
+@property(nonatomic) BKOverscanCompensation overscanCompensation;
+@property(nonatomic) BOOL xCallBackURLEnabled;
+@property(nonatomic) NSString *xCallBackURLKey;
+@property(nonatomic) BOOL disableCustomKeyboards;
 
 + (void)loadDefaults;
 + (BOOL)saveDefaults;
@@ -99,15 +99,14 @@ typedef NS_ENUM (NSInteger, BKKeyboardStyle) {
 + (BOOL)isXCallBackURLEnabled;
 + (NSString *)xCallBackURLKey;
 + (BOOL)disableCustomKeyboards;
-+ (void)setDefaultUserName:(NSString*)name;
-+ (NSString*)defaultUserName;
++ (void)setDefaultUserName:(NSString *)name;
++ (NSString *)defaultUserName;
 + (BKLayoutMode)layoutMode;
 + (BKOverscanCompensation)overscanCompensation;
 + (BKKeyboardStyle)keyboardStyle;
 + (void)setLayoutMode:(BKLayoutMode)mode;
 + (void)setOversanCompensation:(BKOverscanCompensation)value;
 + (void)setKeyboardStyle:(BKKeyboardStyle)value;
-
 
 + (void)applyExternalScreenCompensation:(BKOverscanCompensation)value;
 @end

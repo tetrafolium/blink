@@ -6,8 +6,8 @@
 //  Copyright © 2016 CARLOS CABANERO. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "SKButton.h"
+#import <UIKit/UIKit.h>
 
 @interface SKModifierButton : SKButton
 

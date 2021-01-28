@@ -29,181 +29,185 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include "ios_system/ios_system.h"
-#include "ios_error.h"
-#include "bk_getopts.h"
-#import <AVFoundation/AVFoundation.h>
 #import "MCPSession.h"
+#include "bk_getopts.h"
+#include "ios_error.h"
+#include "ios_system/ios_system.h"
+#import <AVFoundation/AVFoundation.h>
+#include <stdio.h>
 
-@interface BlinkSpeechSynthesizerDelegate : NSObject<AVSpeechSynthesizerDelegate>
+@interface BlinkSpeechSynthesizerDelegate
+    : NSObject <AVSpeechSynthesizerDelegate>
 
 - (void)wait;
 
 @end
 
 @implementation BlinkSpeechSynthesizerDelegate {
-	dispatch_semaphore_t _sema;
+  dispatch_semaphore_t _sema;
 }
 
-- (instancetype)init
-{
-	self = [super init];
-	if (self) {
-		_sema = dispatch_semaphore_create(0);
-	}
-	return self;
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    _sema = dispatch_semaphore_create(0);
+  }
+  return self;
 }
 
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didCancelSpeechUtterance:(AVSpeechUtterance *)utterance {
-	dispatch_semaphore_signal(_sema);
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer
+    didCancelSpeechUtterance:(AVSpeechUtterance *)utterance {
+  dispatch_semaphore_signal(_sema);
 }
 
-- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
-	dispatch_semaphore_signal(_sema);
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer
+    didFinishSpeechUtterance:(AVSpeechUtterance *)utterance {
+  dispatch_semaphore_signal(_sema);
 }
 
 - (void)wait {
-	dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
+  dispatch_semaphore_wait(_sema, DISPATCH_TIME_FOREVER);
 }
 
 @end
 
-void _sayText(NSString *text, NSNumber* rate, AVSpeechSynthesisVoice *voice) {
-	AVSpeechUtterance *utterance = [[AVSpeechUtterance alloc] initWithString: text];
-	if (rate) {
-		utterance.rate = rate.floatValue;
-	}
-	utterance.pitchMultiplier = 1;
-	if (voice) {
-		utterance.voice = voice;
-	}
+void _sayText(NSString *text, NSNumber *rate, AVSpeechSynthesisVoice *voice) {
+  AVSpeechUtterance *utterance =
+      [[AVSpeechUtterance alloc] initWithString:text];
+  if (rate) {
+    utterance.rate = rate.floatValue;
+  }
+  utterance.pitchMultiplier = 1;
+  if (voice) {
+    utterance.voice = voice;
+  }
 
-	BlinkSpeechSynthesizerDelegate *delegate = [[BlinkSpeechSynthesizerDelegate alloc] init];
-	AVSpeechSynthesizer *synth = [[AVSpeechSynthesizer alloc] init];
-	synth.delegate = delegate;
-	[synth speakUtterance:utterance];
-	[delegate wait];
+  BlinkSpeechSynthesizerDelegate *delegate =
+      [[BlinkSpeechSynthesizerDelegate alloc] init];
+  AVSpeechSynthesizer *synth = [[AVSpeechSynthesizer alloc] init];
+  synth.delegate = delegate;
+  [synth speakUtterance:utterance];
+  [delegate wait];
 }
-
 
 int say_main(int argc, char *argv[]) {
-	thread_optind = 1;
+  thread_optind = 1;
 
+  NSString *usage = [@[
+    @"Usage: say [-v voice] [-r rate] [-f file] [message]",
+    @"Examples:", @"  say -v '?'", @"  say Hello, Blink", @"  echo Hello | say",
+    @"  say -v Monica Hola mundo", @"  say -v Milena Привет всем"
+  ] componentsJoinedByString:@"\n"];
 
-	NSString *usage = [@[@"Usage: say [-v voice] [-r rate] [-f file] [message]",
-	                     @"Examples:",
-	                     @"  say -v '?'",
-	                     @"  say Hello, Blink",
-	                     @"  echo Hello | say",
-	                     @"  say -v Monica Hola mundo",
-	                     @"  say -v Milena Привет всем"] componentsJoinedByString:@"\n"];
+  NSString *voice = nil;
+  NSString *file = nil;
+  NSNumber *rate = nil;
+  NSString *text = nil;
+  BOOL showHelp = NO;
 
-	NSString *voice = nil;
-	NSString *file = nil;
-	NSNumber *rate = nil;
-	NSString *text = nil;
-	BOOL showHelp = NO;
+  for (;;) {
+    int c = thread_getopt(argc, argv, "v:f:r:h");
+    if (c == -1) {
+      break;
+    }
 
-	for (;;) {
-		int c = thread_getopt(argc, argv, "v:f:r:h");
-		if (c == -1) {
-			break;
-		}
+    switch (c) {
+    case 'v':
+      voice = @(thread_optarg);
+      break;
+    case 'f':
+      file = @(thread_optarg);
+      break;
+    case 'r':
+      rate = @([@(thread_optarg) floatValue]);
+      break;
+    case 'h':
+      showHelp = YES;
+      break;
+    default:
+      printf("%s\n", usage.UTF8String);
+      return -1;
+    }
+  }
 
-		switch (c) {
-		case 'v':
-			voice = @(thread_optarg);
-			break;
-		case 'f':
-			file = @(thread_optarg);
-			break;
-		case 'r':
-			rate = @([@(thread_optarg) floatValue]);
-			break;
-		case 'h':
-			showHelp = YES;
-			break;
-		default:
-			printf("%s\n", usage.UTF8String);
-			return -1;
-		}
-	}
+  if (showHelp) {
+    printf("%s\n", usage.UTF8String);
+    return 0;
+  }
 
-	if (showHelp) {
-		printf("%s\n", usage.UTF8String);
-		return 0;
-	}
+  if (thread_optind < argc) {
+    NSMutableArray<NSString *> *words = [[NSMutableArray alloc] init];
+    for (int i = thread_optind; i < argc; i++) {
+      [words addObject:@(argv[i])];
+    }
+    text = [words componentsJoinedByString:@" "];
+  }
 
-	if (thread_optind < argc) {
-		NSMutableArray<NSString *> *words = [[NSMutableArray alloc] init];
-		for (int i = thread_optind; i < argc; i++) {
-			[words addObject:@(argv[i])];
-		}
-		text = [words componentsJoinedByString:@" "];
-	}
+  AVSpeechSynthesisVoice *speechVoice = nil;
 
-	AVSpeechSynthesisVoice *speechVoice = nil;
+  if ([voice isEqual:@"?"]) {
+    for (AVSpeechSynthesisVoice *v in AVSpeechSynthesisVoice.speechVoices) {
+      puts(
+          [NSString stringWithFormat:@"%-20s %@", v.name.UTF8String, v.language]
+              .UTF8String);
+    }
+    return 0;
+  } else if (voice) {
+    NSPredicate *predicate =
+        [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", voice];
+    speechVoice = [[AVSpeechSynthesisVoice.speechVoices
+        filteredArrayUsingPredicate:predicate] firstObject];
+  }
 
-	if ([voice isEqual:@"?"]) {
-		for (AVSpeechSynthesisVoice * v in AVSpeechSynthesisVoice.speechVoices) {
-			puts([NSString stringWithFormat:@"%-20s %@", v.name.UTF8String, v.language].UTF8String);
-		}
-		return 0;
-	} else if (voice) {
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", voice];
-		speechVoice = [[AVSpeechSynthesisVoice.speechVoices filteredArrayUsingPredicate:predicate] firstObject];
-	}
+  if (!text && file.length > 0) {
+    NSError *error = nil;
+    text = [NSString stringWithContentsOfFile:file
+                                     encoding:NSUTF8StringEncoding
+                                        error:&error];
+    if (!text) {
+      printf("%s\n", error.localizedDescription.UTF8String);
+      return 1;
+    }
+  }
 
+  if (text) {
+    _sayText(text, rate, speechVoice);
+    return 0;
+  }
 
-	if (!text && file.length > 0) {
-		NSError *error = nil;
-		text = [NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:&error];
-		if (!text) {
-			printf("%s\n", error.localizedDescription.UTF8String);
-			return 1;
-		}
-	}
+  BOOL isatty = ios_isatty(fileno(thread_stdin));
 
-	if (text) {
-		_sayText(text, rate, speechVoice);
-		return 0;
-	}
+  if (!isatty) {
+    if (!text) {
+      const int bufsize = 1024;
+      char buffer[bufsize];
+      NSMutableData *data = [[NSMutableData alloc] init];
+      ssize_t count = 0;
+      while ((count = read(fileno(thread_stdin), buffer, bufsize - 1))) {
+        [data appendBytes:buffer length:count];
+      }
 
-	BOOL isatty = ios_isatty(fileno(thread_stdin));
+      text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
 
-	if (!isatty) {
-		if (!text) {
-			const int bufsize = 1024;
-			char buffer[bufsize];
-			NSMutableData* data = [[NSMutableData alloc] init];
-			ssize_t count = 0;
-			while ((count = read(fileno(thread_stdin), buffer, bufsize-1))) {
-				[data appendBytes:buffer length:count];
-			}
+    if (!text) {
+      printf("%s\n", usage.UTF8String);
+      return 1;
+    }
 
-			text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-		}
+    _sayText(text, rate, speechVoice);
+    return 0;
+  }
 
-		if (!text) {
-			printf("%s\n", usage.UTF8String);
-			return 1;
-		}
+  MCPSession *session = (__bridge MCPSession *)thread_context;
+  for (;;) {
+    NSString *line = [session.device readline:@"" secure:NO];
+    if (!line) {
+      puts("");
+      break;
+    }
+    _sayText(line, rate, speechVoice);
+  }
 
-		_sayText(text, rate, speechVoice);
-		return 0;
-	}
-
-	MCPSession *session = (__bridge MCPSession *)thread_context;
-	for (;;) {
-		NSString *line = [session.device readline:@"" secure: NO];
-		if (!line) {
-			puts("");
-			break;
-		}
-		_sayText(line, rate, speechVoice);
-	}
-
-	return 0;
+  return 0;
 }
-

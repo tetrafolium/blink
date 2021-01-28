@@ -33,46 +33,52 @@
 #import "BKDefaults.h"
 @interface BKDefaultUserViewController ()
 
-@property (nonatomic, weak) IBOutlet UITextField *userNameField;
+@property(nonatomic, weak) IBOutlet UITextField *userNameField;
 
 @end
 
 @implementation BKDefaultUserViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
-	self.userNameField.text = [BKDefaults defaultUserName];
+  [super viewDidLoad];
+  self.userNameField.text = [BKDefaults defaultUserName];
 }
 
 - (void)didReceiveMemoryWarning {
-	[super didReceiveMemoryWarning];
-	// Dispose of any resources that can be recreated.
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-	if([string isEqualToString:@" "]) {
-		return NO;
-	}
-	return YES;
+- (BOOL)textField:(UITextField *)textField
+    shouldChangeCharactersInRange:(NSRange)range
+                replacementString:(NSString *)string {
+  if ([string isEqualToString:@" "]) {
+    return NO;
+  }
+  return YES;
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
+  return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 1;
+- (NSInteger)tableView:(UITableView *)tableView
+    numberOfRowsInSection:(NSInteger)section {
+  return 1;
 }
 
-- (void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC {
-	if(self.userNameField.text != nil && ![self.userNameField.text isEqualToString:@""]) {
-		NSString *sanitisedName = [self.userNameField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
-		[BKDefaults setDefaultUserName:sanitisedName];
-		[BKDefaults saveDefaults];
-	}
+- (void)unwindForSegue:(UIStoryboardSegue *)unwindSegue
+    towardsViewController:(UIViewController *)subsequentVC {
+  if (self.userNameField.text != nil &&
+      ![self.userNameField.text isEqualToString:@""]) {
+    NSString *sanitisedName =
+        [self.userNameField.text stringByReplacingOccurrencesOfString:@" "
+                                                           withString:@""];
+    [BKDefaults setDefaultUserName:sanitisedName];
+    [BKDefaults saveDefaults];
+  }
 }
 
 @end

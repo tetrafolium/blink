@@ -20,61 +20,61 @@
 //#include "includes.h"
 #ifdef WITH_OPENSSL
 
-#include <openssl/opensslv.h>
-#include <openssl/evp.h>
-#include <openssl/rsa.h>
+#include <openssl/dh.h>
 #include <openssl/dsa.h>
 #include <openssl/ecdsa.h>
-#include <openssl/dh.h>
+#include <openssl/evp.h>
+#include <openssl/opensslv.h>
+#include <openssl/rsa.h>
 
 int ssh_compatible_openssl(long, long);
 
 #if (OPENSSL_VERSION_NUMBER <= 0x0090805fL)
-# error OpenSSL 0.9.8f or greater is required
+#error OpenSSL 0.9.8f or greater is required
 #endif
 
 #if OPENSSL_VERSION_NUMBER < 0x10000001L
-# define LIBCRYPTO_EVP_INL_TYPE unsigned int
+#define LIBCRYPTO_EVP_INL_TYPE unsigned int
 #else
-# define LIBCRYPTO_EVP_INL_TYPE size_t
+#define LIBCRYPTO_EVP_INL_TYPE size_t
 #endif
 
 #ifndef OPENSSL_RSA_MAX_MODULUS_BITS
-# define OPENSSL_RSA_MAX_MODULUS_BITS   16384
+#define OPENSSL_RSA_MAX_MODULUS_BITS 16384
 #endif
 #ifndef OPENSSL_DSA_MAX_MODULUS_BITS
-# define OPENSSL_DSA_MAX_MODULUS_BITS   10000
+#define OPENSSL_DSA_MAX_MODULUS_BITS 10000
 #endif
 
 #ifndef OPENSSL_HAVE_EVPCTR
-# define EVP_aes_128_ctr evp_aes_128_ctr
-# define EVP_aes_192_ctr evp_aes_128_ctr
-# define EVP_aes_256_ctr evp_aes_128_ctr
+#define EVP_aes_128_ctr evp_aes_128_ctr
+#define EVP_aes_192_ctr evp_aes_128_ctr
+#define EVP_aes_256_ctr evp_aes_128_ctr
 const EVP_CIPHER *evp_aes_128_ctr(void);
 void ssh_aes_ctr_iv(EVP_CIPHER_CTX *, int, u_char *, size_t);
 #endif
 
 /* Avoid some #ifdef. Code that uses these is unreachable without GCM */
 #if !defined(OPENSSL_HAVE_EVPGCM) && !defined(EVP_CTRL_GCM_SET_IV_FIXED)
-# define EVP_CTRL_GCM_SET_IV_FIXED -1
-# define EVP_CTRL_GCM_IV_GEN -1
-# define EVP_CTRL_GCM_SET_TAG -1
-# define EVP_CTRL_GCM_GET_TAG -1
+#define EVP_CTRL_GCM_SET_IV_FIXED -1
+#define EVP_CTRL_GCM_IV_GEN -1
+#define EVP_CTRL_GCM_SET_TAG -1
+#define EVP_CTRL_GCM_GET_TAG -1
 #endif
 
 /* Replace missing EVP_CIPHER_CTX_ctrl() with something that returns failure */
 #ifndef HAVE_EVP_CIPHER_CTX_CTRL
-# ifdef OPENSSL_HAVE_EVPGCM
-#  error AES-GCM enabled without EVP_CIPHER_CTX_ctrl /* shouldn't happen */
-# else
-# define EVP_CIPHER_CTX_ctrl(a,b,c,d) (0)
-# endif
+#ifdef OPENSSL_HAVE_EVPGCM
+#error AES-GCM enabled without EVP_CIPHER_CTX_ctrl /* shouldn't happen */
+#else
+#define EVP_CIPHER_CTX_ctrl(a, b, c, d) (0)
+#endif
 #endif
 
 #if defined(HAVE_EVP_RIPEMD160)
-# if defined(OPENSSL_NO_RIPEMD) || defined(OPENSSL_NO_RMD160)
-#  undef HAVE_EVP_RIPEMD160
-# endif
+#if defined(OPENSSL_NO_RIPEMD) || defined(OPENSSL_NO_RMD160)
+#undef HAVE_EVP_RIPEMD160
+#endif
 #endif
 
 /*
@@ -87,16 +87,16 @@ void ssh_aes_ctr_iv(EVP_CIPHER_CTX *, int, u_char *, size_t);
  */
 #ifndef SSH_DONT_OVERLOAD_OPENSSL_FUNCS
 
-# ifdef USE_OPENSSL_ENGINE
-#  ifdef OpenSSL_add_all_algorithms
-#   undef OpenSSL_add_all_algorithms
-#  endif
-#  define OpenSSL_add_all_algorithms()  ssh_OpenSSL_add_all_algorithms()
-# endif
+#ifdef USE_OPENSSL_ENGINE
+#ifdef OpenSSL_add_all_algorithms
+#undef OpenSSL_add_all_algorithms
+#endif
+#define OpenSSL_add_all_algorithms() ssh_OpenSSL_add_all_algorithms()
+#endif
 
 void ssh_OpenSSL_add_all_algorithms(void);
 
-#endif  /* SSH_DONT_OVERLOAD_OPENSSL_FUNCS */
+#endif /* SSH_DONT_OVERLOAD_OPENSSL_FUNCS */
 
 /* LibreSSL/OpenSSL 1.1x API compat */
 #ifndef HAVE_DSA_GET0_PQG
@@ -118,13 +118,13 @@ int DSA_set0_key(DSA *d, BIGNUM *pub_key, BIGNUM *priv_key);
 #endif /* HAVE_DSA_SET0_KEY */
 
 #ifndef HAVE_EVP_CIPHER_CTX_GET_IV
-int EVP_CIPHER_CTX_get_iv(const EVP_CIPHER_CTX *ctx,
-                          unsigned char *iv, size_t len);
+int EVP_CIPHER_CTX_get_iv(const EVP_CIPHER_CTX *ctx, unsigned char *iv,
+                          size_t len);
 #endif /* HAVE_EVP_CIPHER_CTX_GET_IV */
 
 #ifndef HAVE_EVP_CIPHER_CTX_SET_IV
-int EVP_CIPHER_CTX_set_iv(EVP_CIPHER_CTX *ctx,
-                          const unsigned char *iv, size_t len);
+int EVP_CIPHER_CTX_set_iv(EVP_CIPHER_CTX *ctx, const unsigned char *iv,
+                          size_t len);
 #endif /* HAVE_EVP_CIPHER_CTX_SET_IV */
 
 #ifndef HAVE_RSA_GET0_KEY
@@ -207,13 +207,17 @@ int (*RSA_meth_get_finish(const RSA_METHOD *meth))(RSA *rsa);
 #endif /* HAVE_RSA_METH_GET_FINISH */
 
 #ifndef HAVE_RSA_METH_SET_PRIV_ENC
-int RSA_meth_set_priv_enc(RSA_METHOD *meth, int (*priv_enc)(int flen,
-                                                            const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
+int RSA_meth_set_priv_enc(RSA_METHOD *meth,
+                          int (*priv_enc)(int flen, const unsigned char *from,
+                                          unsigned char *to, RSA *rsa,
+                                          int padding));
 #endif /* HAVE_RSA_METH_SET_PRIV_ENC */
 
 #ifndef HAVE_RSA_METH_SET_PRIV_DEC
-int RSA_meth_set_priv_dec(RSA_METHOD *meth, int (*priv_dec)(int flen,
-                                                            const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
+int RSA_meth_set_priv_dec(RSA_METHOD *meth,
+                          int (*priv_dec)(int flen, const unsigned char *from,
+                                          unsigned char *to, RSA *rsa,
+                                          int padding));
 #endif /* HAVE_RSA_METH_SET_PRIV_DEC */
 
 #ifndef HAVE_RSA_METH_SET_FINISH

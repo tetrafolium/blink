@@ -11,35 +11,32 @@
 
 #include "crypto_api.h"
 
-#define sc25519                  crypto_sign_ed25519_ref_sc25519
-#define shortsc25519             crypto_sign_ed25519_ref_shortsc25519
-#define sc25519_from32bytes      crypto_sign_ed25519_ref_sc25519_from32bytes
-#define shortsc25519_from16bytes crypto_sign_ed25519_ref_shortsc25519_from16bytes
-#define sc25519_from64bytes      crypto_sign_ed25519_ref_sc25519_from64bytes
-#define sc25519_from_shortsc     crypto_sign_ed25519_ref_sc25519_from_shortsc
-#define sc25519_to32bytes        crypto_sign_ed25519_ref_sc25519_to32bytes
-#define sc25519_iszero_vartime   crypto_sign_ed25519_ref_sc25519_iszero_vartime
-#define sc25519_isshort_vartime  crypto_sign_ed25519_ref_sc25519_isshort_vartime
-#define sc25519_lt_vartime       crypto_sign_ed25519_ref_sc25519_lt_vartime
-#define sc25519_add              crypto_sign_ed25519_ref_sc25519_add
-#define sc25519_sub_nored        crypto_sign_ed25519_ref_sc25519_sub_nored
-#define sc25519_mul              crypto_sign_ed25519_ref_sc25519_mul
-#define sc25519_mul_shortsc      crypto_sign_ed25519_ref_sc25519_mul_shortsc
-#define sc25519_window3          crypto_sign_ed25519_ref_sc25519_window3
-#define sc25519_window5          crypto_sign_ed25519_ref_sc25519_window5
-#define sc25519_2interleave2     crypto_sign_ed25519_ref_sc25519_2interleave2
+#define sc25519 crypto_sign_ed25519_ref_sc25519
+#define shortsc25519 crypto_sign_ed25519_ref_shortsc25519
+#define sc25519_from32bytes crypto_sign_ed25519_ref_sc25519_from32bytes
+#define shortsc25519_from16bytes                                               \
+  crypto_sign_ed25519_ref_shortsc25519_from16bytes
+#define sc25519_from64bytes crypto_sign_ed25519_ref_sc25519_from64bytes
+#define sc25519_from_shortsc crypto_sign_ed25519_ref_sc25519_from_shortsc
+#define sc25519_to32bytes crypto_sign_ed25519_ref_sc25519_to32bytes
+#define sc25519_iszero_vartime crypto_sign_ed25519_ref_sc25519_iszero_vartime
+#define sc25519_isshort_vartime crypto_sign_ed25519_ref_sc25519_isshort_vartime
+#define sc25519_lt_vartime crypto_sign_ed25519_ref_sc25519_lt_vartime
+#define sc25519_add crypto_sign_ed25519_ref_sc25519_add
+#define sc25519_sub_nored crypto_sign_ed25519_ref_sc25519_sub_nored
+#define sc25519_mul crypto_sign_ed25519_ref_sc25519_mul
+#define sc25519_mul_shortsc crypto_sign_ed25519_ref_sc25519_mul_shortsc
+#define sc25519_window3 crypto_sign_ed25519_ref_sc25519_window3
+#define sc25519_window5 crypto_sign_ed25519_ref_sc25519_window5
+#define sc25519_2interleave2 crypto_sign_ed25519_ref_sc25519_2interleave2
 
-typedef struct
-{
-	crypto_uint32 v[32];
-}
-sc25519;
+typedef struct {
+  crypto_uint32 v[32];
+} sc25519;
 
-typedef struct
-{
-	crypto_uint32 v[16];
-}
-shortsc25519;
+typedef struct {
+  crypto_uint32 v[16];
+} shortsc25519;
 
 void sc25519_from32bytes(sc25519 *r, const unsigned char x[32]);
 
@@ -75,6 +72,7 @@ void sc25519_window3(signed char r[85], const sc25519 *s);
  */
 void sc25519_window5(signed char r[51], const sc25519 *s);
 
-void sc25519_2interleave2(unsigned char r[127], const sc25519 *s1, const sc25519 *s2);
+void sc25519_2interleave2(unsigned char r[127], const sc25519 *s1,
+                          const sc25519 *s2);
 
 #endif

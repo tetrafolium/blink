@@ -34,8 +34,8 @@
 @class CKRecordID;
 
 typedef enum {
-	BKiCloudRecordTypeHosts,
-	BKiCloudRecordTypeKeys
+  BKiCloudRecordTypeHosts,
+  BKiCloudRecordTypeKeys
 } BKiCloudRecordType;
 
 extern NSString const *BKiCloudSyncDeletedHosts;
@@ -45,12 +45,13 @@ extern NSString const *BKiCloudZoneName;
 
 @interface BKiCloudSyncHandler : NSObject
 
-@property (nonatomic, copy) void (^mergeHostCompletionBlock)(void);
+@property(nonatomic, copy) void (^mergeHostCompletionBlock)(void);
 
 + (id)sharedHandler;
 - (void)checkForReachabilityAndSync:(NSNotification *)notification;
 - (void)syncFromiCloud;
-- (void)deleteRecord:(CKRecordID *)recordId ofType:(BKiCloudRecordType)recordType;
+- (void)deleteRecord:(CKRecordID *)recordId
+              ofType:(BKiCloudRecordType)recordType;
 - (void)createNewHost:(BKHosts *)host;
 
 @end

@@ -31,12 +31,12 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface BKPubKeyViewController : UITableViewController
 
 @property NSIndexPath *currentSelectionIdx;
 
-- (void)makeSelectable:(BOOL)selectable initialSelection:(NSString *)selectionID;
+- (void)makeSelectable:(BOOL)selectable
+      initialSelection:(NSString *)selectionID;
 - (id)selectedObject;
 
 @end

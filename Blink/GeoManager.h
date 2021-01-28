@@ -29,17 +29,15 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * BLGeoLockNotification;
+extern NSString *BLGeoLockNotification;
 
 @interface GeoManager : NSObject
 
-@property (readonly) BOOL traking;
-
+@property(readonly) BOOL traking;
 
 + (GeoManager *)shared;
 

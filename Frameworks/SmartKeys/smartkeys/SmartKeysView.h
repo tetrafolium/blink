@@ -32,8 +32,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-	SKNonModifierButtonTypeNormal,
-	SKNonModifierButtonTypeAlternate
+  SKNonModifierButtonTypeNormal,
+  SKNonModifierButtonTypeAlternate
 } SKNonModifierButtonType;
 
 extern NSString *const KbdLeftArrowKey;
@@ -43,35 +43,34 @@ extern NSString *const KbdDownArrowKey;
 extern NSString *const KbdEscKey;
 extern NSString *const KbdTabKey;
 
-typedef NS_OPTIONS (NSInteger, KbdModifiers) {
-	KbdCtrlModifier = 1 << 0,
-	KbdAltModifier
+typedef NS_OPTIONS(NSInteger, KbdModifiers) {
+  KbdCtrlModifier = 1 << 0,
+  KbdAltModifier
 };
-
 
 @interface SmartKey : NSObject
 
-@property (readonly) NSString *name;
-@property (readonly) NSString *symbol;
+@property(readonly) NSString *name;
+@property(readonly) NSString *symbol;
 
--(id)initWithName:(NSString *)name symbol:(NSString *)symbol;
+- (id)initWithName:(NSString *)name symbol:(NSString *)symbol;
 
 @end
 
 @protocol SmartKeysDelegate
 
--(void)symbolUp:(NSString *)symbol;
--(void)symbolDown:(NSString *)symbol;
+- (void)symbolUp:(NSString *)symbol;
+- (void)symbolDown:(NSString *)symbol;
 
 @end
 
-@interface SmartKeysView : UIView<UIScrollViewDelegate>
+@interface SmartKeysView : UIView <UIScrollViewDelegate>
 
-@property (readonly) NSUInteger modifiers;
-@property (weak) id<SmartKeysDelegate> delegate;
+@property(readonly) NSUInteger modifiers;
+@property(weak) id<SmartKeysDelegate> delegate;
 
--(void)show;
--(void)setNonModifiers:(NSArray <SmartKey *> *)keys;
-- (void)setAlternateKeys:(NSArray <SmartKey *> *)keys;
+- (void)show;
+- (void)setNonModifiers:(NSArray<SmartKey *> *)keys;
+- (void)setAlternateKeys:(NSArray<SmartKey *> *)keys;
 - (void)showNonModifierKeySection:(SKNonModifierButtonType)type;
 @end

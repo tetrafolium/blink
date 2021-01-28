@@ -39,26 +39,28 @@
 @implementation BKAboutViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
+  [super viewDidLoad];
 
-	WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
-	WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
-	webView.translatesAutoresizingMaskIntoConstraints = NO;
+  WKWebViewConfiguration *theConfiguration =
+      [[WKWebViewConfiguration alloc] init];
+  WKWebView *webView = [[WKWebView alloc] initWithFrame:self.view.frame
+                                          configuration:theConfiguration];
+  webView.translatesAutoresizingMaskIntoConstraints = NO;
 
-	[self.view addSubview:webView];
+  [self.view addSubview:webView];
 
-	[NSLayoutConstraint activateConstraints:
-	 @[
-		 [webView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-		 [webView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-		 [webView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-		 [webView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
-	]];
+  [NSLayoutConstraint activateConstraints:@[
+    [webView.topAnchor constraintEqualToAnchor:self.view.topAnchor],
+    [webView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+    [webView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+    [webView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor]
+  ]];
 
-	NSString *path = [[NSBundle mainBundle] pathForResource:@"about" ofType:@"html"];
-	NSURL *url = [NSURL fileURLWithPath:path];
-	NSURLRequest *request=[NSURLRequest requestWithURL:url];
-	[webView loadRequest:request];
+  NSString *path = [[NSBundle mainBundle] pathForResource:@"about"
+                                                   ofType:@"html"];
+  NSURL *url = [NSURL fileURLWithPath:path];
+  NSURLRequest *request = [NSURLRequest requestWithURL:url];
+  [webView loadRequest:request];
 }
 
 @end

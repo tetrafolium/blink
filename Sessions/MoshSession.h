@@ -35,6 +35,6 @@
 
 @interface MoshSession : Session
 
-@property (strong) MoshParams *sessionParams;
+@property(strong) MoshParams *sessionParams;
 
 @end

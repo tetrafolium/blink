@@ -35,6 +35,6 @@
 
 @interface SSHSession : Session
 
-@property (nonatomic) BOOL debug;
+@property(nonatomic) BOOL debug;
 
 @end

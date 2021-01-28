@@ -29,10 +29,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #import <Foundation/Foundation.h>
-#include <libssh/libssh.h>
 #include <libssh/callbacks.h>
+#include <libssh/libssh.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,22 +39,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol SSHClientConnectedChannelDelegate <NSObject>
 
-- (void)connectedChannelDidClose:(SSHClientConnectedChannel *) connectedChannel;
+- (void)connectedChannelDidClose:(SSHClientConnectedChannel *)connectedChannel;
 
 @end
 
 @interface SSHClientConnectedChannel : NSObject
 
-@property (weak) id<SSHClientConnectedChannelDelegate> delegate;
-@property (readonly) int exit_status;
-@property (readonly) ssh_channel channel;
+@property(weak) id<SSHClientConnectedChannelDelegate> delegate;
+@property(readonly) int exit_status;
+@property(readonly) ssh_channel channel;
 
 - (void)close;
 
-+ (nullable SSHClientConnectedChannel *)connect:(ssh_channel)channel withFdIn:(dispatch_fd_t)fdIn fdOut:(dispatch_fd_t)fdOut fdErr:(dispatch_fd_t)fdErr;
-+ (nullable SSHClientConnectedChannel *)connect:(ssh_channel)channel withSocket:(dispatch_fd_t)sockFd;
++ (nullable SSHClientConnectedChannel *)connect:(ssh_channel)channel
+                                       withFdIn:(dispatch_fd_t)fdIn
+                                          fdOut:(dispatch_fd_t)fdOut
+                                          fdErr:(dispatch_fd_t)fdErr;
++ (nullable SSHClientConnectedChannel *)connect:(ssh_channel)channel
+                                     withSocket:(dispatch_fd_t)sockFd;
 
 @end
-
 
 NS_ASSUME_NONNULL_END

@@ -29,7 +29,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef xcall_h
 #define xcall_h
 
@@ -51,8 +50,10 @@
 @property NSURL *xOriginalErrorURL;
 @property NSURL *xOriginalCancelURL;
 
-@property NSMutableArray<NSArray<NSString *> *> *parseOutputParams; // [<paramName>, <decoder:json|base64>]
-@property NSMutableArray<NSArray<NSString *> *> *encodeInputParams; // [<paramName>, <value>]
+@property NSMutableArray<NSArray<NSString *> *>
+    *parseOutputParams; // [<paramName>, <decoder:json|base64>]
+@property NSMutableArray<NSArray<NSString *> *>
+    *encodeInputParams; // [<paramName>, <value>]
 
 @property NSString *stdInParameterName;
 

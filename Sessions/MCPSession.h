@@ -31,21 +31,21 @@
 
 #import <Foundation/Foundation.h>
 
-
-#import "Session.h"
 #import "SSHClient.h"
+#import "Session.h"
 
 @class MCPParams;
 
 @interface MCPSession : Session
 
-@property (strong) MCPParams *sessionParams;
+@property(strong) MCPParams *sessionParams;
 
 - (void)registerSSHClient:(SSHClient *)sshClient;
 - (void)unregisterSSHClient:(SSHClient *)sshClient;
 
 - (void)enqueueCommand:(NSString *)cmd;
-- (void)enqueueXCallbackCommand:(NSString *)cmd xCallbackSuccessUrl:(NSURL *)xCallbackSuccessUrl;
+- (void)enqueueXCallbackCommand:(NSString *)cmd
+            xCallbackSuccessUrl:(NSURL *)xCallbackSuccessUrl;
 - (bool)isRunningCmd;
 
 - (void)updateAllowedPaths;

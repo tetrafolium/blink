@@ -29,13 +29,14 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <stdio.h>
-#include "ios_system/ios_system.h"
-#include "ios_error.h"
 #include "MCPSession.h"
+#include "ios_error.h"
+#include "ios_system/ios_system.h"
+#include <stdio.h>
 
 int clear_main(int argc, char *argv[]) {
-//  return [[(__bridge MCPSession *)thread_context repl] clear_main:argc argv:argv];
-	printf("\033c\033[H\033[2J\033[0m");
-	return 0;
+  //  return [[(__bridge MCPSession *)thread_context repl] clear_main:argc
+  //  argv:argv];
+  printf("\033c\033[H\033[2J\033[0m");
+  return 0;
 }

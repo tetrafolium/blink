@@ -33,9 +33,8 @@
 
 #import "BKPubKey.h"
 
-
 @interface BKPubKeyDetailsViewController : UITableViewController
 
-@property (weak, nonatomic) BKPubKey *pubkey;
+@property(weak, nonatomic) BKPubKey *pubkey;
 
 @end

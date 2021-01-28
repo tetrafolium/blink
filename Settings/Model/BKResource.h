@@ -31,16 +31,17 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface BKResource : NSObject <NSCoding>
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *filename;
+@property(nonatomic, strong) NSString *name;
+@property(nonatomic, strong) NSString *filename;
 
 + (NSURL *)resourcesURL;
 + (instancetype)withName:(NSString *)name;
 + (BOOL)saveAll;
-+ (instancetype)saveResource:(NSString *)name withContent:(NSData *)content error:(NSError *__autoreleasing *)error;
++ (instancetype)saveResource:(NSString *)name
+                 withContent:(NSData *)content
+                       error:(NSError *__autoreleasing *)error;
 + (void)removeResourceAtIndex:(int)index;
 + (NSArray *)all;
 + (NSInteger)count;

@@ -34,28 +34,28 @@
 
 @interface BKFeedbackViewController ()
 
-@property (weak, nonatomic) IBOutlet UITableViewCell *twitterLinkCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *githubLinkCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *discordLinkCell;
-@property (weak, nonatomic) IBOutlet UITableViewCell *appstoreLinkCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *twitterLinkCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *githubLinkCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *discordLinkCell;
+@property(weak, nonatomic) IBOutlet UITableViewCell *appstoreLinkCell;
 
 @end
 
 @implementation BKFeedbackViewController
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	UITableViewCell *clickedCell = [tableView cellForRowAtIndexPath:indexPath];
+- (void)tableView:(UITableView *)tableView
+    didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  UITableViewCell *clickedCell = [tableView cellForRowAtIndexPath:indexPath];
 
-	if (clickedCell == self.twitterLinkCell) {
-		[BKLinkActions sendToTwitter];
-	} else if (clickedCell == self.githubLinkCell) {
-		[BKLinkActions sendToGitHub:nil];
-	} else if (clickedCell == self.discordLinkCell) {
-		[BKLinkActions sendToDiscord];
-	} else if (clickedCell == self.appstoreLinkCell) {
-		[BKLinkActions sendToAppStore];
-	}
+  if (clickedCell == self.twitterLinkCell) {
+    [BKLinkActions sendToTwitter];
+  } else if (clickedCell == self.githubLinkCell) {
+    [BKLinkActions sendToGitHub:nil];
+  } else if (clickedCell == self.discordLinkCell) {
+    [BKLinkActions sendToDiscord];
+  } else if (clickedCell == self.appstoreLinkCell) {
+    [BKLinkActions sendToAppStore];
+  }
 }
 
 @end

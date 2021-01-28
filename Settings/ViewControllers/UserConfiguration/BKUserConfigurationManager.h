@@ -44,6 +44,6 @@ extern NSString *const BKUserConfigChangedNotification;
 + (void)setUserSettingsValue:(BOOL)value forKey:(NSString *)key;
 + (BOOL)userSettingsValueForKey:(NSString *)key;
 
-+ (NSString *)UIKeyModifiersToString:(UIKeyModifierFlags) flags;
++ (NSString *)UIKeyModifiersToString:(UIKeyModifierFlags)flags;
 
 @end

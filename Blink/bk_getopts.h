@@ -29,19 +29,17 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef bk_getopts_h
 #define bk_getopts_h
 
 #include <stdio.h>
 
-extern __thread int thread_opterr,           /* if error message should be printed */
-                    thread_optind, /* index into parent argv vector */
-                    thread_optopt, /* character checked for validity */
-                    thread_optreset; /* reset getopt */
-extern __thread char    * thread_optarg;        /* argument associated with option */
+extern __thread int thread_opterr,   /* if error message should be printed */
+    thread_optind,                   /* index into parent argv vector */
+    thread_optopt,                   /* character checked for validity */
+    thread_optreset;                 /* reset getopt */
+extern __thread char *thread_optarg; /* argument associated with option */
 
-
-int thread_getopt(int nargc, char * const *nargv, const char *ostr);
+int thread_getopt(int nargc, char *const *nargv, const char *ostr);
 
 #endif /* bk_getopts_h */

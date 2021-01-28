@@ -33,14 +33,12 @@
 
 @implementation BKTheme
 
-+ (NSString *)resourcesPathName
-{
-	return @"Themes";
++ (NSString *)resourcesPathName {
+  return @"Themes";
 }
 
-+ (NSString *)resourcesExtension
-{
-	return @"js";
++ (NSString *)resourcesExtension {
+  return @"js";
 }
 
 @end

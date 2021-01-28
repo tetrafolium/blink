@@ -33,32 +33,39 @@
 #import "BKUserConfigurationManager.h"
 @interface BKSmartKeysConfigViewController ()
 
-@property (nonatomic, weak) IBOutlet UISwitch *showWithExternalKeyboard;
-@property (nonatomic, weak) IBOutlet UISwitch *keyboardClicksSoundSwitch;
+@property(nonatomic, weak) IBOutlet UISwitch *showWithExternalKeyboard;
+@property(nonatomic, weak) IBOutlet UISwitch *keyboardClicksSoundSwitch;
 
 @end
 
 @implementation BKSmartKeysConfigViewController
 
 - (void)viewDidLoad {
-	[super viewDidLoad];
-	[self setupUI];
+  [super viewDidLoad];
+  [self setupUI];
 }
 
-- (void)setupUI
-{
-	[_showWithExternalKeyboard setOn:[BKUserConfigurationManager userSettingsValueForKey:BKUserConfigShowSmartKeysWithXKeyBoard]];
+- (void)setupUI {
+  [_showWithExternalKeyboard
+      setOn:
+          [BKUserConfigurationManager
+              userSettingsValueForKey:BKUserConfigShowSmartKeysWithXKeyBoard]];
 
-	[_keyboardClicksSoundSwitch setOn:![BKUserConfigurationManager userSettingsValueForKey:BKUserConfigMuteSmartKeysPlaySound]];
+  [_keyboardClicksSoundSwitch
+      setOn:![BKUserConfigurationManager
+                userSettingsValueForKey:BKUserConfigMuteSmartKeysPlaySound]];
 }
 
-- (IBAction)didToggleSwitch:(UISwitch *)sender
-{
-	if (sender == _showWithExternalKeyboard) {
-		[BKUserConfigurationManager setUserSettingsValue:sender.isOn forKey:BKUserConfigShowSmartKeysWithXKeyBoard];
-	} else if (sender == _keyboardClicksSoundSwitch) {
-		[BKUserConfigurationManager setUserSettingsValue:!sender.isOn forKey:BKUserConfigMuteSmartKeysPlaySound];
-	}
+- (IBAction)didToggleSwitch:(UISwitch *)sender {
+  if (sender == _showWithExternalKeyboard) {
+    [BKUserConfigurationManager
+        setUserSettingsValue:sender.isOn
+                      forKey:BKUserConfigShowSmartKeysWithXKeyBoard];
+  } else if (sender == _keyboardClicksSoundSwitch) {
+    [BKUserConfigurationManager
+        setUserSettingsValue:!sender.isOn
+                      forKey:BKUserConfigMuteSmartKeysPlaySound];
+  }
 }
 
 @end

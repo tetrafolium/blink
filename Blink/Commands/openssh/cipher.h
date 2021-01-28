@@ -37,35 +37,35 @@
 #ifndef CIPHER_H
 #define CIPHER_H
 
-#include <sys/types.h>
 #include <openssl/evp.h>
+#include <sys/types.h>
 
 /*#include "cipher-chachapoly.h"*/
 #include "chapoly/chacha.h"
 #include "chapoly/poly1305.h"
 
-#define CHACHA_KEYLEN   32 /* Only 256 bit keys used here */
+#define CHACHA_KEYLEN 32 /* Only 256 bit keys used here */
 
 struct chachapoly_ctx {
-	struct chacha_ctx main_ctx, header_ctx;
+  struct chacha_ctx main_ctx, header_ctx;
 };
 
-int     chachapoly_init(struct chachapoly_ctx *cpctx,
-                        const u_char *key, u_int keylen)
-__attribute__((__bounded__(__buffer__, 2, 3)));
-int     chachapoly_crypt(struct chachapoly_ctx *cpctx, u_int seqnr,
-                         u_char *dest, const u_char *src, u_int len, u_int aadlen, u_int authlen,
-                         int do_encrypt);
-int     chachapoly_get_length(struct chachapoly_ctx *cpctx,
-                              u_int *plenp, u_int seqnr, const u_char *cp, u_int len)
-__attribute__((__bounded__(__buffer__, 4, 5)));
+int chachapoly_init(struct chachapoly_ctx *cpctx, const u_char *key,
+                    u_int keylen)
+    __attribute__((__bounded__(__buffer__, 2, 3)));
+int chachapoly_crypt(struct chachapoly_ctx *cpctx, u_int seqnr, u_char *dest,
+                     const u_char *src, u_int len, u_int aadlen, u_int authlen,
+                     int do_encrypt);
+int chachapoly_get_length(struct chachapoly_ctx *cpctx, u_int *plenp,
+                          u_int seqnr, const u_char *cp, u_int len)
+    __attribute__((__bounded__(__buffer__, 4, 5)));
 
 /*#include "cipher-aesctr.h"*/
 /*#include "rijndael.h"*/
-#define AES_MAXKEYBITS  (256)
-#define AES_MAXKEYBYTES (AES_MAXKEYBITS/8)
+#define AES_MAXKEYBITS (256)
+#define AES_MAXKEYBYTES (AES_MAXKEYBITS / 8)
 /* for 256-bit keys, fewer for less */
-#define AES_MAXROUNDS   14
+#define AES_MAXROUNDS 14
 
 typedef unsigned char u8;
 typedef unsigned short u16;
@@ -74,70 +74,70 @@ typedef unsigned int u32;
 #define AES_BLOCK_SIZE 16
 
 typedef struct aesctr_ctx {
-	int rounds;                     /* keylen-dependent #rounds */
-	u32 ek[4*(AES_MAXROUNDS + 1)];  /* encrypt key schedule */
-	u8 ctr[AES_BLOCK_SIZE];         /* counter */
+  int rounds;                      /* keylen-dependent #rounds */
+  u32 ek[4 * (AES_MAXROUNDS + 1)]; /* encrypt key schedule */
+  u8 ctr[AES_BLOCK_SIZE];          /* counter */
 } aesctr_ctx;
 
-void aesctr_keysetup(aesctr_ctx *x,const u8 *k,u32 kbits,u32 ivbits);
-void aesctr_ivsetup(aesctr_ctx *x,const u8 *iv);
-void aesctr_encrypt_bytes(aesctr_ctx *x,const u8 *m,u8 *c,u32 bytes);
+void aesctr_keysetup(aesctr_ctx *x, const u8 *k, u32 kbits, u32 ivbits);
+void aesctr_ivsetup(aesctr_ctx *x, const u8 *iv);
+void aesctr_encrypt_bytes(aesctr_ctx *x, const u8 *m, u8 *c, u32 bytes);
 
 /*
  * Cipher types for SSH-1.  New types can be added, but old types should not
  * be removed for compatibility.  The maximum allowed value is 31.
  */
-#define SSH_CIPHER_SSH2         -3
-#define SSH_CIPHER_INVALID      -2      /* No valid cipher selected. */
-#define SSH_CIPHER_NOT_SET      -1      /* None selected (invalid number). */
-#define SSH_CIPHER_NONE         0       /* no encryption */
-#define SSH_CIPHER_IDEA         1       /* IDEA CFB */
-#define SSH_CIPHER_DES          2       /* DES CBC */
-#define SSH_CIPHER_3DES         3       /* 3DES CBC */
-#define SSH_CIPHER_BROKEN_TSS   4       /* TRI's Simple Stream encryption CBC */
-#define SSH_CIPHER_BROKEN_RC4   5       /* Alleged RC4 */
-#define SSH_CIPHER_BLOWFISH     6
-#define SSH_CIPHER_RESERVED     7
-#define SSH_CIPHER_MAX          31
+#define SSH_CIPHER_SSH2 -3
+#define SSH_CIPHER_INVALID -2   /* No valid cipher selected. */
+#define SSH_CIPHER_NOT_SET -1   /* None selected (invalid number). */
+#define SSH_CIPHER_NONE 0       /* no encryption */
+#define SSH_CIPHER_IDEA 1       /* IDEA CFB */
+#define SSH_CIPHER_DES 2        /* DES CBC */
+#define SSH_CIPHER_3DES 3       /* 3DES CBC */
+#define SSH_CIPHER_BROKEN_TSS 4 /* TRI's Simple Stream encryption CBC */
+#define SSH_CIPHER_BROKEN_RC4 5 /* Alleged RC4 */
+#define SSH_CIPHER_BLOWFISH 6
+#define SSH_CIPHER_RESERVED 7
+#define SSH_CIPHER_MAX 31
 
-#define CIPHER_ENCRYPT          1
-#define CIPHER_DECRYPT          0
+#define CIPHER_ENCRYPT 1
+#define CIPHER_DECRYPT 0
 
 struct sshcipher;
 struct sshcipher_ctx;
 
-u_int    cipher_mask_ssh1(int);
+u_int cipher_mask_ssh1(int);
 const struct sshcipher *cipher_by_name(const char *);
 const struct sshcipher *cipher_by_number(int);
-int      cipher_number(const char *);
-char    *cipher_name(int);
+int cipher_number(const char *);
+char *cipher_name(int);
 const char *cipher_warning_message(const struct sshcipher_ctx *);
-int      ciphers_valid(const char *);
-char    *cipher_alg_list(char, int);
+int ciphers_valid(const char *);
+char *cipher_alg_list(char, int);
 int cipher_init(struct sshcipher_ctx **, const struct sshcipher *,
                 const u_char *, u_int, const u_char *, u_int, int);
-int cipher_crypt(struct sshcipher_ctx *, u_int, u_char *, const u_char *,
-                 u_int, u_int, u_int);
-int cipher_get_length(struct sshcipher_ctx *, u_int *, u_int,
-                      const u_char *, u_int);
-void     cipher_free(struct sshcipher_ctx *);
-int      cipher_set_key_string(struct sshcipher_ctx **,
-                               const struct sshcipher *, const char *, int);
-u_int    cipher_blocksize(const struct sshcipher *);
-u_int    cipher_keylen(const struct sshcipher *);
-u_int    cipher_seclen(const struct sshcipher *);
-u_int    cipher_authlen(const struct sshcipher *);
-u_int    cipher_ivlen(const struct sshcipher *);
-u_int    cipher_is_cbc(const struct sshcipher *);
+int cipher_crypt(struct sshcipher_ctx *, u_int, u_char *, const u_char *, u_int,
+                 u_int, u_int);
+int cipher_get_length(struct sshcipher_ctx *, u_int *, u_int, const u_char *,
+                      u_int);
+void cipher_free(struct sshcipher_ctx *);
+int cipher_set_key_string(struct sshcipher_ctx **, const struct sshcipher *,
+                          const char *, int);
+u_int cipher_blocksize(const struct sshcipher *);
+u_int cipher_keylen(const struct sshcipher *);
+u_int cipher_seclen(const struct sshcipher *);
+u_int cipher_authlen(const struct sshcipher *);
+u_int cipher_ivlen(const struct sshcipher *);
+u_int cipher_is_cbc(const struct sshcipher *);
 
-u_int    cipher_ctx_is_plaintext(struct sshcipher_ctx *);
-u_int    cipher_ctx_get_number(struct sshcipher_ctx *);
+u_int cipher_ctx_is_plaintext(struct sshcipher_ctx *);
+u_int cipher_ctx_get_number(struct sshcipher_ctx *);
 
-u_int    cipher_get_number(const struct sshcipher *);
+u_int cipher_get_number(const struct sshcipher *);
 int cipher_get_keyiv(struct sshcipher_ctx *, u_char *, u_int);
-int      cipher_set_keyiv(struct sshcipher_ctx *, const u_char *);
-int      cipher_get_keyiv_len(const struct sshcipher_ctx *);
-int      cipher_get_keycontext(const struct sshcipher_ctx *, u_char *);
-void     cipher_set_keycontext(struct sshcipher_ctx *, const u_char *);
+int cipher_set_keyiv(struct sshcipher_ctx *, const u_char *);
+int cipher_get_keyiv_len(const struct sshcipher_ctx *);
+int cipher_get_keycontext(const struct sshcipher_ctx *, u_char *);
+void cipher_set_keycontext(struct sshcipher_ctx *, const u_char *);
 
-#endif                          /* CIPHER_H */
+#endif /* CIPHER_H */

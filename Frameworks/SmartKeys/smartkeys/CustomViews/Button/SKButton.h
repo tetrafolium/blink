@@ -10,7 +10,7 @@
 
 @interface SKButton : UIButton
 
-@property (nonatomic, strong) CALayer *backgroundLayer;
+@property(nonatomic, strong) CALayer *backgroundLayer;
 
 - (void)animatedButtonSelection:(BOOL)selected;
 

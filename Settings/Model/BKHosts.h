@@ -32,43 +32,58 @@
 #import <Foundation/Foundation.h>
 @import CloudKit;
 enum BKMoshPrediction {
-	BKMoshPredictionAdaptive,
-	BKMoshPredictionAlways,
-	BKMoshPredictionNever,
-	BKMoshPredictionExperimental,
-	BKMoshPredictionUnknown
+  BKMoshPredictionAdaptive,
+  BKMoshPredictionAlways,
+  BKMoshPredictionNever,
+  BKMoshPredictionExperimental,
+  BKMoshPredictionUnknown
 };
 
 @interface BKHosts : NSObject <NSCoding>
 
-@property (nonatomic, strong) NSString *host;
-@property (nonatomic, strong) NSString *hostName;
-@property (nonatomic, strong) NSNumber *port;
-@property (nonatomic, strong) NSString *user;
-@property (nonatomic, strong) NSString *passwordRef;
-@property (readonly) NSString *password;
-@property (nonatomic, strong) NSString *key;
-@property (nonatomic, strong) NSString *moshServer;
-@property (nonatomic, strong) NSNumber *moshPort;
-@property (nonatomic, strong) NSNumber *moshPortEnd;
-@property (nonatomic, strong) NSString *moshStartup;
-@property (nonatomic, strong) NSNumber *prediction;
-@property (nonatomic, strong) NSString *proxyCmd;
-@property (nonatomic, strong) CKRecordID *iCloudRecordId;
-@property (nonatomic, strong) NSDate *lastModifiedTime;
-@property (nonatomic, strong) NSNumber *iCloudConflictDetected;
-@property (nonatomic, strong) BKHosts *iCloudConflictCopy;
+@property(nonatomic, strong) NSString *host;
+@property(nonatomic, strong) NSString *hostName;
+@property(nonatomic, strong) NSNumber *port;
+@property(nonatomic, strong) NSString *user;
+@property(nonatomic, strong) NSString *passwordRef;
+@property(readonly) NSString *password;
+@property(nonatomic, strong) NSString *key;
+@property(nonatomic, strong) NSString *moshServer;
+@property(nonatomic, strong) NSNumber *moshPort;
+@property(nonatomic, strong) NSNumber *moshPortEnd;
+@property(nonatomic, strong) NSString *moshStartup;
+@property(nonatomic, strong) NSNumber *prediction;
+@property(nonatomic, strong) NSString *proxyCmd;
+@property(nonatomic, strong) CKRecordID *iCloudRecordId;
+@property(nonatomic, strong) NSDate *lastModifiedTime;
+@property(nonatomic, strong) NSNumber *iCloudConflictDetected;
+@property(nonatomic, strong) BKHosts *iCloudConflictCopy;
 
 + (instancetype)withHost:(NSString *)ID;
 + (void)loadHosts;
 + (BOOL)saveHosts;
-+ (instancetype)saveHost:(NSString *)host withNewHost:(NSString *)newHost hostName:(NSString *)hostName sshPort:(NSString *)sshPort user:(NSString *)user password:(NSString *)password hostKey:(NSString *)hostKey moshServer:(NSString *)moshServer moshPortRange:(NSString *)moshPortRange startUpCmd:(NSString *)startUpCmd prediction:(enum BKMoshPrediction) prediction proxyCmd:(NSString *)proxyCmd;
-+ (void)updateHost:(NSString *)host withiCloudId:(CKRecordID *)iCloudId andLastModifiedTime:(NSDate *)lastModifiedTime;
-+ (void)markHost:(NSString *)host forRecord:(CKRecord *)record withConflict:(BOOL)hasConflict;
++ (instancetype)saveHost:(NSString *)host
+             withNewHost:(NSString *)newHost
+                hostName:(NSString *)hostName
+                 sshPort:(NSString *)sshPort
+                    user:(NSString *)user
+                password:(NSString *)password
+                 hostKey:(NSString *)hostKey
+              moshServer:(NSString *)moshServer
+           moshPortRange:(NSString *)moshPortRange
+              startUpCmd:(NSString *)startUpCmd
+              prediction:(enum BKMoshPrediction)prediction
+                proxyCmd:(NSString *)proxyCmd;
++ (void)updateHost:(NSString *)host
+           withiCloudId:(CKRecordID *)iCloudId
+    andLastModifiedTime:(NSDate *)lastModifiedTime;
++ (void)markHost:(NSString *)host
+       forRecord:(CKRecord *)record
+    withConflict:(BOOL)hasConflict;
 + (NSMutableArray<BKHosts *> *)all;
 + (NSInteger)count;
 + (NSString *)predictionStringForRawValue:(int)rawValue;
-+ (enum BKMoshPrediction) predictionValueForString:(NSString *)predictionString;
++ (enum BKMoshPrediction)predictionValueForString:(NSString *)predictionString;
 + (NSMutableArray *)predictionStringList;
 + (CKRecord *)recordFromHost:(BKHosts *)host;
 + (BKHosts *)hostFromRecord:(CKRecord *)hostRecord;

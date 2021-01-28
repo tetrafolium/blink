@@ -29,24 +29,24 @@
 
 #include "includes.h"
 
-#include <sys/types.h>
 #include <pwd.h>
+#include <sys/types.h>
 
 #include <sys/socket.h>
 
-#include <stddef.h>  /* for wchar_t */
+#include <stddef.h> /* for wchar_t */
 
 /* OpenBSD function replacements */
 #include "base64.h"
-#include "sigact.h"
-#include "readpassphrase.h"
-#include "vis.h"
+#include "blf.h"
 #include "getrrsetbyname.h"
+#include "md5.h"
+#include "readpassphrase.h"
+#include "rmd160.h"
 #include "sha1.h"
 #include "sha2.h"
-#include "rmd160.h"
-#include "md5.h"
-#include "blf.h"
+#include "sigact.h"
+#include "vis.h"
 
 #ifndef HAVE_BASENAME
 char *basename(const char *path);
@@ -85,9 +85,9 @@ void *recallocarray(void *, size_t, size_t, size_t);
  * glibc's FORTIFY_SOURCE can redefine this and prevent us picking up the
  * compat version.
  */
-# ifdef BROKEN_REALPATH
-#  define realpath(x, y) _ssh_compat_realpath(x, y)
-# endif
+#ifdef BROKEN_REALPATH
+#define realpath(x, y) _ssh_compat_realpath(x, y)
+#endif
 
 char *realpath(const char *path, char *resolved);
 #endif
@@ -117,7 +117,7 @@ void strmode(int mode, char *p);
 #endif
 
 #ifndef HAVE_STRPTIME
-#include  <time.h>
+#include <time.h>
 char *strptime(const char *buf, const char *fmt, struct tm *tm);
 #endif
 
@@ -136,12 +136,12 @@ char *dirname(const char *path);
 #endif
 
 #ifndef HAVE_FMT_SCALED
-#define FMT_SCALED_STRSIZE      7
-int     fmt_scaled(long long number, char *result);
+#define FMT_SCALED_STRSIZE 7
+int fmt_scaled(long long number, char *result);
 #endif
 
 #ifndef HAVE_SCAN_SCALED
-int     scan_scaled(char *, long long *);
+int scan_scaled(char *, long long *);
 #endif
 
 #if defined(BROKEN_INET_NTOA) || !defined(HAVE_INET_NTOA)
@@ -170,40 +170,40 @@ int getgrouplist(const char *, gid_t, gid_t *, int *);
 #endif
 
 #if !defined(HAVE_GETOPT) || !defined(HAVE_GETOPT_OPTRESET)
-int BSDgetopt(int argc, char * const *argv, const char *opts);
+int BSDgetopt(int argc, char *const *argv, const char *opts);
 #include "openbsd-compat/getopt.h"
 #endif
 
-#if ((defined(HAVE_DECL_READV) && HAVE_DECL_READV == 0) || \
-        (defined(HAVE_DECL_WRITEV) && HAVE_DECL_WRITEV == 0))
-# include <sys/types.h>
-# include <sys/uio.h>
+#if ((defined(HAVE_DECL_READV) && HAVE_DECL_READV == 0) ||                     \
+     (defined(HAVE_DECL_WRITEV) && HAVE_DECL_WRITEV == 0))
+#include <sys/types.h>
+#include <sys/uio.h>
 
-# if defined(HAVE_DECL_READV) && HAVE_DECL_READV == 0
+#if defined(HAVE_DECL_READV) && HAVE_DECL_READV == 0
 int readv(int, struct iovec *, int);
-# endif
+#endif
 
-# if defined(HAVE_DECL_WRITEV) && HAVE_DECL_WRITEV == 0
+#if defined(HAVE_DECL_WRITEV) && HAVE_DECL_WRITEV == 0
 int writev(int, struct iovec *, int);
-# endif
+#endif
 #endif
 
 /* Home grown routines */
 #include "bsd-misc.h"
+#include "bsd-poll.h"
 #include "bsd-setres_id.h"
 #include "bsd-signal.h"
 #include "bsd-statvfs.h"
 #include "bsd-waitpid.h"
-#include "bsd-poll.h"
 
 #ifndef HAVE_GETPEEREID
 int getpeereid(int, uid_t *, gid_t *);
 #endif
 
 #ifdef HAVE_ARC4RANDOM
-# ifndef HAVE_ARC4RANDOM_STIR
-#  define arc4random_stir()
-# endif
+#ifndef HAVE_ARC4RANDOM_STIR
+#define arc4random_stir()
+#endif
 #else
 unsigned int arc4random(void);
 void arc4random_stir(void);
@@ -222,7 +222,7 @@ int asprintf(char **, const char *, ...);
 #endif
 
 #ifndef HAVE_OPENPTY
-# include <sys/ioctl.h> /* for struct winsize */
+#include <sys/ioctl.h> /* for struct winsize */
 int openpty(int *, int *, char *, struct termios *, struct winsize *);
 #endif /* HAVE_OPENPTY */
 
@@ -248,27 +248,27 @@ long long strtonum(const char *, long long, long long, const char **);
 
 /* multibyte character support */
 #ifndef HAVE_MBLEN
-# define mblen(x, y)    (1)
+#define mblen(x, y) (1)
 #endif
 
 #ifndef HAVE_WCWIDTH
-# define wcwidth(x)     (((x) >= 0x20 && (x) <= 0x7e) ? 1 : -1)
+#define wcwidth(x) (((x) >= 0x20 && (x) <= 0x7e) ? 1 : -1)
 /* force our no-op nl_langinfo and mbtowc */
-# undef HAVE_NL_LANGINFO
-# undef HAVE_MBTOWC
-# undef HAVE_LANGINFO_H
+#undef HAVE_NL_LANGINFO
+#undef HAVE_MBTOWC
+#undef HAVE_LANGINFO_H
 #endif
 
 #ifndef HAVE_NL_LANGINFO
-# define nl_langinfo(x) ""
+#define nl_langinfo(x) ""
 #endif
 
 #ifndef HAVE_MBTOWC
-int mbtowc(wchar_t *, const char*, size_t);
+int mbtowc(wchar_t *, const char *, size_t);
 #endif
 
 #if !defined(HAVE_VASPRINTF) || !defined(HAVE_VSNPRINTF)
-# include <stdarg.h>
+#include <stdarg.h>
 #endif
 
 /*
@@ -277,15 +277,15 @@ int mbtowc(wchar_t *, const char*, size_t);
  * AIX with the xlc compiler.
  */
 #ifndef VA_COPY
-# ifdef HAVE_VA_COPY
-#  define VA_COPY(dest, src) va_copy(dest, src)
-# else
-#  ifdef HAVE___VA_COPY
-#   define VA_COPY(dest, src) __va_copy(dest, src)
-#  else
-#   define VA_COPY(dest, src) (dest) = (src)
-#  endif
-# endif
+#ifdef HAVE_VA_COPY
+#define VA_COPY(dest, src) va_copy(dest, src)
+#else
+#ifdef HAVE___VA_COPY
+#define VA_COPY(dest, src) __va_copy(dest, src)
+#else
+#define VA_COPY(dest, src) (dest) = (src)
+#endif
+#endif
 #endif
 
 #ifndef HAVE_VASPRINTF
@@ -309,8 +309,8 @@ int timingsafe_bcmp(const void *, const void *, size_t);
 #endif
 
 #ifndef HAVE_BCRYPT_PBKDF
-int bcrypt_pbkdf(const char *, size_t, const u_int8_t *, size_t,
-                 u_int8_t *, size_t, unsigned int);
+int bcrypt_pbkdf(const char *, size_t, const u_int8_t *, size_t, u_int8_t *,
+                 size_t, unsigned int);
 #endif
 
 #ifndef HAVE_EXPLICIT_BZERO
@@ -333,24 +333,24 @@ char *shadow_pw(struct passwd *pw);
 #include "port-aix.h"
 #include "port-irix.h"
 #include "port-linux.h"
-#include "port-solaris.h"
 #include "port-net.h"
+#include "port-solaris.h"
 #include "port-uw.h"
 
 /* _FORTIFY_SOURCE breaks FD_ISSET(n)/FD_SET(n) for n > FD_SETSIZE. Avoid. */
 #if defined(HAVE_FEATURES_H) && defined(_FORTIFY_SOURCE)
-# include <features.h>
-# if defined(__GNU_LIBRARY__) && defined(__GLIBC_PREREQ)
-#  if __GLIBC_PREREQ(2, 15) && (_FORTIFY_SOURCE > 0)
-#   include <sys/socket.h>  /* Ensure include guard is defined */
-#   undef FD_SET
-#   undef FD_ISSET
-#   define FD_SET(n, set)       kludge_FD_SET(n, set)
-#   define FD_ISSET(n, set)     kludge_FD_ISSET(n, set)
+#include <features.h>
+#if defined(__GNU_LIBRARY__) && defined(__GLIBC_PREREQ)
+#if __GLIBC_PREREQ(2, 15) && (_FORTIFY_SOURCE > 0)
+#include <sys/socket.h> /* Ensure include guard is defined */
+#undef FD_SET
+#undef FD_ISSET
+#define FD_SET(n, set) kludge_FD_SET(n, set)
+#define FD_ISSET(n, set) kludge_FD_ISSET(n, set)
 void kludge_FD_SET(int, fd_set *);
 int kludge_FD_ISSET(int, fd_set *);
-#  endif /* __GLIBC_PREREQ(2, 15) && (_FORTIFY_SOURCE > 0) */
-# endif /* __GNU_LIBRARY__ && __GLIBC_PREREQ */
+#endif /* __GLIBC_PREREQ(2, 15) && (_FORTIFY_SOURCE > 0) */
+#endif /* __GNU_LIBRARY__ && __GLIBC_PREREQ */
 #endif /* HAVE_FEATURES_H && _FORTIFY_SOURCE */
 
 #endif /* _OPENBSD_COMPAT_H */

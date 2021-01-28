@@ -33,7 +33,6 @@
 
 #import "Session.h"
 
-
 @interface SSHCopyIDSession : Session
 
 @end

@@ -8,21 +8,21 @@ function _postMessage(op, data) {
   window.webkit.messageHandlers.interOp.postMessage({op, data});
 }
 
-hterm.notify = function(params) {
+hterm.notify =
+    function(params) {
   var def = (curr, fallback) => curr !== undefined ? curr : fallback;
   if (params === undefined || params === null) {
     params = {};
   }
 
-
   var title = def(params.title, window.document.title);
   if (!title)
     title = 'hterm';
 
-  _postMessage('notify', {title, body: params.body})
+  _postMessage('notify', {title, body : params.body})
 }
 
-hterm.Terminal.prototype.copyStringToClipboard = function(content) {
+    hterm.Terminal.prototype.copyStringToClipboard = function(content) {
   if (this.prefs_.get('enable-clipboard-notice')) {
     setTimeout(this.showOverlay.bind(this, hterm.notifyCopyMessage, 500), 200);
   }
@@ -35,39 +35,33 @@ document.addEventListener('selectionchange', function() {
   _postMessage('selectionchange', term_getCurrentSelection());
 });
 
-hterm.Terminal.IO.prototype.sendString = function(string) {
-  _postMessage('sendString', {string});
-};
+hterm.Terminal.IO.prototype.sendString = function(
+    string) { _postMessage('sendString', {string}); };
 
 hterm.msg = function() {}; // TODO: show messages
 
 function _colorComponents(colorStr) {
   if (!colorStr) {
-    return [0, 0, 0]; // Default is black
+    return [ 0, 0, 0 ]; // Default is black
   }
 
-  return colorStr
-    .replace(/[^0-9,]/g, '')
-    .split(',')
-    .map(s => parseInt(s));
+  return colorStr.replace(/[^0-9,]/g, '').split(',').map(s => parseInt(s));
 }
 
 // Before we fully load hterm. We set options here.
 var _prefs = new hterm.PreferenceManager('blink');
-var t = {prefs_: _prefs}; // <- `t` will become actual hterm instance after decorate.
+var t = {
+  prefs_ : _prefs
+}; // <- `t` will become actual hterm instance after decorate.
 
-function term_set(key, value) {
-  _prefs.set(key, value);
-}
+function term_set(key, value) { _prefs.set(key, value); }
 
-function term_get(key) {
-  return _prefs.get(key);
-}
+function term_get(key) { return _prefs.get(key); }
 
 function term_setupDefaults() {
   term_set('copy-on-select', false);
   term_set('audible-bell-sound', '');
-  term_set('receive-encoding', 'raw'); // we are UTF8
+  term_set('receive-encoding', 'raw');   // we are UTF8
   term_set('allow-images-inline', true); // need to make it work
   term_set('scroll-wheel-may-send-arrow-keys', true)
 }
@@ -85,18 +79,17 @@ function term_displayInput(str, display) {
   if (!t || !t.accessibilityReader_) {
     return;
   }
-  
+
   t.accessibilityReader_.hasUserGesture = true;
-  
+
   if (!display) {
     return;
   }
-  
+
   if (str && !t.prompt._secure) {
     window.KeystrokeVisualizer.processInput(str);
   }
 }
-
 
 function term_setup(accessibilityEnabled) {
   t = new hterm.Terminal('blink');
@@ -105,7 +98,7 @@ function term_setup(accessibilityEnabled) {
     window.installKB(t, t.scrollPort_.screen_);
     term_setAutoCarriageReturn(true);
     t.setCursorVisible(true);
-    
+
     t.io.onTerminalResize = function(cols, rows) {
       _postMessage('sigwinch', {cols, rows});
       if (t.prompt) {
@@ -114,17 +107,17 @@ function term_setup(accessibilityEnabled) {
     };
 
     var size = {
-      cols: t.screenSize.width,
-      rows: t.screenSize.height,
+      cols : t.screenSize.width,
+      rows : t.screenSize.height,
     };
-    
+
     document.body.style.backgroundColor =
-      t.scrollPort_.screen_.style.backgroundColor;
+        t.scrollPort_.screen_.style.backgroundColor;
     var bgColor = _colorComponents(t.scrollPort_.screen_.style.backgroundColor);
-    
+
     t.keyboard.characterEncoding = 'raw'; // we are UTF8. Fix for #507
     t.uninstallKeyboard();
-    
+
     _postMessage('terminalReady', {size, bgColor});
 
     if (window.KeystrokeVisualizer) {
@@ -146,10 +139,9 @@ function term_init(accessibilityEnabled) {
     waitForFontFamily(term_setup);
   } catch (e) {
     _postMessage('alert', {
-      title: 'Error',
-      message:
-        'Failed to setup theme. Please check syntax of your theme.\n' +
-        e.toString(),
+      title : 'Error',
+      message : 'Failed to setup theme. Please check syntax of your theme.\n' +
+                    e.toString(),
     });
     term_setup(accessibilityEnabled);
   }
@@ -164,25 +156,23 @@ class ApiRequest {
     request.id = this.id;
     var self = this;
     this.promise = new Promise(function(resolve, reject) {
-        self.resolve = resolve;
-        self.reject = reject;
+      self.resolve = resolve;
+      self.reject = reject;
     });
     _requestsMap[this.id] = self
-    _postMessage("api", {name, request: JSON.stringify(request)} );
-    
+    _postMessage("api", {name, request : JSON.stringify(request)});
+
     this.then = this.promise.then.bind(this.promise);
     this.catch = this.promise.catch.bind(this.promise);
   }
-  
+
   cancel() {
     this.resolve(null);
     delete _requestsMap[this.id];
   }
 }
 
-function term_apiRequest(name, request) {
-  return new ApiRequest(name, request)
-}
+function term_apiRequest(name, request) { return new ApiRequest(name, request) }
 
 function term_apiResponse(name, response) {
   var res = JSON.parse(response);
@@ -194,17 +184,12 @@ function term_apiResponse(name, response) {
   req.resolve(res)
 }
 
-
 window.term_apiRequest = term_apiRequest;
 window.term_apiResponse = term_apiResponse;
 
-function term_write(data) {
-  t.interpret(data);
-}
+function term_write(data) { t.interpret(data); }
 
-function term_paste(str) {
-  t.onPaste_({text: str || ''});
-}
+function term_paste(str) { t.onPaste_({text : str || ''}); }
 
 var _utf8TextDecoder = new TextDecoder('utf8');
 function term_write_b64(b64str) {
@@ -223,27 +208,19 @@ function b64_to_uint8_array(b64Str) {
   return res;
 }
 
-function term_clear() {
-  t.clear();
-}
+function term_clear() { t.clear(); }
 
-function term_reset() {
-  t.reset();
-}
+function term_reset() { t.reset(); }
 
-function term_focus() {
-  t.onFocusChange__(true);
-}
+function term_focus() { t.onFocusChange__(true); }
 
-function term_blur() {
-  t.onFocusChange__(false);
-}
+function term_blur() { t.onFocusChange__(false); }
 
 function _setTermCoordinates(event, x, y) {
   // One based row/column stored on the mouse event.
   var ty = (y / t.scrollPort_.characterSize.height | 0) + 1;
   var tx = (x / t.scrollPort_.characterSize.width | 0) + 1;
-//  console.log(`x:${x},y: ${y}, col:${tx}, row:${ty}`);
+  //  console.log(`x:${x},y: ${y}, col:${tx}, row:${ty}`);
   event.terminalRow = ty;
   event.terminalColumn = tx;
 }
@@ -259,9 +236,9 @@ function term_reportMouseClick(x, y, buttons, display) {
     term_reportMouseEvent('mousedown', x, y, 1);
     term_reportMouseEvent('mouseup', x, y, 1);
   }
-                                  
+
   if (display) {
-     term_displayInput("👆", display);
+    term_displayInput("👆", display);
   }
 }
 
@@ -280,13 +257,11 @@ function term_reportWheelEvent(name, x, y, deltaX, deltaY) {
     return;
   }
 
-  var event = new WheelEvent(name, {clientX: x, clientY: y, deltaX, deltaY});
+  var event = new WheelEvent(name, {clientX : x, clientY : y, deltaX, deltaY});
   t.onMouse_Blink(event);
 }
 
-function term_setWidth(cols) {
-  t.setWidth(cols);
-}
+function term_setWidth(cols) { t.setWidth(cols); }
 
 function term_increaseFontSize() {
   var size = t.getFontSize();
@@ -298,9 +273,7 @@ function term_decreaseFontSize() {
   term_setFontSize(size - 1 + 'px');
 }
 
-function term_resetFontSize() {
-  term_setFontSize();
-}
+function term_resetFontSize() { term_setFontSize(); }
 
 function term_scale(scale) {
   var minScale = 0.3;
@@ -316,7 +289,7 @@ function term_scale(scale) {
 
 function term_setFontSize(size) {
   term_set('font-size', size);
-  _postMessage('fontSizeChanged', {size: parseInt(size)});
+  _postMessage('fontSizeChanged', {size : parseInt(size)});
 }
 
 function term_setFontFamily(name, fontSizeDetectionMethod) {
@@ -335,21 +308,19 @@ function term_appendUserCss(css) {
 
 function term_loadFontFromCss(url, name) {
   WebFont.load({
-    custom: {
-      families: [name],
-      urls: [url],
+    custom : {
+      families : [ name ],
+      urls : [ url ],
     },
-    active: function() {
-      t.syncFontFamily();
-    },
+    active : function() { t.syncFontFamily(); },
   });
   term_setFontFamily(name);
 }
 
 function term_getCurrentSelection() {
   const selection = document.getSelection();
-    if (!selection || selection.rangeCount === 0 || selection.type === 'Caret') {
-    return {base: '', offset: 0, text: ''};
+  if (!selection || selection.rangeCount === 0 || selection.type === 'Caret') {
+    return {base : '', offset : 0, text : ''};
   }
 
   const r = selection.getRangeAt(0).getBoundingClientRect();
@@ -357,9 +328,9 @@ function term_getCurrentSelection() {
   const rect = `{{${r.x}, ${r.y}},{${r.width},${r.height}}}`;
 
   return {
-    base: selection.baseNode.textContent,
-    offset: selection.baseOffset,
-    text: t.getSelectionText() || "",
+    base : selection.baseNode.textContent,
+    offset : selection.baseOffset,
+    text : t.getSelectionText() || "",
     rect,
   };
 }
@@ -371,10 +342,8 @@ function _modifySelectionByLine(direction) {
   var aNode = selection.anchorNode;
   var aOffset = selection.anchorOffset;
 
-  var dy =
-    direction === 'left'
-      ? -t.scrollPort_.characterSize.height
-      : t.scrollPort_.characterSize.height;
+  var dy = direction === 'left' ? -t.scrollPort_.characterSize.height
+                                : t.scrollPort_.characterSize.height;
   var dx = t.scrollPort_.characterSize.width;
   var range = selection.getRangeAt(0);
 
@@ -388,37 +357,35 @@ function _modifySelectionByLine(direction) {
   if (topLeft) {
     // top left
     var rect = _filteredRects(range)[0];
-    var point = {x: rect.left, y: rect.top + Math.abs(dy) * 0.5};
+    var point = {x : rect.left, y : rect.top + Math.abs(dy) * 0.5};
     var newRange = document.caretRangeFromPoint(point.x, point.y + dy);
     if (!newRange) {
       selection.modify('extend', direction, 'line');
     } else {
       if (newRange.startContainer.textContent.length <= newRange.startOffset) {
-        if (
-          newRange.startContainer.nodeName === 'X-ROW' &&
-          newRange.startOffset === 0
-        ) {
+        if (newRange.startContainer.nodeName === 'X-ROW' &&
+            newRange.startOffset === 0) {
           selection.setBaseAndExtent(
-            aNode,
-            aOffset,
-            newRange.startContainer,
-            newRange.startOffset,
+              aNode,
+              aOffset,
+              newRange.startContainer,
+              newRange.startOffset,
           );
           selection.modify('extend', 'left', 'character');
         } else {
           selection.setBaseAndExtent(
-            aNode,
-            aOffset,
-            newRange.startContainer,
-            Math.max(newRange.startOffset - 1, 0),
+              aNode,
+              aOffset,
+              newRange.startContainer,
+              Math.max(newRange.startOffset - 1, 0),
           );
         }
       } else {
         selection.setBaseAndExtent(
-          aNode,
-          aOffset,
-          newRange.startContainer,
-          newRange.startOffset,
+            aNode,
+            aOffset,
+            newRange.startContainer,
+            newRange.startOffset,
         );
       }
     }
@@ -426,17 +393,17 @@ function _modifySelectionByLine(direction) {
     // bottom right
     var rects = _filteredRects(range);
     var rect = rects[rects.length - 1];
-    var point = {x: rect.right, y: rect.bottom - Math.abs(dy) * 0.5};
+    var point = {x : rect.right, y : rect.bottom - Math.abs(dy) * 0.5};
     var newRange = document.caretRangeFromPoint(point.x, point.y + dy);
     if (newRange == null) {
       point.x -= dx * 0.5;
     }
     newRange = document.caretRangeFromPoint(point.x, point.y + dy);
     selection.setBaseAndExtent(
-      aNode,
-      aOffset,
-      newRange.startContainer,
-      newRange.startOffset,
+        aNode,
+        aOffset,
+        newRange.startContainer,
+        newRange.startOffset,
     );
   }
 }
@@ -490,16 +457,14 @@ function term_modifySideSelection() {
   }
 
   selection.setBaseAndExtent(
-    selection.focusNode,
-    selection.focusOffset,
-    selection.anchorNode,
-    selection.anchorOffset,
+      selection.focusNode,
+      selection.focusOffset,
+      selection.anchorNode,
+      selection.anchorOffset,
   );
 }
 
-function term_cleanSelection() {
-  document.getSelection().removeAllRanges();
-}
+function term_cleanSelection() { document.getSelection().removeAllRanges(); }
 
 function waitForFontFamily(callback) {
   const fontFamily = term_get('font-family');
@@ -510,9 +475,9 @@ function waitForFontFamily(callback) {
   const families = fontFamily.split(/\s*,\s*/);
 
   WebFont.load({
-    custom: {families},
-    active: callback,
-    inactive: callback,
+    custom : {families},
+    active : callback,
+    inactive : callback,
   });
 }
 
@@ -522,9 +487,7 @@ function term_applySexyTheme(theme) {
   term_set('background-color', theme.background);
 }
 
-function term_setAutoCarriageReturn(state) {
-  t.setAutoCarriageReturn(state);
-}
+function term_setAutoCarriageReturn(state) { t.setAutoCarriageReturn(state); }
 
 function term_restore() {
   t.primaryScreen_.textAttributes.reset();

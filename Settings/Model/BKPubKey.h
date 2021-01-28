@@ -42,25 +42,29 @@ extern const NSString *BK_KEYTYPE_Ed25519;
 - (Pki *)initRSAWithLength:(int)bits;
 - (Pki *)initWithType:(NSString *)type andBits:(int)bits;
 - (NSString *)privateKey;
-- (NSString *)publicKeyWithComment:(NSString*)comment;
+- (NSString *)publicKeyWithComment:(NSString *)comment;
 - (const NSString *)keyTypeName;
 
 + (NSArray<NSString *> *)supportedKeyTypes;
-+ (void)importPrivateKey:(NSString *)privateKey controller:(UIViewController *)controller andCallback: (void (^)(Pki *, NSString *))callback;
++ (void)importPrivateKey:(NSString *)privateKey
+              controller:(UIViewController *)controller
+             andCallback:(void (^)(Pki *, NSString *))callback;
 
 @end
 
 @interface BKPubKey : NSObject <NSCoding, UIActivityItemSource>
 
 @property NSString *ID;
-@property (readonly) NSString *privateKey;
-@property (readonly) NSString *publicKey;
+@property(readonly) NSString *privateKey;
+@property(readonly) NSString *publicKey;
 
 + (void)initialize;
 + (instancetype)withID:(NSString *)ID;
 + (void)loadIDS;
 + (BOOL)saveIDS;
-+ (id)saveCard:(NSString *)ID privateKey:(NSString *)privateKey publicKey:(NSString *)publicKey;
++ (id)saveCard:(NSString *)ID
+    privateKey:(NSString *)privateKey
+     publicKey:(NSString *)publicKey;
 + (NSMutableArray *)all;
 + (NSInteger)count;
 - (BOOL)isEncrypted;
@@ -71,6 +75,7 @@ extern const NSString *BK_KEYTYPE_Ed25519;
 @end
 
 // Responsible of the lifecycle of the IDCards within the system.
-// Offers a directory to the rest, in the same way that you wouldn't offer everything in a file interface.
-// Class methods can give us this, then we can connect the TableViewController for rendering, extending them with
-// a Decorator (or in this case maybe a custom View that represents the Cell)
+// Offers a directory to the rest, in the same way that you wouldn't offer
+// everything in a file interface. Class methods can give us this, then we can
+// connect the TableViewController for rendering, extending them with a
+// Decorator (or in this case maybe a custom View that represents the Cell)

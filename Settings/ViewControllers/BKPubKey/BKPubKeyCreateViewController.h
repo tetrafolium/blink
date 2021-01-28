@@ -41,7 +41,8 @@
 
 @interface BKPubKeyCreateViewController : UITableViewController
 
-@property (nonatomic, weak) id<BKPubKeyCreateViewControllerDelegate> createKeyDelegate;
+@property(nonatomic, weak) id<BKPubKeyCreateViewControllerDelegate>
+    createKeyDelegate;
 
 @property bool importMode;
 

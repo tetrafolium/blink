@@ -1,6 +1,6 @@
 // exported as json from https://terminal.sexy
 var theme = {
-  color: [
+  color : [
     '#292c36',
     '#dc3c3c',
     '#95c76f',
@@ -18,8 +18,8 @@ var theme = {
     '#40ebe5',
     '#ffffff',
   ],
-  foreground: '#ffffff',
-  background: '#292c36',
+  foreground : '#ffffff',
+  background : '#292c36',
 };
 
 term_applySexyTheme(theme);

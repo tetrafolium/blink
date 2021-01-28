@@ -29,26 +29,27 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include "UIApplication+Version.h"
 
 @implementation UIApplication (BlinkVersion)
 
 + (NSString *)blinkVersion {
-	NSString *compileDate = [NSString stringWithUTF8String:__DATE__];
+  NSString *compileDate = [NSString stringWithUTF8String:__DATE__];
 
-	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-	NSString *appDisplayName = [infoDictionary objectForKey:@"CFBundleName"];
+  NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+  NSString *appDisplayName = [infoDictionary objectForKey:@"CFBundleName"];
 
-	return [NSString stringWithFormat:@"%@: %@. %@",
-	        appDisplayName, [UIApplication blinkShortVersion], compileDate];
+  return [NSString stringWithFormat:@"%@: %@. %@", appDisplayName,
+                                    [UIApplication blinkShortVersion],
+                                    compileDate];
 }
 
 + (NSString *)blinkShortVersion {
-	NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-	NSString *majorVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-	NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
-	return [NSString stringWithFormat:@"v%@.%@", majorVersion, minorVersion];
+  NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+  NSString *majorVersion =
+      [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+  NSString *minorVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
+  return [NSString stringWithFormat:@"v%@.%@", majorVersion, minorVersion];
 }
 
 @end
