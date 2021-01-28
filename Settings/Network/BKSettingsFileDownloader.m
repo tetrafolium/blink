@@ -37,62 +37,62 @@ static NSURLSessionDownloadTask *downloadTask;
 
 + (void)downloadFileAtUrl:(NSString *)urlString withCompletionHandler:(void (^)(NSData *fileData, NSError *error))completionHandler
 {
-  [self downloadFileAtUrl:urlString expectedMIMETypes:nil withCompletionHandler:completionHandler];
-  // [BKSettingsFileDownloader cancelRunningDownloads];
+    [self downloadFileAtUrl:urlString expectedMIMETypes:nil withCompletionHandler:completionHandler];
+    // [BKSettingsFileDownloader cancelRunningDownloads];
 
-  // NSURL *url = [NSURL URLWithString:urlString];
-  // downloadTask = [[NSURLSession sharedSession]
-  //   downloadTaskWithURL:url
-  //     completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-  //       if (error.code != -999) {
-  //         completionHandler([NSData dataWithContentsOfURL:location], error);
-  //       }
-  //     }];
+    // NSURL *url = [NSURL URLWithString:urlString];
+    // downloadTask = [[NSURLSession sharedSession]
+    //   downloadTaskWithURL:url
+    //     completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+    //       if (error.code != -999) {
+    //         completionHandler([NSData dataWithContentsOfURL:location], error);
+    //       }
+    //     }];
 
-  // [downloadTask resume];
+    // [downloadTask resume];
 }
 
 + (void)downloadFileAtUrl:(NSString *)urlString expectedMIMETypes:(NSArray *)mimeTypes withCompletionHandler:(void (^)(NSData *fileData, NSError *error))completionHandler
 {
-  [BKSettingsFileDownloader cancelRunningDownloads];
+    [BKSettingsFileDownloader cancelRunningDownloads];
 
-  NSURL *url = [NSURL URLWithString:urlString];
-  downloadTask = [[NSURLSession sharedSession]
-		   downloadTaskWithURL:url
-		     completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
-      if (!error && mimeTypes) {
-	NSString *responseType = [response MIMEType];
-	__block BOOL acceptedMIMEType = NO;
-        [mimeTypes enumerateObjectsUsingBlock:^(NSString *type,
-						NSUInteger idx,
-						BOOL *stop) {
-	    if ([type isEqualToString:responseType]) {
-	      *stop = YES;
-	      acceptedMIMEType = YES;	      
-	    } 
-	  }];
+    NSURL *url = [NSURL URLWithString:urlString];
+    downloadTask = [[NSURLSession sharedSession]
+                    downloadTaskWithURL:url
+    completionHandler:^(NSURL *location, NSURLResponse *response, NSError *error) {
+        if (!error && mimeTypes) {
+            NSString *responseType = [response MIMEType];
+            __block BOOL acceptedMIMEType = NO;
+            [mimeTypes enumerateObjectsUsingBlock:^(NSString *type,
+                                                    NSUInteger idx,
+                      BOOL *stop) {
+                          if ([type isEqualToString:responseType]) {
+                              *stop = YES;
+                              acceptedMIMEType = YES;
+                          }
+                      }];
 
-	if (!acceptedMIMEType) {
-	  NSString *msg = [NSString stringWithFormat:@"Unsupported media type %@.", [response MIMEType]];
-	  error = [NSError errorWithDomain:@"BKSettingsErrorDomain"
-				      code:415
-				  userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(msg, nil)}];
-	}
-      }
-      if (error.code != -999) {
-	completionHandler([NSData dataWithContentsOfURL:location], error);
-      }
+            if (!acceptedMIMEType) {
+                NSString *msg = [NSString stringWithFormat:@"Unsupported media type %@.", [response MIMEType]];
+                error = [NSError errorWithDomain:@"BKSettingsErrorDomain"
+                                 code:415
+                                 userInfo:@ {NSLocalizedDescriptionKey: NSLocalizedString(msg, nil)}];
+            }
+        }
+        if (error.code != -999) {
+            completionHandler([NSData dataWithContentsOfURL:location], error);
+        }
     }];
 
-  [downloadTask resume];
+    [downloadTask resume];
 }
 
 + (void)cancelRunningDownloads
 {
-  if (downloadTask != nil || downloadTask.state == NSURLSessionTaskStateRunning) {
-    [downloadTask cancel];
-    downloadTask = nil;
-  }
+    if (downloadTask != nil || downloadTask.state == NSURLSessionTaskStateRunning) {
+        [downloadTask cancel];
+        downloadTask = nil;
+    }
 }
 
 @end

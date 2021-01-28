@@ -47,18 +47,18 @@
 #define CHACHA_KEYLEN	32 /* Only 256 bit keys used here */
 
 struct chachapoly_ctx {
-	struct chacha_ctx main_ctx, header_ctx;
+    struct chacha_ctx main_ctx, header_ctx;
 };
 
 int	chachapoly_init(struct chachapoly_ctx *cpctx,
-    const u_char *key, u_int keylen)
-    __attribute__((__bounded__(__buffer__, 2, 3)));
+                    const u_char *key, u_int keylen)
+__attribute__((__bounded__(__buffer__, 2, 3)));
 int	chachapoly_crypt(struct chachapoly_ctx *cpctx, u_int seqnr,
-    u_char *dest, const u_char *src, u_int len, u_int aadlen, u_int authlen,
-    int do_encrypt);
+                     u_char *dest, const u_char *src, u_int len, u_int aadlen, u_int authlen,
+                     int do_encrypt);
 int	chachapoly_get_length(struct chachapoly_ctx *cpctx,
-    u_int *plenp, u_int seqnr, const u_char *cp, u_int len)
-    __attribute__((__bounded__(__buffer__, 4, 5)));
+                          u_int *plenp, u_int seqnr, const u_char *cp, u_int len)
+__attribute__((__bounded__(__buffer__, 4, 5)));
 
 /*#include "cipher-aesctr.h"*/
 /*#include "rijndael.h"*/
@@ -74,9 +74,9 @@ typedef unsigned int	u32;
 #define AES_BLOCK_SIZE 16
 
 typedef struct aesctr_ctx {
-	int	rounds;				/* keylen-dependent #rounds */
-	u32	ek[4*(AES_MAXROUNDS + 1)];	/* encrypt key schedule */
-	u8	ctr[AES_BLOCK_SIZE];		/* counter */
+    int	rounds;				/* keylen-dependent #rounds */
+    u32	ek[4*(AES_MAXROUNDS + 1)];	/* encrypt key schedule */
+    u8	ctr[AES_BLOCK_SIZE];		/* counter */
 } aesctr_ctx;
 
 void aesctr_keysetup(aesctr_ctx *x,const u8 *k,u32 kbits,u32 ivbits);
@@ -115,14 +115,14 @@ const char *cipher_warning_message(const struct sshcipher_ctx *);
 int	 ciphers_valid(const char *);
 char	*cipher_alg_list(char, int);
 int	 cipher_init(struct sshcipher_ctx **, const struct sshcipher *,
-    const u_char *, u_int, const u_char *, u_int, int);
+                 const u_char *, u_int, const u_char *, u_int, int);
 int	 cipher_crypt(struct sshcipher_ctx *, u_int, u_char *, const u_char *,
-    u_int, u_int, u_int);
+                  u_int, u_int, u_int);
 int	 cipher_get_length(struct sshcipher_ctx *, u_int *, u_int,
-    const u_char *, u_int);
+                       const u_char *, u_int);
 void	 cipher_free(struct sshcipher_ctx *);
 int	 cipher_set_key_string(struct sshcipher_ctx **,
-    const struct sshcipher *, const char *, int);
+                           const struct sshcipher *, const char *, int);
 u_int	 cipher_blocksize(const struct sshcipher *);
 u_int	 cipher_keylen(const struct sshcipher *);
 u_int	 cipher_seclen(const struct sshcipher *);

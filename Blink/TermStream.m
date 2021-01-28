@@ -34,40 +34,40 @@
 @implementation TermStream
 
 - (void)close {
-  if (_in) {
-    fclose(_in);
-    _in = NULL;
-  }
-  if (_out) {
-    fclose(_out);
-    _out = NULL;
-  }
-  if (_err) {
-    fclose(_err);
-    _err = NULL;
-  }
+    if (_in) {
+        fclose(_in);
+        _in = NULL;
+    }
+    if (_out) {
+        fclose(_out);
+        _out = NULL;
+    }
+    if (_err) {
+        fclose(_err);
+        _err = NULL;
+    }
 }
 
 - (void)closeIn {
-  if (_in) {
-    fflush(_in);
-    fclose(_in);
-    _in = NULL;
-  }
+    if (_in) {
+        fflush(_in);
+        fclose(_in);
+        _in = NULL;
+    }
 }
 
 - (instancetype) duplicate {
-  TermStream *dupe = [[TermStream alloc] init];
-  
-  dupe.in = fdopen(dup(fileno(_in)), "rb");
-  // If there is no underlying descriptor (writing to the WV), then duplicate the fterm.
-  dupe.out = fdopen(dup(fileno(_out)), "wb");
-  dupe.err = fdopen(dup(fileno(_err)), "wb");
-  setvbuf(dupe.out, NULL, _IONBF, 0);
-  setvbuf(dupe.err, NULL, _IONBF, 0);
-  setvbuf(dupe.in, NULL, _IONBF, 0);
+    TermStream *dupe = [[TermStream alloc] init];
 
-  return dupe;
+    dupe.in = fdopen(dup(fileno(_in)), "rb");
+    // If there is no underlying descriptor (writing to the WV), then duplicate the fterm.
+    dupe.out = fdopen(dup(fileno(_out)), "wb");
+    dupe.err = fdopen(dup(fileno(_err)), "wb");
+    setvbuf(dupe.out, NULL, _IONBF, 0);
+    setvbuf(dupe.err, NULL, _IONBF, 0);
+    setvbuf(dupe.in, NULL, _IONBF, 0);
+
+    return dupe;
 }
 
 @end

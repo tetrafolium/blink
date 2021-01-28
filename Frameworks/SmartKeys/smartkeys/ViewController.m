@@ -41,7 +41,7 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    if(![string isEqualToString:@""]){
+    if(![string isEqualToString:@""]) {
         NSUInteger modifiers = [(SmartKeysView *)[_smartKeys view] modifiers];
         if (modifiers & KbdCtrlModifier) {
             textField.text = [textField.text stringByReplacingCharactersInRange:range withString:[NSString stringWithFormat:@"^%@", string]];

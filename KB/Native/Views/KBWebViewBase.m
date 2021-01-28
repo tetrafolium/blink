@@ -35,19 +35,19 @@
 
 NSString *_encodeString(NSString *str);
 
-@interface KeyCommand: UIKeyCommand
+@interface KeyCommand : UIKeyCommand
 @end
 
 @implementation KeyCommand {
-  SEL _up;
+    SEL _up;
 }
 
 - (void)setUp:(SEL) action {
-  _up = action;
+    _up = action;
 }
 
 - (SEL)upAction {
-  return _up;
+    return _up;
 }
 
 @end
@@ -56,53 +56,53 @@ NSString *_encodeString(NSString *str);
 @end
 
 @implementation KBWebViewBase {
-  NSArray<UIKeyCommand *> *_keyCommands;
-  NSString *_jsPath;
-  NSString *_interopName;
-  BOOL _focused;
-  
-  KeyCommand *_activeModsCommand;
-  NSArray<KeyCommand *> *_imeGuardCommands;
-  NSArray<KeyCommand *> *_activeIMEGuardCommands;
+    NSArray<UIKeyCommand *> *_keyCommands;
+    NSString *_jsPath;
+    NSString *_interopName;
+    BOOL _focused;
+
+    KeyCommand *_activeModsCommand;
+    NSArray<KeyCommand *> *_imeGuardCommands;
+    NSArray<KeyCommand *> *_activeIMEGuardCommands;
 }
 
 - (KeyCommand *)_modifiersCommand:(UIKeyModifierFlags) flags {
-  KeyCommand *cmd = [KeyCommand keyCommandWithInput:@"" modifierFlags:flags action:@selector(_keyDown:)];
-  [cmd setUp: @selector(_keyUp:)];
-  return cmd;
+    KeyCommand *cmd = [KeyCommand keyCommandWithInput:@"" modifierFlags:flags action:@selector(_keyDown:)];
+    [cmd setUp: @selector(_keyUp:)];
+    return cmd;
 }
 
 - ( UIView * _Nullable )selectionView {
-  return [self.scrollView.subviews.firstObject valueForKeyPath:@"interactionAssistant.selectionView"];
+    return [self.scrollView.subviews.firstObject valueForKeyPath:@"interactionAssistant.selectionView"];
 }
 
 
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration
 {
-  self = [super initWithFrame:frame configuration:configuration];
-  if (self) {
-    _keyCommands = @[];
-    _jsPath = @"_onKB";
-    _interopName = @"_kb";
-    _focused = YES;
-    [self.configuration.userContentController addScriptMessageHandler:self name:_interopName];
-    self.configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeDesktop;
+    self = [super initWithFrame:frame configuration:configuration];
+    if (self) {
+        _keyCommands = @[];
+        _jsPath = @"_onKB";
+        _interopName = @"_kb";
+        _focused = YES;
+        [self.configuration.userContentController addScriptMessageHandler:self name:_interopName];
+        self.configuration.defaultWebpagePreferences.preferredContentMode = WKContentModeDesktop;
 //    [self.configuration.preferences setJavaScriptCanOpenWindowsAutomatically:true];
-    NSMutableArray *imeGuards = [[NSMutableArray alloc] init];
-    
-    // do we need guard - ` ?
-    // alt+letter                ´     ¨     ˆ     ˜
-    for (NSString * input in @[@"e", @"u", @"i", @"n"]) {
-      KeyCommand *cmd = [KeyCommand keyCommandWithInput:input modifierFlags:UIKeyModifierAlternate action:@selector(_imeGuardDown:)];
-      [cmd setUp:@selector(_imeGuardUp:)];
-      [imeGuards addObject:cmd];
+        NSMutableArray *imeGuards = [[NSMutableArray alloc] init];
+
+        // do we need guard - ` ?
+        // alt+letter                ´     ¨     ˆ     ˜
+        for (NSString * input in @[@"e", @"u", @"i", @"n"]) {
+            KeyCommand *cmd = [KeyCommand keyCommandWithInput:input modifierFlags:UIKeyModifierAlternate action:@selector(_imeGuardDown:)];
+            [cmd setUp:@selector(_imeGuardUp:)];
+            [imeGuards addObject:cmd];
+        }
+
+        _activeIMEGuardCommands = nil;
+        _imeGuardCommands = [imeGuards copy];
+        [self removeAssistantsFromView];
     }
-    
-    _activeIMEGuardCommands = nil;
-    _imeGuardCommands = [imeGuards copy];
-    [self removeAssistantsFromView];
-  }
-  return self;
+    return self;
 }
 
 //- (BOOL)_requiresKeyboardWhenFirstResponder {
@@ -145,152 +145,155 @@ NSString *_encodeString(NSString *str);
 
 
 - (void)dealloc {
-  [NSNotificationCenter.defaultCenter removeObserver:self];
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)setHasSelection:(BOOL)value {
-  [self report:@"selection" arg:value ? @"true" : @"false"];
+    [self report:@"selection" arg:value ? @"true" : @"false"];
 }
 
-- (void)reportLang:(NSString *) lang isHardwareKB: (BOOL)isHardwareKB; {
-  [self report:@"lang" arg:[NSString stringWithFormat:@"\"%@:%@\"", lang, isHardwareKB ? @"hw" : @"sw"]];
+- (void)reportLang:(NSString *) lang isHardwareKB: (BOOL)isHardwareKB;
+{
+    [self report:@"lang" arg:[NSString stringWithFormat:@"\"%@:%@\"", lang, isHardwareKB ? @"hw" : @"sw"]];
 }
 
 - (void)_keyDown:(KeyCommand *)cmd {
-  [self report:@"mods-down" arg:@(cmd.modifierFlags)];
+    [self report:@"mods-down" arg:@(cmd.modifierFlags)];
 }
 
 - (void)_keyUp:(KeyCommand *)cmd {
-  [self report:@"mods-up" arg:@(cmd.modifierFlags)];
+    [self report:@"mods-up" arg:@(cmd.modifierFlags)];
 }
 
 - (void)reportStateReset:(BOOL)hasSelection {
-  [self report:@"state-reset" arg: hasSelection ? @"true" : @"false"];
+    [self report:@"state-reset" arg: hasSelection ? @"true" : @"false"];
 }
 
 - (void)reportToolbarModifierFlags:(UIKeyModifierFlags)flags {
-  [self report:@"toolbar-mods" arg:@(flags)];
+    [self report:@"toolbar-mods" arg:@(flags)];
 }
 
 - (void)reportToolbarPress:(UIKeyModifierFlags)mods keyId:(NSString *)keyId {
-  NSString *kid = [NSString stringWithFormat:@"%ld:%@", (long)mods, keyId];
-  [self report:@"toolbar-press" arg:_encodeString(kid)];
+    NSString *kid = [NSString stringWithFormat:@"%ld:%@", (long)mods, keyId];
+    [self report:@"toolbar-press" arg:_encodeString(kid)];
 }
 
 - (void)reportPress:(UIKeyModifierFlags)mods keyId:(NSString *)keyId {
-  NSString *kid = [NSString stringWithFormat:@"%ld:%@", (long)mods, keyId];
-  [self report:@"press" arg:_encodeString(kid)];
+    NSString *kid = [NSString stringWithFormat:@"%ld:%@", (long)mods, keyId];
+    [self report:@"press" arg:_encodeString(kid)];
 }
 
 - (void)reportHex:(NSString *)hex {
-  [self report:@"hex" arg:_encodeString(hex)];
+    [self report:@"hex" arg:_encodeString(hex)];
 }
 
 // Not sure we need up
 - (void)_imeGuardUp:(KeyCommand *)cmd {
-  [self report:@"guard-up" arg:_encodeString(cmd.input)];
+    [self report:@"guard-up" arg:_encodeString(cmd.input)];
 }
 
 - (void)_imeGuardDown:(KeyCommand *)cmd {
-  [self report:@"guard-down" arg:_encodeString(cmd.input)];
+    [self report:@"guard-down" arg:_encodeString(cmd.input)];
 }
 
-- (id)_inputDelegate { return self; }
+- (id)_inputDelegate {
+    return self;
+}
 - (int)_webView:(WKWebView *)webView decidePolicyForFocusedElement:(id) info {
-  if (self.userInteractionEnabled) {
-    return _focused ? 1 : 0;
-  }
-  return 0;
+    if (self.userInteractionEnabled) {
+        return _focused ? 1 : 0;
+    }
+    return 0;
 }
 
 - (_Bool)_webView:(WKWebView *)arg1 focusShouldStartInputSession:(id)arg2 {
-  return YES;
+    return YES;
 }
 
 - (BOOL)becomeFirstResponder {
-  BOOL res = [super becomeFirstResponder];
-  if (res) {
-    [self reportFocus:YES];
-  }
-  return res;
+    BOOL res = [super becomeFirstResponder];
+    if (res) {
+        [self reportFocus:YES];
+    }
+    return res;
 }
 
 - (void)reportFocus:(BOOL) value {
-  _focused = value;
-  [self report:@"focus" arg:value ? @"true" : @"false"];
+    _focused = value;
+    [self report:@"focus" arg:value ? @"true" : @"false"];
 }
 
 - (BOOL)resignFirstResponder {
-  BOOL res = [super resignFirstResponder];
-  if (res) {
-    [self reportFocus:NO];
-  }
-  return res;
+    BOOL res = [super resignFirstResponder];
+    if (res) {
+        [self reportFocus:NO];
+    }
+    return res;
 }
 
 - (void)onSelection:(NSDictionary *)args {
-  
+
 }
 
 - (void)report:(NSString *)cmd arg:(NSObject *)arg {
-  NSString *js = [NSString stringWithFormat:@"%@(\"%@\", %@);", _jsPath, cmd, arg];
-  [self evaluateJavaScript:js completionHandler:nil];
+    NSString *js = [NSString stringWithFormat:@"%@(\"%@\", %@);", _jsPath, cmd, arg];
+    [self evaluateJavaScript:js completionHandler:nil];
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-  if (@selector(toggleBoldface:) == action ||
-      @selector(toggleItalics:) == action ||
-      @selector(cut:) == action ||
-      @selector(toggleFontPanel:) == action ||
-      @selector(select:) == action ||
-      @selector(selectAll:) == action ||
-      @selector(_share:) == action ||
-      @selector(toggleUnderline:) == action) {
-    return NO;
-  }
+    if (@selector(toggleBoldface:) == action ||
+            @selector(toggleItalics:) == action ||
+            @selector(cut:) == action ||
+            @selector(toggleFontPanel:) == action ||
+            @selector(select:) == action ||
+            @selector(selectAll:) == action ||
+            @selector(_share:) == action ||
+            @selector(toggleUnderline:) == action) {
+        return NO;
+    }
 
-  return [super canPerformAction:action withSender:sender];
+    return [super canPerformAction:action withSender:sender];
 }
 
 - (NSArray<UIKeyCommand *> *)keyCommands {
-  return _keyCommands;
+    return _keyCommands;
 }
 
 - (void)onIME:(NSString *)event data:(NSString *)data {
-  
+
 }
 
 - (void)_onVoice:(NSString *)event data:(NSString *)data {
-  if (data.length > 0) {
-    [self onIME:@"compositionupdate" data:data];
-  } else {
-    [self onIME:@"compositionend" data:data];
-  }
+    if (data.length > 0) {
+        [self onIME:@"compositionupdate" data:data];
+    } else {
+        [self onIME:@"compositionend" data:data];
+    }
 }
 
 - (void)onOut:(NSString *)data {
-  
+
 }
 
 - (void)onCommand:(NSString *)command {
-  
+
 }
 
 - (void)_rebuildKeyCommands {
-  NSMutableArray *cmds = [[NSMutableArray alloc] init];
-  if (_activeModsCommand) {
-    [cmds addObject:_activeModsCommand];
-  }
-  
-  if (_activeIMEGuardCommands) {
-    [cmds addObjectsFromArray:_activeIMEGuardCommands];
-  }
-  
-  _keyCommands = cmds;
+    NSMutableArray *cmds = [[NSMutableArray alloc] init];
+    if (_activeModsCommand) {
+        [cmds addObject:_activeModsCommand];
+    }
+
+    if (_activeIMEGuardCommands) {
+        [cmds addObjectsFromArray:_activeIMEGuardCommands];
+    }
+
+    _keyCommands = cmds;
 }
 
 - (void)onMods {
-  
+
 }
 
 - (void)ready {
@@ -302,71 +305,71 @@ NSString *_encodeString(NSString *str);
 }
 
 - (void)_removeAssistantsFromView:(UIView *)view {
-  view.inputAssistantItem.trailingBarButtonGroups = @[];
-  view.inputAssistantItem.leadingBarButtonGroups = @[];
-  
-  for (UIView * v in view.subviews) {
-    [self _removeAssistantsFromView:v];
-  }
+    view.inputAssistantItem.trailingBarButtonGroups = @[];
+    view.inputAssistantItem.leadingBarButtonGroups = @[];
+
+    for (UIView * v in view.subviews) {
+        [self _removeAssistantsFromView:v];
+    }
 }
 
 - (void)setTrackingModifierFlags:(UIKeyModifierFlags)trackingModifierFlags {
-  _trackingModifierFlags = trackingModifierFlags;
-  if (_trackingModifierFlags == 0) {
-    _activeModsCommand = nil;
-  } else {
-    _activeModsCommand = [self _modifiersCommand:_trackingModifierFlags];
-  }
-  [self _rebuildKeyCommands];
-  [self onMods];
+    _trackingModifierFlags = trackingModifierFlags;
+    if (_trackingModifierFlags == 0) {
+        _activeModsCommand = nil;
+    } else {
+        _activeModsCommand = [self _modifiersCommand:_trackingModifierFlags];
+    }
+    [self _rebuildKeyCommands];
+    [self onMods];
 }
 
 - (void)userContentController:(WKUserContentController *)userContentController
-      didReceiveScriptMessage:(WKScriptMessage *)message {
+    didReceiveScriptMessage:(WKScriptMessage *)message {
 
-  if (![_interopName isEqual: message.name]) {
-    return;
-  }
-  
-  NSDictionary *body = message.body;
-  NSString *op = body[@"op"];
-  if (!op) {
-    return;
-  }
-  
-  if ([@"out" isEqual:op]) {
-    NSString *data = body[@"data"];
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self onOut:data];
-    });
-  } else if ([@"mods" isEqual:op]) {
-    NSNumber *mods = body[@"mods"];
-    [self setTrackingModifierFlags:(UIKeyModifierFlags)mods.integerValue];
-  } else if ([@"ime" isEqual:op]) {
-    NSString *event = body[@"type"];
-    NSString *data = body[@"data"];
-    [self onIME:event data: data];
-  } else if ([@"guard-ime-on" isEqual:op]) {
-    if (_activeIMEGuardCommands == nil) {
-      _activeIMEGuardCommands = _imeGuardCommands;
-      [self _rebuildKeyCommands];
+    if (![_interopName isEqual: message.name]) {
+        return;
     }
-  } else if ([@"guard-ime-off" isEqual:op]) {
-    if (_activeIMEGuardCommands) {
-      _activeIMEGuardCommands = nil;
-      [self _rebuildKeyCommands];
+
+    NSDictionary *body = message.body;
+    NSString *op = body[@"op"];
+    if (!op) {
+        return;
     }
-  } else if ([@"voice" isEqual:op]) {
-    NSString *event = body[@"event"];
-    NSString *data = body[@"data"];
-    [self _onVoice:event data: data];
-  } else if ([@"ready" isEqual: op]) {
-    [self ready];
-  } else if ([@"command" isEqual:op]) {
-    [self onCommand: body[@"command"]];
-  } else if ([@"selection" isEqual:op]) {
-    [self onSelection:body];
-  }
+
+    if ([@"out" isEqual:op]) {
+        NSString *data = body[@"data"];
+        dispatch_async(dispatch_get_main_queue(), ^ {
+            [self onOut:data];
+        });
+    } else if ([@"mods" isEqual:op]) {
+        NSNumber *mods = body[@"mods"];
+        [self setTrackingModifierFlags:(UIKeyModifierFlags)mods.integerValue];
+    } else if ([@"ime" isEqual:op]) {
+        NSString *event = body[@"type"];
+        NSString *data = body[@"data"];
+        [self onIME:event data: data];
+    } else if ([@"guard-ime-on" isEqual:op]) {
+        if (_activeIMEGuardCommands == nil) {
+            _activeIMEGuardCommands = _imeGuardCommands;
+            [self _rebuildKeyCommands];
+        }
+    } else if ([@"guard-ime-off" isEqual:op]) {
+        if (_activeIMEGuardCommands) {
+            _activeIMEGuardCommands = nil;
+            [self _rebuildKeyCommands];
+        }
+    } else if ([@"voice" isEqual:op]) {
+        NSString *event = body[@"event"];
+        NSString *data = body[@"data"];
+        [self _onVoice:event data: data];
+    } else if ([@"ready" isEqual: op]) {
+        [self ready];
+    } else if ([@"command" isEqual:op]) {
+        [self onCommand: body[@"command"]];
+    } else if ([@"selection" isEqual:op]) {
+        [self onSelection:body];
+    }
 }
 
 @end

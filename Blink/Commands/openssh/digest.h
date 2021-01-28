@@ -23,13 +23,13 @@
 
 /* Digest algorithms */
 enum sshdigest_types {
-	SSH_DIGEST_MD5 = 0,
-	SSH_DIGEST_RIPEMD160 = 1,
-	SSH_DIGEST_SHA1 = 2,
-	SSH_DIGEST_SHA256 = 3,
-	SSH_DIGEST_SHA384 = 4,
-	SSH_DIGEST_SHA512 = 5,
-	SSH_DIGEST_MAX
+    SSH_DIGEST_MD5 = 0,
+    SSH_DIGEST_RIPEMD160 = 1,
+    SSH_DIGEST_SHA1 = 2,
+    SSH_DIGEST_SHA256 = 3,
+    SSH_DIGEST_SHA384 = 4,
+    SSH_DIGEST_SHA512 = 5,
+    SSH_DIGEST_MAX
 };
 
 struct sshbuf;
@@ -49,24 +49,24 @@ size_t ssh_digest_blocksize(struct ssh_digest_ctx *ctx);
 
 /* Copies internal state of digest of 'from' to 'to' */
 int ssh_digest_copy_state(struct ssh_digest_ctx *from,
-    struct ssh_digest_ctx *to);
+                          struct ssh_digest_ctx *to);
 
 /* One-shot API */
 int ssh_digest_memory(int alg, const void *m, size_t mlen,
-    u_char *d, size_t dlen)
-	__attribute__((__bounded__(__buffer__, 2, 3)))
-	__attribute__((__bounded__(__buffer__, 4, 5)));
+                      u_char *d, size_t dlen)
+__attribute__((__bounded__(__buffer__, 2, 3)))
+__attribute__((__bounded__(__buffer__, 4, 5)));
 int ssh_digest_buffer(int alg, const struct sshbuf *b, u_char *d, size_t dlen)
-	__attribute__((__bounded__(__buffer__, 3, 4)));
+__attribute__((__bounded__(__buffer__, 3, 4)));
 
 /* Update API */
 struct ssh_digest_ctx *ssh_digest_start(int alg);
 int ssh_digest_update(struct ssh_digest_ctx *ctx, const void *m, size_t mlen)
-	__attribute__((__bounded__(__buffer__, 2, 3)));
+__attribute__((__bounded__(__buffer__, 2, 3)));
 int ssh_digest_update_buffer(struct ssh_digest_ctx *ctx,
-    const struct sshbuf *b);
+                             const struct sshbuf *b);
 int ssh_digest_final(struct ssh_digest_ctx *ctx, u_char *d, size_t dlen)
-	__attribute__((__bounded__(__buffer__, 2, 3)));
+__attribute__((__bounded__(__buffer__, 2, 3)));
 void ssh_digest_free(struct ssh_digest_ctx *ctx);
 
 #endif /* _DIGEST_H */

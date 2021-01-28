@@ -41,10 +41,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSHClient : NSObject
 
 - (instancetype)initWithStdIn:(dispatch_fd_t)fdIn
-                       stdOut:(dispatch_fd_t)fdOut
-                       stdErr:(dispatch_fd_t)fdErr
-                       device:(TermDevice *)device
-                        isTTY:(BOOL)isTTY;
+    stdOut:(dispatch_fd_t)fdOut
+    stdErr:(dispatch_fd_t)fdErr
+    device:(TermDevice *)device
+    isTTY:(BOOL)isTTY;
 - (int)main:(int) argc argv:(char **) argv;
 - (void)sigwinch;
 - (void)kill;

@@ -54,9 +54,9 @@ __thread int    __db_getopt_reset;    /* global reset for VxWorks. */
 // Not __thread unless I rename them.
 // Try with thread
 __thread int    thread_opterr = 1,        /* if error message should be printed */
- thread_optind = 1,        /* index into parent argv vector */
- thread_optopt,            /* character checked for validity */
- thread_optreset;        /* reset getopt */
+                thread_optind = 1,        /* index into parent argv vector */
+                thread_optopt,            /* character checked for validity */
+                thread_optreset;        /* reset getopt */
 __thread char    * thread_optarg;        /* argument associated with option */
 
 #undef    BADCH
@@ -76,82 +76,82 @@ __thread char    * thread_optarg;        /* argument associated with option */
  */
 int
 thread_getopt(
-int nargc,
-char * const *nargv,
-const char *ostr) {
-  static char *progname;
-  static char *place = EMSG;        /* option letter processing */
-  char *oli;                /* option letter list index */
-  
-  /*
-   * VxWorks needs to be able to repeatedly call getopt from multiple
-   * programs within its global name space. And so does iOS.
-   */
-  if (__db_getopt_reset) {
-    __db_getopt_reset = 0;
-    
-    thread_opterr = thread_optind = 1;
-    thread_optopt = thread_optreset = 0;
-    thread_optarg = NULL;
-    progname = NULL;
-    place = EMSG;
-  }
-  if (!progname) {
-    // if ((progname = __db_rpath(*nargv)) == NULL)
-    progname = *nargv;
-    // else
-    //    ++progname;
-  }
-  
-  if (thread_optreset || !*place) {        /* update scanning pointer */
-    thread_optreset = 0;
-    if (thread_optind >= nargc || *(place = nargv[thread_optind]) != '-') {
-      place = EMSG;
-      return (EOF);
-    }
-    if (place[1] && *++place == '-') {    /* found "--" */
-      ++thread_optind;
-      place = EMSG;
-      return (EOF);
-    }
-  }                    /* option letter okay? */
-  if ((thread_optopt = (int)*place++) == (int)':' ||
-      !(oli = strchr(ostr, thread_optopt))) {
+    int nargc,
+    char * const *nargv,
+    const char *ostr) {
+    static char *progname;
+    static char *place = EMSG;        /* option letter processing */
+    char *oli;                /* option letter list index */
+
     /*
-     * if the user didn't specify '-' as an option,
-     * assume it means EOF.
+     * VxWorks needs to be able to repeatedly call getopt from multiple
+     * programs within its global name space. And so does iOS.
      */
-    if (thread_optopt == (int)'-')
-      return (EOF);
-    if (!*place)
-      ++thread_optind;
-    if (thread_opterr && *ostr != ':')
-      (void)fprintf(thread_stderr,
-                    "%s: illegal option -- %c\n", progname, thread_optopt);
-    return (BADCH);
-  }
-  if (*++oli != ':') {            /* don't need argument */
-    thread_optarg = NULL;
-    if (!*place)
-      ++thread_optind;
-  }
-  else {                    /* need an argument */
-    if (*place)            /* no white space */
-      thread_optarg = place;
-    else if (nargc <= ++thread_optind) {    /* no arg */
-      place = EMSG;
-      if (*ostr == ':')
-        return (BADARG);
-      if (thread_opterr)
-        (void)fprintf(thread_stderr,
-                      "%s: option requires an argument -- %c\n",
-                      progname, thread_optopt);
-      return (BADCH);
+    if (__db_getopt_reset) {
+        __db_getopt_reset = 0;
+
+        thread_opterr = thread_optind = 1;
+        thread_optopt = thread_optreset = 0;
+        thread_optarg = NULL;
+        progname = NULL;
+        place = EMSG;
     }
-    else                /* white space */
-      thread_optarg = nargv[thread_optind];
-    place = EMSG;
-    ++thread_optind;
-  }
-  return (thread_optopt);            /* dump back option letter */
+    if (!progname) {
+        // if ((progname = __db_rpath(*nargv)) == NULL)
+        progname = *nargv;
+        // else
+        //    ++progname;
+    }
+
+    if (thread_optreset || !*place) {        /* update scanning pointer */
+        thread_optreset = 0;
+        if (thread_optind >= nargc || *(place = nargv[thread_optind]) != '-') {
+            place = EMSG;
+            return (EOF);
+        }
+        if (place[1] && *++place == '-') {    /* found "--" */
+            ++thread_optind;
+            place = EMSG;
+            return (EOF);
+        }
+    }                    /* option letter okay? */
+    if ((thread_optopt = (int)*place++) == (int)':' ||
+            !(oli = strchr(ostr, thread_optopt))) {
+        /*
+         * if the user didn't specify '-' as an option,
+         * assume it means EOF.
+         */
+        if (thread_optopt == (int)'-')
+            return (EOF);
+        if (!*place)
+            ++thread_optind;
+        if (thread_opterr && *ostr != ':')
+            (void)fprintf(thread_stderr,
+                          "%s: illegal option -- %c\n", progname, thread_optopt);
+        return (BADCH);
+    }
+    if (*++oli != ':') {            /* don't need argument */
+        thread_optarg = NULL;
+        if (!*place)
+            ++thread_optind;
+    }
+    else {                    /* need an argument */
+        if (*place)            /* no white space */
+            thread_optarg = place;
+        else if (nargc <= ++thread_optind) {    /* no arg */
+            place = EMSG;
+            if (*ostr == ':')
+                return (BADARG);
+            if (thread_opterr)
+                (void)fprintf(thread_stderr,
+                              "%s: option requires an argument -- %c\n",
+                              progname, thread_optopt);
+            return (BADCH);
+        }
+        else                /* white space */
+            thread_optarg = nargv[thread_optind];
+        place = EMSG;
+        ++thread_optind;
+    }
+    return (thread_optopt);            /* dump back option letter */
 }

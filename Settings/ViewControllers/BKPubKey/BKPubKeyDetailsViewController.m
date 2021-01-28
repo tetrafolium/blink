@@ -44,69 +44,70 @@
 
 - (void)viewDidLoad
 {
-  [super viewDidLoad];
+    [super viewDidLoad];
 
-  _name.text = _pubkey.ID;
-  _comments.text = [NSString stringWithFormat:@"%@@%@", [BKDefaults defaultUserName] , [UIDevice getInfoTypeFromDeviceName:BKDeviceInfoTypeDeviceName]];
+    _name.text = _pubkey.ID;
+    _comments.text = [NSString stringWithFormat:@"%@@%@", [BKDefaults defaultUserName], [UIDevice getInfoTypeFromDeviceName:BKDeviceInfoTypeDeviceName]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-  if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
-    [self performSegueWithIdentifier:@"unwindFromDetails" sender:self];
-  }
-  [super viewWillDisappear:animated];
+    if ([self.navigationController.viewControllers indexOfObject:self] == NSNotFound) {
+        [self performSegueWithIdentifier:@"unwindFromDetails" sender:self];
+    }
+    [super viewWillDisappear:animated];
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-  if (textField == _name) {
-    if ([string isEqualToString:@" "]) {
-      return NO;
+    if (textField == _name) {
+        if ([string isEqualToString:@" "]) {
+            return NO;
+        }
     }
-  }
 
-  return YES;
+    return YES;
 }
 
 - (IBAction)copyPublicKey:(id)sender
 {
-  UIPasteboard *pb = [UIPasteboard generalPasteboard];
-  [pb setString:_pubkey.publicKey];
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    [pb setString:_pubkey.publicKey];
 }
 
 - (IBAction)copyPrivateKey:(id)sender
 {
-  [[LocalAuth shared] authenticateWithCallback:^(BOOL success) {
-    if (success) {
-      UIPasteboard *pb = [UIPasteboard generalPasteboard];
-      [pb setString:_pubkey.privateKey];
+    [[LocalAuth shared] authenticateWithCallback:^(BOOL success) {
+                           if (success) {
+                               UIPasteboard *pb = [UIPasteboard generalPasteboard];
+            [pb setString:_pubkey.privateKey];
+        }
     }
-  } reason:@"to copy private key to clipboard."];
+    reason:@"to copy private key to clipboard."];
 }
 
 - (IBAction)sharePublicKey:(id)sender
 {
-  NSArray *sharingItems = @[_pubkey];
+    NSArray *sharingItems = @[_pubkey];
 
-  UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
-  activityController.excludedActivityTypes = @[UIActivityTypePostToTwitter, UIActivityTypePostToFacebook,
-                                               UIActivityTypePostToWeibo, UIActivityTypeCopyToPasteboard,
-                                               UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll,
-                                               UIActivityTypeAddToReadingList, UIActivityTypePostToFlickr,
-                                               UIActivityTypePostToVimeo, UIActivityTypePostToTencentWeibo];
-  activityController.popoverPresentationController.barButtonItem = sender;
-  [self presentViewController:activityController animated:YES completion:nil];
+    UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
+    activityController.excludedActivityTypes = @[UIActivityTypePostToTwitter, UIActivityTypePostToFacebook,
+                                         UIActivityTypePostToWeibo, UIActivityTypeCopyToPasteboard,
+                                         UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll,
+                                         UIActivityTypeAddToReadingList, UIActivityTypePostToFlickr,
+                                         UIActivityTypePostToVimeo, UIActivityTypePostToTencentWeibo];
+    activityController.popoverPresentationController.barButtonItem = sender;
+    [self presentViewController:activityController animated:YES completion:nil];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-  if ([segue.identifier isEqualToString:@"unwindFromDetails"]) {
-    if (_name.text.length && ![_name.text isEqualToString:_pubkey.ID]) {
-      _pubkey.ID = _name.text;
-      [BKPubKey saveIDS];
+    if ([segue.identifier isEqualToString:@"unwindFromDetails"]) {
+        if (_name.text.length && ![_name.text isEqualToString:_pubkey.ID]) {
+            _pubkey.ID = _name.text;
+            [BKPubKey saveIDS];
+        }
     }
-  }
 }
 
 @end

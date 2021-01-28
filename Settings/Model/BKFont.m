@@ -36,113 +36,113 @@
 
 + (NSString *)resourcesPathName
 {
-  return @"Fonts";
+    return @"Fonts";
 }
 
 + (NSString *)resourcesExtension
 {
-  return @"css";
+    return @"css";
 }
 
 + (NSArray *)all
 {
-  return [[
-          self.defaultResources
-          arrayByAddingObjectsFromArray: [self _systemWideFonts]]
-          arrayByAddingObjectsFromArray: self.customResources];
+    return [[
+                self.defaultResources
+                arrayByAddingObjectsFromArray: [self _systemWideFonts]]
+            arrayByAddingObjectsFromArray: self.customResources];
 }
 
 
 + (NSArray<BKFont *> *)_systemWideFonts
 {
-  NSMutableDictionary *map = [[NSMutableDictionary alloc] init];
-  NSMutableArray *result = [[NSMutableArray alloc] init];
-  for (BKFont *f in self.defaultResources) {
-    map[f.name] = f;
-  }
-  map[@"Apple Color Emoji"] = @(YES);
-  
-  NSDictionary *traitsAttributes = @{UIFontSymbolicTrait: @(UIFontDescriptorTraitMonoSpace)};
-  NSDictionary *fontAttributes = @{UIFontDescriptorTraitsAttribute: traitsAttributes};
-  UIFontDescriptor *fontDescriptor = [UIFontDescriptor fontDescriptorWithFontAttributes:fontAttributes];
-  NSArray *array = [fontDescriptor matchingFontDescriptorsWithMandatoryKeys:nil];
-  for (UIFontDescriptor *descriptor in array) {
-    UIFont *f = [UIFont fontWithDescriptor:descriptor size:10];
-    if (map[f.familyName]) {
-      continue;
+    NSMutableDictionary *map = [[NSMutableDictionary alloc] init];
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (BKFont *f in self.defaultResources) {
+        map[f.name] = f;
     }
-  
-    BKFont * font = [[BKFont alloc] init];
-    font.name = f.familyName;
-    font.systemWide = YES;
-    map[font.name] = font;
-    [result addObject:font];
-  }
-  
-  return result;
+    map[@"Apple Color Emoji"] = @(YES);
+
+    NSDictionary *traitsAttributes = @ {UIFontSymbolicTrait: @(UIFontDescriptorTraitMonoSpace)};
+    NSDictionary *fontAttributes = @ {UIFontDescriptorTraitsAttribute: traitsAttributes};
+    UIFontDescriptor *fontDescriptor = [UIFontDescriptor fontDescriptorWithFontAttributes:fontAttributes];
+    NSArray *array = [fontDescriptor matchingFontDescriptorsWithMandatoryKeys:nil];
+    for (UIFontDescriptor *descriptor in array) {
+        UIFont *f = [UIFont fontWithDescriptor:descriptor size:10];
+        if (map[f.familyName]) {
+            continue;
+        }
+
+        BKFont * font = [[BKFont alloc] init];
+        font.name = f.familyName;
+        font.systemWide = YES;
+        map[font.name] = font;
+        [result addObject:font];
+    }
+
+    return result;
 }
 
 - (NSString *)content
 {
-  if (!_systemWide) {
-    return [super content];
-  }
-  
-  NSString * css = [
-  @[
-      @"@font-face {",
-      @" font-family: '[[family]]';",
-      @" src: local('[[family]]');",
-      @" font-weight: normal;",
-      @" font-style: normal;",
-      @"}",
-      @"",
-      @"@font-face {",
-      @" font-family: '[[family]]';",
-      @" src: local('[[family]]');",
-      @" font-weight: bold;",
-      @" font-style: normal;",
-      @"}",
-      @"",
-      @"@font-face {",
-      @" font-family: '[[family]]';",
-      @" src: local('[[family]]');",
-      @" font-weight: normal;",
-      @" font-style: italic;",
-      @" }",
-      @" ",
-      @"@font-face {",
-      @" font-family: '[[family]]';",
-      @" src: local('[[family]]');",
-      @" font-weight: bold;",
-      @" font-style: italic;",
-      @"}",
-      @"",
-  ] componentsJoinedByString:@"\n"];
-  
-  return [css stringByReplacingOccurrencesOfString:@"[[family]]" withString:self.name];
+    if (!_systemWide) {
+        return [super content];
+    }
+
+    NSString * css = [
+                         @[
+                             @"@font-face {",
+                             @" font-family: '[[family]]';",
+                             @" src: local('[[family]]');",
+                             @" font-weight: normal;",
+                             @" font-style: normal;",
+                             @"}",
+                             @"",
+                             @"@font-face {",
+                             @" font-family: '[[family]]';",
+                             @" src: local('[[family]]');",
+                             @" font-weight: bold;",
+                             @" font-style: normal;",
+                             @"}",
+                             @"",
+                             @"@font-face {",
+                             @" font-family: '[[family]]';",
+                             @" src: local('[[family]]');",
+                             @" font-weight: normal;",
+                             @" font-style: italic;",
+                             @" }",
+                             @" ",
+                             @"@font-face {",
+                             @" font-family: '[[family]]';",
+                             @" src: local('[[family]]');",
+                             @" font-weight: bold;",
+                             @" font-style: italic;",
+                             @"}",
+                             @"",
+                         ] componentsJoinedByString:@"\n"];
+
+    return [css stringByReplacingOccurrencesOfString:@"[[family]]" withString:self.name];
 }
 
 -(BOOL)isCustom
 {
-  if (_systemWide) {
-    return YES;
-  }
-  return [super isCustom];
+    if (_systemWide) {
+        return YES;
+    }
+    return [super isCustom];
 }
 
 - (BOOL)isEqual:(id)object {
-  if ([super isEqual:object]) {
-    return YES;
-  }
-  
-  if (![object isKindOfClass:[BKFont class]]) {
-    return NO;
-  }
-  
-  BKFont *other = (BKFont *)object;
-  
-  return [self isCustom] == [other isCustom] && [self.name isEqualToString:other.name];
+    if ([super isEqual:object]) {
+        return YES;
+    }
+
+    if (![object isKindOfClass:[BKFont class]]) {
+        return NO;
+    }
+
+    BKFont *other = (BKFont *)object;
+
+    return [self isCustom] == [other isCustom] && [self.name isEqualToString:other.name];
 }
 
 

@@ -34,52 +34,52 @@
 #import "SSHSession.h"
 
 static const char *copy_command =
-"sh -c 'umask 077; test -d ~/.ssh || mkdir ~/.ssh ; cat >> .ssh/authorized_keys; test -x /sbin/restorecon && /sbin/restorecon .ssh .ssh/authorized_keys'";
+    "sh -c 'umask 077; test -d ~/.ssh || mkdir ~/.ssh ; cat >> .ssh/authorized_keys; test -x /sbin/restorecon && /sbin/restorecon .ssh .ssh/authorized_keys'";
 
 static const char *usage_format =
-  "Usage: ssh-copy-id identity_file [user@]host";
+    "Usage: ssh-copy-id identity_file [user@]host";
 
 @implementation SSHCopyIDSession
 
 - (int)main:(int)argc argv:(char **)argv
 {
-  if (argc != 3) {
-    return [self dieMsg:@(usage_format)];
-  }
+    if (argc != 3) {
+        return [self dieMsg:@(usage_format)];
+    }
 
-  NSString *keyName = [NSString stringWithFormat:@"%s", argv[1]];
-  BKPubKey *pkcard = [BKPubKey withID:keyName];
+    NSString *keyName = [NSString stringWithFormat:@"%s", argv[1]];
+    BKPubKey *pkcard = [BKPubKey withID:keyName];
 
-  if (!pkcard) {
-    return [self dieMsg:@"ERROR: No identities found."];
-  }
-  const char *public_key = [[pkcard publicKey] UTF8String];
+    if (!pkcard) {
+        return [self dieMsg:@"ERROR: No identities found."];
+    }
+    const char *public_key = [[pkcard publicKey] UTF8String];
 
-  SSHSession *sshSession = [[SSHSession alloc] initWithDevice:_device andParams:nil];
-  
-  // Pipe public key
-  int pinput[2];
-  pipe(pinput);
-  FILE *inputr = fdopen(pinput[0], "r");
-  fclose(sshSession.stream.in);
-  sshSession.stream.in = inputr;
+    SSHSession *sshSession = [[SSHSession alloc] initWithDevice:_device andParams:nil];
 
-  write(pinput[1], public_key, strlen(public_key));
-  write(pinput[1], "\n", 1);
-  close(pinput[1]);
+    // Pipe public key
+    int pinput[2];
+    pipe(pinput);
+    FILE *inputr = fdopen(pinput[0], "r");
+    fclose(sshSession.stream.in);
+    sshSession.stream.in = inputr;
 
-  NSString *ssh_command = [NSString stringWithFormat:@"ssh -v %s -- %s", argv[2], copy_command];
-  [sshSession executeAttachedWithArgs:ssh_command];
+    write(pinput[1], public_key, strlen(public_key));
+    write(pinput[1], "\n", 1);
+    close(pinput[1]);
 
-  close(pinput[0]);
+    NSString *ssh_command = [NSString stringWithFormat:@"ssh -v %s -- %s", argv[2], copy_command];
+    [sshSession executeAttachedWithArgs:ssh_command];
 
-  return 0;
+    close(pinput[0]);
+
+    return 0;
 }
 
 - (int)dieMsg:(NSString *)msg
 {
-  fprintf(_stream.out, "%s\n", [msg UTF8String]);
-  return -1;
+    fprintf(_stream.out, "%s\n", [msg UTF8String]);
+    return -1;
 }
 
 @end

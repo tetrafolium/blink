@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *LayoutManagerBottomInsetDidUpdate;
 
-@interface LayoutManager: NSObject
+@interface LayoutManager : NSObject
 
 + (BKLayoutMode) deviceDefaultLayoutMode;
 + (UIEdgeInsets) buildSafeInsetsForController:(UIViewController *)ctrl andMode:(BKLayoutMode) mode;

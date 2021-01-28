@@ -31,10 +31,10 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum{
-  BKDeviceInfoTypeDeviceName,
-  BKDeviceInfoTypeUserName
-}BKDeviceInfoType;
+typedef enum {
+    BKDeviceInfoTypeDeviceName,
+    BKDeviceInfoTypeUserName
+} BKDeviceInfoType;
 
 @interface UIDevice (DeviceName)
 

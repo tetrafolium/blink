@@ -39,62 +39,62 @@
 #include "MCPSession.h"
 
 void __print_commands() {
-  MCPSession *session = (__bridge MCPSession *)thread_context;
-  if (!session) {
-    return;
-  }
+    MCPSession *session = (__bridge MCPSession *)thread_context;
+    if (!session) {
+        return;
+    }
 
-  NSString *formattedCommands = [CompleteClass formattedCommandsWithWidth: session.device.cols];
-  puts(formattedCommands.UTF8String);
+    NSString *formattedCommands = [CompleteClass formattedCommandsWithWidth: session.device.cols];
+    puts(formattedCommands.UTF8String);
 }
 
 
 int help_main(int argc, char *argv[]) {
-  
-  if (argc == 2 && [@"list-commands" isEqual: @(argv[1])]) {
-    __print_commands();
+
+    if (argc == 2 && [@"list-commands" isEqual: @(argv[1])]) {
+        __print_commands();
+        return 0;
+    }
+    NSString *help = [@[
+                          @"",
+                          [UIApplication blinkVersion],
+                          @"",
+                          @"Available commands:",
+                          @"  <tab>: list available UNIX commands.",
+                          @"  mosh: mosh client.",
+                          @"  ssh: ssh client.",
+                          @"  config: Setup ssh keys, hosts, keyboard, etc.",
+                          @"  help: Prints this.",
+                          @"  exit: Close this shell.",
+                          @"",
+                          @"Gestures:",
+                          @"  ✌️ tap -> New Terminal.  ",
+                          @"  👆 tap -> Mouse click.  ",
+                          @"  👆 swipe left/right -> Switch Terminals.  ",
+                          @"  pinch -> Change font size.",
+                          UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone ? @"  👆 drag down -> Dismiss keyboard.\n" : @"",
+                          @"Shortcuts:",
+                          @"  Press and hold ⌘ on hardware kb to show a list of shortcuts.",
+                          @"  Run config. Go to Keyboard > Shortcuts for configuration.",
+                          @"",
+                          @"Selection Control:",
+                          @"  VIM users:",
+                          @"    h j k l (left, down, up, right)",
+                          @"    w b (forward/backward by word)",
+                          @"    o (change selection point)",
+                          @"    y p (yank, paste)",
+                          @"  EMACS users:",
+                          @"    C-f,b,n,p (right, left, down, up)",
+                          @"    C-M-f,b (forward/backward by word)",
+                          @"    C-x (change selection point)",
+                          @"  OTHER: arrows and fingers",
+                          @"",
+                          @"Docs: https://blink.sh/docs",
+                          @"",
+
+                      ] componentsJoinedByString:@"\n"];
+
+    puts(help.UTF8String);
+
     return 0;
-  }
-  NSString *help = [@[
-    @"",
-    [UIApplication blinkVersion],
-    @"",
-    @"Available commands:",
-    @"  <tab>: list available UNIX commands.",
-    @"  mosh: mosh client.",
-    @"  ssh: ssh client.",
-    @"  config: Setup ssh keys, hosts, keyboard, etc.",
-    @"  help: Prints this.",
-    @"  exit: Close this shell.",
-    @"",
-    @"Gestures:",
-    @"  ✌️ tap -> New Terminal.  ",
-    @"  👆 tap -> Mouse click.  ",
-    @"  👆 swipe left/right -> Switch Terminals.  ",
-    @"  pinch -> Change font size.",
-    UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPhone ? @"  👆 drag down -> Dismiss keyboard.\n" : @"",
-    @"Shortcuts:",
-    @"  Press and hold ⌘ on hardware kb to show a list of shortcuts.",
-    @"  Run config. Go to Keyboard > Shortcuts for configuration.",
-    @"",
-    @"Selection Control:",
-    @"  VIM users:",
-    @"    h j k l (left, down, up, right)",
-    @"    w b (forward/backward by word)",
-    @"    o (change selection point)",
-    @"    y p (yank, paste)",
-    @"  EMACS users:",
-    @"    C-f,b,n,p (right, left, down, up)",
-    @"    C-M-f,b (forward/backward by word)",
-    @"    C-x (change selection point)",
-    @"  OTHER: arrows and fingers",
-    @"",
-    @"Docs: https://blink.sh/docs",
-    @"",
-    
- ] componentsJoinedByString:@"\n"];
- 
-  puts(help.UTF8String);
-  
-  return 0;
 }

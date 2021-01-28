@@ -34,153 +34,153 @@
 
 NSString *_encodeString(NSString *str)
 {
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:str options:NSJSONWritingFragmentsAllowed error:nil];
-  return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:str options:NSJSONWritingFragmentsAllowed error:nil];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
 NSString *term_init(BOOL accessibilityEnabled)
 {
-  return [NSString stringWithFormat:@"term_init(%@);", accessibilityEnabled ? @"true" : @"false" ];
+    return [NSString stringWithFormat:@"term_init(%@);", accessibilityEnabled ? @"true" : @"false" ];
 }
 
 NSString *term_write(NSString *data) {
-  NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingFragmentsAllowed error:nil];
-  
-  NSMutableData *result = [[NSMutableData alloc] initWithCapacity:jsonData.length + 11 + 2];
-  [result appendBytes:"term_write(" length:11];
-  [result appendData:jsonData];
-  [result appendBytes:");" length:2];
-  return [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingFragmentsAllowed error:nil];
+
+    NSMutableData *result = [[NSMutableData alloc] initWithCapacity:jsonData.length + 11 + 2];
+    [result appendBytes:"term_write(" length:11];
+    [result appendData:jsonData];
+    [result appendBytes:");" length:2];
+    return [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
 }
 
 NSString *term_writeB64(NSData *data) {
-  return [NSString stringWithFormat:@"term_write_b64(\"%@\");", [data base64EncodedStringWithOptions:kNilOptions]];
+    return [NSString stringWithFormat:@"term_write_b64(\"%@\");", [data base64EncodedStringWithOptions:kNilOptions]];
 }
 
 NSString *term_paste(NSString *str) {
-  return [NSString stringWithFormat:@"term_paste(%@);", _encodeString(str)];
+    return [NSString stringWithFormat:@"term_paste(%@);", _encodeString(str)];
 }
 
 NSString *term_clear()
 {
-  return @"term_clear();";
+    return @"term_clear();";
 }
 
 NSString *term_reset()
 {
-  return @"term_reset();";
+    return @"term_reset();";
 }
 
 NSString *term_focus()
 {
-  return @"term_focus();";
+    return @"term_focus();";
 }
 
 NSString *term_blur()
 {
-  return @"term_blur();";
+    return @"term_blur();";
 }
 
 NSString *term_reportTouchInPoint(CGPoint point) {
-  return [NSString stringWithFormat:@"term_reportTouchInPoint(%@, %@);", @(point.x), @(point.y)];
+    return [NSString stringWithFormat:@"term_reportTouchInPoint(%@, %@);", @(point.x), @(point.y)];
 }
 
 NSString *term_setWidth(NSInteger count)
 {
-  return [NSString stringWithFormat:@"term_setWidth(\"%ld\");", (long)count];
+    return [NSString stringWithFormat:@"term_setWidth(\"%ld\");", (long)count];
 }
 
 NSString *term_increaseFontSize()
 {
-  return @"term_increaseFontSize();";
+    return @"term_increaseFontSize();";
 }
 
 NSString *term_decreaseFontSize()
 {
-  return @"term_decreaseFontSize();";
+    return @"term_decreaseFontSize();";
 }
 
 NSString *term_resetFontSize()
 {
-  return @"term_resetFontSize();";
+    return @"term_resetFontSize();";
 }
 
 NSString *term_scale(CGFloat scale)
 {
-  return [NSString stringWithFormat:@"term_scale(%f);", scale];
+    return [NSString stringWithFormat:@"term_scale(%f);", scale];
 }
 
 NSString *term_setFontSize(NSNumber *newSize)
 {
-  return [NSString stringWithFormat:@"term_setFontSize(\"%@\");", newSize];
+    return [NSString stringWithFormat:@"term_setFontSize(\"%@\");", newSize];
 }
 
 NSString *term_getCurrentSelection()
 {
-  return @"term_getCurrentSelection();";
+    return @"term_getCurrentSelection();";
 }
 
 NSString *term_setCursorBlink(BOOL state)
 {
-  return [NSString stringWithFormat:@"term_set('cursor-blink', %@);", state ? @"true" : @"false"];
+    return [NSString stringWithFormat:@"term_set('cursor-blink', %@);", state ? @"true" : @"false"];
 }
 
 NSString *term_setBoldAsBright(BOOL state)
 {
-  return [NSString stringWithFormat:@"term_set('enable-bold-as-bright', %@);", state ? @"true" : @"false"];
+    return [NSString stringWithFormat:@"term_set('enable-bold-as-bright', %@);", state ? @"true" : @"false"];
 }
 
 NSString *term_setBoldEnabled(NSUInteger state)
 {
-  NSString *stateStr = @"null";
-  if (state == 1) {
-    stateStr = @"true";
-  } else if (state == 2) {
-    stateStr = @"false";
-  }
-  return [NSString stringWithFormat:@"term_set('enable-bold', %@);", stateStr];
+    NSString *stateStr = @"null";
+    if (state == 1) {
+        stateStr = @"true";
+    } else if (state == 2) {
+        stateStr = @"false";
+    }
+    return [NSString stringWithFormat:@"term_set('enable-bold', %@);", stateStr];
 }
 
 NSString *term_setFontFamily(NSString *family, NSString * fontSizeDetectionMethod)
 {
-  return [NSString stringWithFormat:@"term_setFontFamily(%@, %@);", _encodeString(family), _encodeString(fontSizeDetectionMethod)];
+    return [NSString stringWithFormat:@"term_setFontFamily(%@, %@);", _encodeString(family), _encodeString(fontSizeDetectionMethod)];
 }
 
 NSString *term_appendUserCss(NSString *css)
 {
-  return [NSString stringWithFormat:@"term_appendUserCss(%@)", _encodeString(css)];
+    return [NSString stringWithFormat:@"term_appendUserCss(%@)", _encodeString(css)];
 }
 
 NSString *term_cleanSelection()
 {
-  return @"term_cleanSelection();";
+    return @"term_cleanSelection();";
 }
 
 NSString *term_modifySelection(NSString *direction, NSString *granularity)
 {
-  return [NSString stringWithFormat:@"term_modifySelection(%@, %@);", _encodeString(direction), _encodeString(granularity)];
+    return [NSString stringWithFormat:@"term_modifySelection(%@, %@);", _encodeString(direction), _encodeString(granularity)];
 }
 
 NSString *term_modifySideSelection()
 {
-  return @"term_modifySideSelection();";
+    return @"term_modifySideSelection();";
 }
 
 NSString *term_processKB(NSString *str) {
-  return  [NSString stringWithFormat:@"term_processKB(%@);", _encodeString(str)];
+    return  [NSString stringWithFormat:@"term_processKB(%@);", _encodeString(str)];
 }
 
 NSString *term_displayInput(NSString *str, BOOL display) {
-  return  [NSString stringWithFormat:@"term_displayInput(%@, %@);", _encodeString(str), display ? @"true" : @"false"];
+    return  [NSString stringWithFormat:@"term_displayInput(%@, %@);", _encodeString(str), display ? @"true" : @"false"];
 }
 
 NSString *term_apiResponse(NSString *name, NSString *response) {
-  return  [NSString stringWithFormat:@"term_apiResponse(%@, %@);", _encodeString(name), _encodeString(response)];
+    return  [NSString stringWithFormat:@"term_apiResponse(%@, %@);", _encodeString(name), _encodeString(response)];
 }
 
 
 NSString *term_restore() {
-  return @"term_restore();";
+    return @"term_restore();";
 }
 
 

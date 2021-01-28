@@ -33,7 +33,7 @@
 #ifndef xcall_h
 #define xcall_h
 
-@interface BlinkXCall: NSObject
+@interface BlinkXCall : NSObject
 
 @property NSString *callID;
 

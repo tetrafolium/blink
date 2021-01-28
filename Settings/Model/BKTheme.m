@@ -35,12 +35,12 @@
 
 + (NSString *)resourcesPathName
 {
-  return @"Themes";
+    return @"Themes";
 }
 
 + (NSString *)resourcesExtension
 {
-  return @"js";
+    return @"js";
 }
 
 @end

@@ -31,10 +31,10 @@
 
 #import <UIKit/UIKit.h>
 
-typedef enum{
+typedef enum {
     SKNonModifierButtonTypeNormal,
     SKNonModifierButtonTypeAlternate
-}SKNonModifierButtonType;
+} SKNonModifierButtonType;
 
 extern NSString *const KbdLeftArrowKey;
 extern NSString *const KbdRightArrowKey;

@@ -42,19 +42,20 @@
 @implementation BKSecurityConfigurationViewController
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
-  [_toggleAppLock setOn:[BKUserConfigurationManager userSettingsValueForKey:BKUserConfigAutoLock]];
+    [super viewDidLoad];
+    [_toggleAppLock setOn:[BKUserConfigurationManager userSettingsValueForKey:BKUserConfigAutoLock]];
 }
 
 - (IBAction)didToggleSwitch:(UISwitch *)toggleSwitch {
-  BOOL isOn = toggleSwitch.isOn;
-  [[LocalAuth shared] authenticateWithCallback:^(BOOL success) {
-    if (success) {
-      [BKUserConfigurationManager setUserSettingsValue:isOn forKey:BKUserConfigAutoLock];
-    } else {
-      toggleSwitch.on = !isOn;
-    }
-  } reason: isOn ? @"to turn off auto lock." : @"to turn on auto lock."];
+    BOOL isOn = toggleSwitch.isOn;
+    [[LocalAuth shared] authenticateWithCallback:^(BOOL success) {
+                           if (success) {
+                               [BKUserConfigurationManager setUserSettingsValue:isOn forKey:BKUserConfigAutoLock];
+                           } else {
+                               toggleSwitch.on = !isOn;
+                           }
+                       }
+                       reason: isOn ? @"to turn off auto lock." : @"to turn on auto lock."];
 }
 
 

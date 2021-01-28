@@ -101,7 +101,7 @@ void ssh_OpenSSL_add_all_algorithms(void);
 /* LibreSSL/OpenSSL 1.1x API compat */
 #ifndef HAVE_DSA_GET0_PQG
 void DSA_get0_pqg(const DSA *d, const BIGNUM **p, const BIGNUM **q,
-    const BIGNUM **g);
+                  const BIGNUM **g);
 #endif /* HAVE_DSA_GET0_PQG */
 
 #ifndef HAVE_DSA_SET0_PQG
@@ -110,7 +110,7 @@ int DSA_set0_pqg(DSA *d, BIGNUM *p, BIGNUM *q, BIGNUM *g);
 
 #ifndef HAVE_DSA_GET0_KEY
 void DSA_get0_key(const DSA *d, const BIGNUM **pub_key,
-    const BIGNUM **priv_key);
+                  const BIGNUM **priv_key);
 #endif /* HAVE_DSA_GET0_KEY */
 
 #ifndef HAVE_DSA_SET0_KEY
@@ -119,17 +119,17 @@ int DSA_set0_key(DSA *d, BIGNUM *pub_key, BIGNUM *priv_key);
 
 #ifndef HAVE_EVP_CIPHER_CTX_GET_IV
 int EVP_CIPHER_CTX_get_iv(const EVP_CIPHER_CTX *ctx,
-    unsigned char *iv, size_t len);
+                          unsigned char *iv, size_t len);
 #endif /* HAVE_EVP_CIPHER_CTX_GET_IV */
 
 #ifndef HAVE_EVP_CIPHER_CTX_SET_IV
 int EVP_CIPHER_CTX_set_iv(EVP_CIPHER_CTX *ctx,
-    const unsigned char *iv, size_t len);
+                          const unsigned char *iv, size_t len);
 #endif /* HAVE_EVP_CIPHER_CTX_SET_IV */
 
 #ifndef HAVE_RSA_GET0_KEY
 void RSA_get0_key(const RSA *r, const BIGNUM **n, const BIGNUM **e,
-    const BIGNUM **d);
+                  const BIGNUM **d);
 #endif /* HAVE_RSA_GET0_KEY */
 
 #ifndef HAVE_RSA_SET0_KEY
@@ -138,7 +138,7 @@ int RSA_set0_key(RSA *r, BIGNUM *n, BIGNUM *e, BIGNUM *d);
 
 #ifndef HAVE_RSA_GET0_CRT_PARAMS
 void RSA_get0_crt_params(const RSA *r, const BIGNUM **dmp1, const BIGNUM **dmq1,
-    const BIGNUM **iqmp);
+                         const BIGNUM **iqmp);
 #endif /* HAVE_RSA_GET0_CRT_PARAMS */
 
 #ifndef HAVE_RSA_SET0_CRT_PARAMS
@@ -171,7 +171,7 @@ int ECDSA_SIG_set0(ECDSA_SIG *sig, BIGNUM *r, BIGNUM *s);
 
 #ifndef HAVE_DH_GET0_PQG
 void DH_get0_pqg(const DH *dh, const BIGNUM **p, const BIGNUM **q,
-    const BIGNUM **g);
+                 const BIGNUM **g);
 #endif /* HAVE_DH_GET0_PQG */
 
 #ifndef HAVE_DH_SET0_PQG
@@ -208,12 +208,12 @@ int (*RSA_meth_get_finish(const RSA_METHOD *meth))(RSA *rsa);
 
 #ifndef HAVE_RSA_METH_SET_PRIV_ENC
 int RSA_meth_set_priv_enc(RSA_METHOD *meth, int (*priv_enc)(int flen,
-    const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
+                          const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
 #endif /* HAVE_RSA_METH_SET_PRIV_ENC */
 
 #ifndef HAVE_RSA_METH_SET_PRIV_DEC
 int RSA_meth_set_priv_dec(RSA_METHOD *meth, int (*priv_dec)(int flen,
-    const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
+                          const unsigned char *from, unsigned char *to, RSA *rsa, int padding));
 #endif /* HAVE_RSA_METH_SET_PRIV_DEC */
 
 #ifndef HAVE_RSA_METH_SET_FINISH

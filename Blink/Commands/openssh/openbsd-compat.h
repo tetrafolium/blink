@@ -197,7 +197,7 @@ int writev(int, struct iovec *, int);
 #include "bsd-poll.h"
 
 #ifndef HAVE_GETPEEREID
-int getpeereid(int , uid_t *, gid_t *);
+int getpeereid(int, uid_t *, gid_t *);
 #endif
 
 #ifdef HAVE_ARC4RANDOM
@@ -310,7 +310,7 @@ int timingsafe_bcmp(const void *, const void *, size_t);
 
 #ifndef HAVE_BCRYPT_PBKDF
 int	bcrypt_pbkdf(const char *, size_t, const u_int8_t *, size_t,
-    u_int8_t *, size_t, unsigned int);
+                 u_int8_t *, size_t, unsigned int);
 #endif
 
 #ifndef HAVE_EXPLICIT_BZERO

@@ -32,11 +32,11 @@
 #import <Foundation/Foundation.h>
 @import CloudKit;
 enum BKMoshPrediction {
-  BKMoshPredictionAdaptive,
-  BKMoshPredictionAlways,
-  BKMoshPredictionNever,
-  BKMoshPredictionExperimental,
-  BKMoshPredictionUnknown
+    BKMoshPredictionAdaptive,
+    BKMoshPredictionAlways,
+    BKMoshPredictionNever,
+    BKMoshPredictionExperimental,
+    BKMoshPredictionUnknown
 };
 
 @interface BKHosts : NSObject <NSCoding>

@@ -48,69 +48,69 @@
 @end
 
 @implementation AppDelegate {
-  NSTimer *_suspendTimer;
-  UIBackgroundTaskIdentifier _suspendTaskId;
-  BOOL _suspendedMode;
-  BOOL _enforceSuspension;
+    NSTimer *_suspendTimer;
+    UIBackgroundTaskIdentifier _suspendTaskId;
+    BOOL _suspendedMode;
+    BOOL _enforceSuspension;
 }
-  
-void __on_pipebroken_signal(int signum){
-  NSLog(@"PIPE is broken");
+
+void __on_pipebroken_signal(int signum) {
+    NSLog(@"PIPE is broken");
 }
 
 void __setupProcessEnv() {
-  NSBundle *mainBundle = [NSBundle mainBundle];
-  int forceOverwrite = 1;
-  NSString *SSL_CERT_FILE = [mainBundle pathForResource:@"cacert" ofType:@"pem"];
-  setenv("SSL_CERT_FILE", SSL_CERT_FILE.UTF8String, forceOverwrite);
-  
-  NSString *locales_path = [mainBundle pathForResource:@"locales" ofType:@"bundle"];
-  setenv("PATH_LOCALE", locales_path.UTF8String, forceOverwrite);
-  setenv("LC_CTYPE", "UTF-8", forceOverwrite);
-  setlocale(LC_CTYPE, "UTF-8");
-  setlocale(LC_ALL, "UTF-8");
-  setenv("TERM", "xterm-256color", forceOverwrite);
-  
-  ssh_threads_set_callbacks(ssh_threads_get_pthread());
-  ssh_init();
+    NSBundle *mainBundle = [NSBundle mainBundle];
+    int forceOverwrite = 1;
+    NSString *SSL_CERT_FILE = [mainBundle pathForResource:@"cacert" ofType:@"pem"];
+    setenv("SSL_CERT_FILE", SSL_CERT_FILE.UTF8String, forceOverwrite);
+
+    NSString *locales_path = [mainBundle pathForResource:@"locales" ofType:@"bundle"];
+    setenv("PATH_LOCALE", locales_path.UTF8String, forceOverwrite);
+    setenv("LC_CTYPE", "UTF-8", forceOverwrite);
+    setlocale(LC_CTYPE, "UTF-8");
+    setlocale(LC_ALL, "UTF-8");
+    setenv("TERM", "xterm-256color", forceOverwrite);
+
+    ssh_threads_set_callbacks(ssh_threads_get_pthread());
+    ssh_init();
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  signal(SIGPIPE, __on_pipebroken_signal);
-  
-  dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-  dispatch_async(bgQueue, ^{
-    [BlinkPaths linkICloudDriveIfNeeded];
-  });
+    signal(SIGPIPE, __on_pipebroken_signal);
 
-  sideLoading = false; // Turn off extra commands from iOS system
-  initializeEnvironment(); // initialize environment variables for iOS system
-  dispatch_async(bgQueue, ^{
-    addCommandList([[NSBundle mainBundle] pathForResource:@"blinkCommandsDictionary" ofType:@"plist"]); // Load blink commands to ios_system
-      __setupProcessEnv(); // we should call this after ios_system initializeEnvironment to override its defaults.
-  });
+    dispatch_queue_t bgQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    dispatch_async(bgQueue, ^ {
+        [BlinkPaths linkICloudDriveIfNeeded];
+    });
 
-  NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
-  [nc addObserver:self
-         selector:@selector(_onSceneDidEnterBackground:)
-             name:UISceneDidEnterBackgroundNotification object:nil];
-  [nc addObserver:self
-           selector:@selector(_onSceneWillEnterForeground:)
-               name:UISceneWillEnterForegroundNotification object:nil];
-  [nc addObserver:self
-         selector:@selector(_onSceneDidActiveNotification:)
-             name:UISceneDidActivateNotification object:nil];
-  [nc addObserver:self
-         selector: @selector(_onScreenConnect)
-             name:UIScreenDidConnectNotification object:nil];
-  
-  [UNUserNotificationCenter currentNotificationCenter].delegate = self;
-  
+    sideLoading = false; // Turn off extra commands from iOS system
+    initializeEnvironment(); // initialize environment variables for iOS system
+    dispatch_async(bgQueue, ^ {
+        addCommandList([[NSBundle mainBundle] pathForResource:@"blinkCommandsDictionary" ofType:@"plist"]); // Load blink commands to ios_system
+        __setupProcessEnv(); // we should call this after ios_system initializeEnvironment to override its defaults.
+    });
+
+    NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
+    [nc addObserver:self
+        selector:@selector(_onSceneDidEnterBackground:)
+        name:UISceneDidEnterBackgroundNotification object:nil];
+    [nc addObserver:self
+        selector:@selector(_onSceneWillEnterForeground:)
+        name:UISceneWillEnterForegroundNotification object:nil];
+    [nc addObserver:self
+        selector:@selector(_onSceneDidActiveNotification:)
+        name:UISceneDidActivateNotification object:nil];
+    [nc addObserver:self
+        selector: @selector(_onScreenConnect)
+        name:UIScreenDidConnectNotification object:nil];
+
+    [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+
 //  [nc addObserver:self selector:@selector(_logEvent:) name:nil object:nil];
 //  [nc addObserver:self selector:@selector(_active) name:@"UIApplicationSystemNavigationActionChangedNotification" object:nil];
 
-  [UIApplication sharedApplication].applicationSupportsShakeToEdit = NO;
-  return YES;
+    [UIApplication sharedApplication].applicationSupportsShakeToEdit = NO;
+    return YES;
 }
 
 //- (void)_active {
@@ -125,219 +125,219 @@ void __setupProcessEnv() {
 //}
 
 - (void)_loadProfileVars {
-  NSCharacterSet *whiteSpace = [NSCharacterSet whitespaceCharacterSet];
-  NSString *profile = [NSString stringWithContentsOfFile:[BlinkPaths blinkProfileFile] encoding:NSUTF8StringEncoding error:nil];
-  [profile enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
-    NSMutableArray<NSString *> *parts = [[line componentsSeparatedByString:@"="] mutableCopy];
-    if (parts.count < 2) {
-      return;
-    }
-    
-    NSString *varName = [parts.firstObject stringByTrimmingCharactersInSet:whiteSpace];
-    if (varName.length == 0) {
-      return;
-    }
-    [parts removeObjectAtIndex:0];
-    NSString *varValue = [[parts componentsJoinedByString:@"="] stringByTrimmingCharactersInSet:whiteSpace];
-    if ([varValue hasSuffix:@"\""] || [varValue hasPrefix:@"\""]) {
-      NSData *data =  [varValue dataUsingEncoding:NSUTF8StringEncoding];
-      varValue = [varValue substringWithRange:NSMakeRange(1, varValue.length - 1)];
-      if (data) {
-        id value = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        if ([value isKindOfClass:[NSString class]]) {
-          varValue = value;
+    NSCharacterSet *whiteSpace = [NSCharacterSet whitespaceCharacterSet];
+    NSString *profile = [NSString stringWithContentsOfFile:[BlinkPaths blinkProfileFile] encoding:NSUTF8StringEncoding error:nil];
+    [profile enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
+                NSMutableArray<NSString *> *parts = [[line componentsSeparatedByString:@"="] mutableCopy];
+                if (parts.count < 2) {
+            return;
         }
-      }
-    }
-    if (varValue.length == 0) {
-      return;
-    }
-    BOOL forceOverwrite = 1;
-    setenv(varName.UTF8String, varValue.UTF8String, forceOverwrite);
-  }];
+
+        NSString *varName = [parts.firstObject stringByTrimmingCharactersInSet:whiteSpace];
+        if (varName.length == 0) {
+            return;
+        }
+        [parts removeObjectAtIndex:0];
+        NSString *varValue = [[parts componentsJoinedByString:@"="] stringByTrimmingCharactersInSet:whiteSpace];
+        if ([varValue hasSuffix:@"\""] || [varValue hasPrefix:@"\""]) {
+            NSData *data =  [varValue dataUsingEncoding:NSUTF8StringEncoding];
+            varValue = [varValue substringWithRange:NSMakeRange(1, varValue.length - 1)];
+            if (data) {
+                id value = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+                if ([value isKindOfClass:[NSString class]]) {
+                    varValue = value;
+                }
+            }
+        }
+        if (varValue.length == 0) {
+            return;
+        }
+        BOOL forceOverwrite = 1;
+        setenv(varName.UTF8String, varValue.UTF8String, forceOverwrite);
+    }];
 }
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  [BKDefaults loadDefaults];
-  [BKPubKey loadIDS];
-  [BKHosts loadHosts];
-  [self _loadProfileVars];
-  [[UIView appearance] setTintColor:[UIColor blinkTint]];
-  return YES;
+    [BKDefaults loadDefaults];
+    [BKPubKey loadIDS];
+    [BKHosts loadHosts];
+    [self _loadProfileVars];
+    [[UIView appearance] setTintColor:[UIColor blinkTint]];
+    return YES;
 }
 
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-  [[BKiCloudSyncHandler sharedHandler]checkForReachabilityAndSync:nil];
-  // TODO: pass completion handler.
+    [[BKiCloudSyncHandler sharedHandler]checkForReachabilityAndSync:nil];
+    // TODO: pass completion handler.
 }
 
 // MARK: NSUserActivity
 
-- (BOOL)application:(UIApplication *)application willContinueUserActivityWithType:(NSString *)userActivityType 
+- (BOOL)application:(UIApplication *)application willContinueUserActivityWithType:(NSString *)userActivityType
 {
-  return YES;
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
 {
-  return YES;
+    return YES;
 }
 
 - (BOOL)application:(UIApplication *)application shouldAllowExtensionPointIdentifier:(NSString *)extensionPointIdentifier {
-  if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
-    return ![BKDefaults disableCustomKeyboards];
-  }
-  return YES;
+    if ([extensionPointIdentifier isEqualToString: UIApplicationKeyboardExtensionPointIdentifier]) {
+        return ![BKDefaults disableCustomKeyboards];
+    }
+    return YES;
 }
 
 #pragma mark - State saving and restoring
 
 - (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application
 {
-  // If a scene is not yet in the background, then await for it to suspend
-  NSArray * scenes = UIApplication.sharedApplication.connectedScenes.allObjects;
-  for (UIScene *scene in scenes) {
-    if (scene.activationState == UISceneActivationStateForegroundActive || scene.activationState == UISceneActivationStateForegroundInactive) {
-      _enforceSuspension = true;
-      return;
+    // If a scene is not yet in the background, then await for it to suspend
+    NSArray * scenes = UIApplication.sharedApplication.connectedScenes.allObjects;
+    for (UIScene *scene in scenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive || scene.activationState == UISceneActivationStateForegroundInactive) {
+            _enforceSuspension = true;
+            return;
+        }
     }
-  }
 
-  [self _suspendApplicationOnProtectedDataWillBecomeUnavailable];
+    [self _suspendApplicationOnProtectedDataWillBecomeUnavailable];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-  [self _suspendApplicationOnWillTerminate];
+    [self _suspendApplicationOnWillTerminate];
 }
 
 - (void)_startMonitoringForSuspending
 {
-  if (_suspendedMode) {
-    return;
-  }
-  
-  UIApplication *application = [UIApplication sharedApplication];
-  
-  [self _cancelApplicationSuspendTask];
-  
-  _suspendTaskId = [application beginBackgroundTaskWithName:@"Suspend" expirationHandler:^{
-    [self _suspendApplicationWithExpirationHandler];
-  }];
-  
-  NSTimeInterval time = MIN(application.backgroundTimeRemaining * 0.9, 5 * 60);
-  [_suspendTimer invalidate];
-  _suspendTimer = [NSTimer scheduledTimerWithTimeInterval:time
-                                                   target:self
-                                                 selector:@selector(_suspendApplicationWithSuspendTimer)
-                                                 userInfo:nil
-                                                  repeats:NO];
+    if (_suspendedMode) {
+        return;
+    }
+
+    UIApplication *application = [UIApplication sharedApplication];
+
+    [self _cancelApplicationSuspendTask];
+
+    _suspendTaskId = [application beginBackgroundTaskWithName:@"Suspend" expirationHandler:^ {
+                    [self _suspendApplicationWithExpirationHandler];
+                }];
+
+    NSTimeInterval time = MIN(application.backgroundTimeRemaining * 0.9, 5 * 60);
+    [_suspendTimer invalidate];
+    _suspendTimer = [NSTimer scheduledTimerWithTimeInterval:time
+                             target:self
+                             selector:@selector(_suspendApplicationWithSuspendTimer)
+                             userInfo:nil
+                             repeats:NO];
 }
 
 - (void)_cancelApplicationSuspendTask {
-  [_suspendTimer invalidate];
-  if (_suspendTaskId != UIBackgroundTaskInvalid) {
-    [[UIApplication sharedApplication] endBackgroundTask:_suspendTaskId];
-  }
-  _suspendTaskId = UIBackgroundTaskInvalid;
+    [_suspendTimer invalidate];
+    if (_suspendTaskId != UIBackgroundTaskInvalid) {
+        [[UIApplication sharedApplication] endBackgroundTask:_suspendTaskId];
+    }
+    _suspendTaskId = UIBackgroundTaskInvalid;
 }
 
 - (void)_cancelApplicationSuspend {
-  [self _cancelApplicationSuspendTask];
-  
-  // We can't resume if we don't have access to protected data
-  if (UIApplication.sharedApplication.isProtectedDataAvailable) {
-    _suspendedMode = NO;
-  }
+    [self _cancelApplicationSuspendTask];
+
+    // We can't resume if we don't have access to protected data
+    if (UIApplication.sharedApplication.isProtectedDataAvailable) {
+        _suspendedMode = NO;
+    }
 }
 
 // Simple wrappers to get the reason of failure from call stack
 - (void)_suspendApplicationWithSuspendTimer {
-  [self _suspendApplication];
+    [self _suspendApplication];
 }
 
 - (void)_suspendApplicationWithExpirationHandler {
-  [self _suspendApplication];
+    [self _suspendApplication];
 }
 
 - (void)_suspendApplicationOnWillTerminate {
-  [self _suspendApplication];
+    [self _suspendApplication];
 }
 
 - (void)_suspendApplicationOnProtectedDataWillBecomeUnavailable {
-  [self _suspendApplication];
+    [self _suspendApplication];
 }
 
 - (void)_suspendApplication {
-  [_suspendTimer invalidate];
+    [_suspendTimer invalidate];
 
-  _enforceSuspension = false;
-  
-  if (_suspendedMode) {
-    return;
-  }
-  
-  [[SessionRegistry shared] suspend];
-  _suspendedMode = YES;
-  [self _cancelApplicationSuspendTask];
+    _enforceSuspension = false;
+
+    if (_suspendedMode) {
+        return;
+    }
+
+    [[SessionRegistry shared] suspend];
+    _suspendedMode = YES;
+    [self _cancelApplicationSuspendTask];
 }
 
 #pragma mark - Scenes
 
 - (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
-  
-  
-  return [UISceneConfiguration configurationWithName:@"main" sessionRole:connectingSceneSession.role];
-  
+
+
+    return [UISceneConfiguration configurationWithName:@"main" sessionRole:connectingSceneSession.role];
+
 }
 
 - (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions {
-  [SpaceController onDidDiscardSceneSessions: sceneSessions];
+    [SpaceController onDidDiscardSceneSessions: sceneSessions];
 }
 
 - (void)_onSceneDidEnterBackground:(NSNotification *)notification {
-  NSArray * scenes = UIApplication.sharedApplication.connectedScenes.allObjects;
-  for (UIScene *scene in scenes) {
-    if (scene.activationState == UISceneActivationStateForegroundActive || scene.activationState == UISceneActivationStateForegroundInactive) {
-      return;
+    NSArray * scenes = UIApplication.sharedApplication.connectedScenes.allObjects;
+    for (UIScene *scene in scenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive || scene.activationState == UISceneActivationStateForegroundInactive) {
+            return;
+        }
     }
-  }
-  if (_enforceSuspension) {
-    [self _suspendApplication];
-  } else {
-    [self _startMonitoringForSuspending];
-  }
+    if (_enforceSuspension) {
+        [self _suspendApplication];
+    } else {
+        [self _startMonitoringForSuspending];
+    }
 }
 
 - (void)_onSceneWillEnterForeground:(NSNotification *)notification {
-  [self _cancelApplicationSuspend];
+    [self _cancelApplicationSuspend];
 }
 
 - (void)_onSceneDidActiveNotification:(NSNotification *)notification {
-  [self _cancelApplicationSuspend];
+    [self _cancelApplicationSuspend];
 }
 
 - (void)_onScreenConnect {
-  [BKDefaults applyExternalScreenCompensation:BKDefaults.overscanCompensation];
+    [BKDefaults applyExternalScreenCompensation:BKDefaults.overscanCompensation];
 }
 
 #pragma mark - UNUserNotificationCenterDelegate
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
-  UNNotificationPresentationOptions opts = UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge;
-  completionHandler(opts);
+    UNNotificationPresentationOptions opts = UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge;
+    completionHandler(opts);
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
-  SceneDelegate *sceneDelegate = (SceneDelegate *)response.targetScene.delegate;
-  
-  SpaceController *ctrl = sceneDelegate.spaceController;
-  
-  [ctrl moveToShellWithKey:response.notification.request.content.threadIdentifier];
-  
-  completionHandler();
+    SceneDelegate *sceneDelegate = (SceneDelegate *)response.targetScene.delegate;
+
+    SpaceController *ctrl = sceneDelegate.spaceController;
+
+    [ctrl moveToShellWithKey:response.notification.request.content.threadIdentifier];
+
+    completionHandler();
 }
 
 @end

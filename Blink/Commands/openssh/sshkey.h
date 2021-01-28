@@ -57,17 +57,17 @@ struct sshbuf;
 
 /* Key types */
 enum sshkey_types {
-  KEY_RSA,
-  KEY_DSA,
-  KEY_ECDSA,
-  KEY_ED25519,
-  KEY_RSA_CERT,
-  KEY_DSA_CERT,
-  KEY_ECDSA_CERT,
-  KEY_ED25519_CERT,
-  KEY_XMSS,
-  KEY_XMSS_CERT,
-  KEY_UNSPEC
+    KEY_RSA,
+    KEY_DSA,
+    KEY_ECDSA,
+    KEY_ED25519,
+    KEY_RSA_CERT,
+    KEY_DSA_CERT,
+    KEY_ECDSA_CERT,
+    KEY_ED25519_CERT,
+    KEY_XMSS,
+    KEY_XMSS_CERT,
+    KEY_UNSPEC
 };
 
 /* Default fingerprint hash */
@@ -75,19 +75,19 @@ enum sshkey_types {
 
 /* Fingerprint representation formats */
 enum sshkey_fp_rep {
-  SSH_FP_DEFAULT = 0,
-  SSH_FP_HEX,
-  SSH_FP_BASE64,
-  SSH_FP_BUBBLEBABBLE,
-  SSH_FP_RANDOMART
+    SSH_FP_DEFAULT = 0,
+    SSH_FP_HEX,
+    SSH_FP_BASE64,
+    SSH_FP_BUBBLEBABBLE,
+    SSH_FP_RANDOMART
 };
 
 /* Private key serialisation formats, used on the wire */
 enum sshkey_serialize_rep {
-  SSHKEY_SERIALIZE_DEFAULT = 0,
-  SSHKEY_SERIALIZE_STATE = 1,
-  SSHKEY_SERIALIZE_FULL = 2,
-  SSHKEY_SERIALIZE_INFO = 254,
+    SSHKEY_SERIALIZE_DEFAULT = 0,
+    SSHKEY_SERIALIZE_STATE = 1,
+    SSHKEY_SERIALIZE_FULL = 2,
+    SSHKEY_SERIALIZE_INFO = 254,
 };
 
 /* key is stored in external hardware */
@@ -96,35 +96,35 @@ enum sshkey_serialize_rep {
 #define SSHKEY_CERT_MAX_PRINCIPALS  256
 /* XXX opaquify? */
 struct sshkey_cert {
-  struct sshbuf  *certblob; /* Kept around for use on wire */
-  u_int     type; /* SSH2_CERT_TYPE_USER or SSH2_CERT_TYPE_HOST */
-  u_int64_t   serial;
-  char    *key_id;
-  u_int     nprincipals;
-  char    **principals;
-  u_int64_t   valid_after, valid_before;
-  struct sshbuf  *critical;
-  struct sshbuf  *extensions;
-  struct sshkey  *signature_key;
-  char    *signature_type;
+    struct sshbuf  *certblob; /* Kept around for use on wire */
+    u_int     type; /* SSH2_CERT_TYPE_USER or SSH2_CERT_TYPE_HOST */
+    u_int64_t   serial;
+    char    *key_id;
+    u_int     nprincipals;
+    char    **principals;
+    u_int64_t   valid_after, valid_before;
+    struct sshbuf  *critical;
+    struct sshbuf  *extensions;
+    struct sshkey  *signature_key;
+    char    *signature_type;
 };
 
 /* XXX opaquify? */
 struct sshkey {
-  int   type;
-  int   flags;
-  RSA  *rsa;
-  DSA  *dsa;
-  int   ecdsa_nid;  /* NID of curve */
-  EC_KEY  *ecdsa;
-  u_char  *ed25519_sk;
-  u_char  *ed25519_pk;
-  char  *xmss_name;
-  char  *xmss_filename;  /* for state file updates */
-  void  *xmss_state;  /* depends on xmss_name, opaque */
-  u_char  *xmss_sk;
-  u_char  *xmss_pk;
-  struct sshkey_cert *cert;
+    int   type;
+    int   flags;
+    RSA  *rsa;
+    DSA  *dsa;
+    int   ecdsa_nid;  /* NID of curve */
+    EC_KEY  *ecdsa;
+    u_char  *ed25519_sk;
+    u_char  *ed25519_pk;
+    char  *xmss_name;
+    char  *xmss_filename;  /* for state file updates */
+    void  *xmss_state;  /* depends on xmss_name, opaque */
+    u_char  *xmss_sk;
+    u_char  *xmss_pk;
+    struct sshkey_cert *cert;
 };
 
 #define  ED25519_SK_SZ  crypto_sign_ed25519_SECRETKEYBYTES

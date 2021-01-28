@@ -42,38 +42,38 @@
 @end
 
 @implementation BKXCallBackUrlConfigurationViewController {
-  UISwitch *_xCallbackUrlEnabledSwitch;
-  NSRegularExpression *_validKeyRegexp;
+    UISwitch *_xCallbackUrlEnabledSwitch;
+    NSRegularExpression *_validKeyRegexp;
 }
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
-  
-  NSString *key = [BKDefaults xCallBackURLKey];
-  if (key == nil) {
-    key = [NSProcessInfo.processInfo.globallyUniqueString substringToIndex:6];
-    [BKDefaults setXCallBackURLKey:key];
-  }
-  
-  _validKeyRegexp = [[NSRegularExpression alloc] initWithPattern:@"[^a-zA-Z0-9]" options:kNilOptions error:nil];
-  
-  _xCallbackUrlEnabledSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
-  [_xCallbackUrlEnabledSwitch setOn:[BKDefaults isXCallBackURLEnabled]];
-  [_xCallbackUrlEnabledSwitch addTarget:self action:@selector(_onCallBackUrlEnabledChanged) forControlEvents:UIControlEventValueChanged];
-  
-  [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"switch"];
+    [super viewDidLoad];
+
+    NSString *key = [BKDefaults xCallBackURLKey];
+    if (key == nil) {
+        key = [NSProcessInfo.processInfo.globallyUniqueString substringToIndex:6];
+        [BKDefaults setXCallBackURLKey:key];
+    }
+
+    _validKeyRegexp = [[NSRegularExpression alloc] initWithPattern:@"[^a-zA-Z0-9]" options:kNilOptions error:nil];
+
+    _xCallbackUrlEnabledSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+    [_xCallbackUrlEnabledSwitch setOn:[BKDefaults isXCallBackURLEnabled]];
+    [_xCallbackUrlEnabledSwitch addTarget:self action:@selector(_onCallBackUrlEnabledChanged) forControlEvents:UIControlEventValueChanged];
+
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"switch"];
 }
 
 - (void)_onCallBackUrlEnabledChanged {
-  bool isOn = _xCallbackUrlEnabledSwitch.isOn;
-  [BKDefaults setXCallBackURLEnabled:isOn];
-  [BKDefaults saveDefaults];
-  NSArray * rows = @[[NSIndexPath indexPathForRow:1 inSection:0]];
-  if (isOn) {
-    [self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationTop];
-  } else {
-    [self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationTop];
-  }
+    bool isOn = _xCallbackUrlEnabledSwitch.isOn;
+    [BKDefaults setXCallBackURLEnabled:isOn];
+    [BKDefaults saveDefaults];
+    NSArray * rows = @[[NSIndexPath indexPathForRow:1 inSection:0]];
+    if (isOn) {
+        [self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationTop];
+    } else {
+        [self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 #pragma mark - Table view data source
@@ -83,61 +83,61 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  if (_xCallbackUrlEnabledSwitch.isOn) {
-    return 2;
-  } else {
-    return 1;
-  }
+    if (_xCallbackUrlEnabledSwitch.isOn) {
+        return 2;
+    } else {
+        return 1;
+    }
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-  if (indexPath.row == 0) {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch" forIndexPath:indexPath];
-    cell.accessoryView = _xCallbackUrlEnabledSwitch;
-    cell.textLabel.text = @"Allow URL actions";
-    return cell;
-  } else if (indexPath.row == 1) {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"URLKey" forIndexPath:indexPath];
-    _xCallbackURLKeyTextField = [cell viewWithTag:KTextFieldTag];
-    _xCallbackURLKeyTextField.text = [BKDefaults xCallBackURLKey];
-    return cell;
-  }
-  
-    
-  return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"default"];
+    if (indexPath.row == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"switch" forIndexPath:indexPath];
+        cell.accessoryView = _xCallbackUrlEnabledSwitch;
+        cell.textLabel.text = @"Allow URL actions";
+        return cell;
+    } else if (indexPath.row == 1) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"URLKey" forIndexPath:indexPath];
+        _xCallbackURLKeyTextField = [cell viewWithTag:KTextFieldTag];
+        _xCallbackURLKeyTextField.text = [BKDefaults xCallBackURLKey];
+        return cell;
+    }
+
+
+    return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"default"];
 }
 
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
-  return NO;
+    return NO;
 }
 
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-  if (string.length == 0) {
-    return YES;
-  }
-  
-  NSArray *matches = [_validKeyRegexp matchesInString:string options:kNilOptions range:NSMakeRange(0, string.length)];
-  
-  NSUInteger oldLength = [textField.text length];
-  NSUInteger replacementLength = [string length];
-  NSUInteger rangeLength = range.length;
-  
-  NSUInteger newLength = oldLength - rangeLength + replacementLength;
-  
-  return matches.count == 0 && newLength <= 100;
+    if (string.length == 0) {
+        return YES;
+    }
+
+    NSArray *matches = [_validKeyRegexp matchesInString:string options:kNilOptions range:NSMakeRange(0, string.length)];
+
+    NSUInteger oldLength = [textField.text length];
+    NSUInteger replacementLength = [string length];
+    NSUInteger rangeLength = range.length;
+
+    NSUInteger newLength = oldLength - rangeLength + replacementLength;
+
+    return matches.count == 0 && newLength <= 100;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-  NSString *urlKey = [BKDefaults xCallBackURLKey] ?: @"<URL key>";
-  return [NSString stringWithFormat: @"Use x-callback-url for automation and inter-app communication. Your URL key should be kept secret.\n\nExample:\nblinkshell://run?key=%@&cmd=ls", urlKey];
+    NSString *urlKey = [BKDefaults xCallBackURLKey] ?: @"<URL key>";
+    return [NSString stringWithFormat: @"Use x-callback-url for automation and inter-app communication. Your URL key should be kept secret.\n\nExample:\nblinkshell://run?key=%@&cmd=ls", urlKey];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-  [BKDefaults setXCallBackURLKey:textField.text];
-  [BKDefaults saveDefaults];
-  [self.tableView reloadData];
+    [BKDefaults setXCallBackURLKey:textField.text];
+    [BKDefaults saveDefaults];
+    [self.tableView reloadData];
 }
 
 @end

@@ -22,10 +22,10 @@
 
 typedef struct
 {
-  fe25519 x;
-  fe25519 y;
-  fe25519 z;
-  fe25519 t;
+    fe25519 x;
+    fe25519 y;
+    fe25519 z;
+    fe25519 t;
 } ge25519;
 
 extern const ge25519 ge25519_base;

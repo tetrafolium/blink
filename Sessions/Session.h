@@ -44,9 +44,9 @@
 @end
 
 @interface Session : NSObject {
-  pthread_t _tid;
-  TermStream *_stream;
-  TermDevice *_device;
+    pthread_t _tid;
+    TermStream *_stream;
+    TermDevice *_device;
 }
 
 @property (strong, atomic) SessionParams *sessionParams;

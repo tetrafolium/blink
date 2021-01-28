@@ -40,8 +40,8 @@
 @implementation BKDefaultUserViewController
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
-  self.userNameField.text = [BKDefaults defaultUserName];
+    [super viewDidLoad];
+    self.userNameField.text = [BKDefaults defaultUserName];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,10 +51,10 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-  if([string isEqualToString:@" "]){
-    return NO;
-  }
-  return YES;
+    if([string isEqualToString:@" "]) {
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Table view data source
@@ -67,12 +67,12 @@
     return 1;
 }
 
-- (void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC{
-  if(self.userNameField.text != nil && ![self.userNameField.text isEqualToString:@""]){
-    NSString *sanitisedName = [self.userNameField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
-    [BKDefaults setDefaultUserName:sanitisedName];
-    [BKDefaults saveDefaults];
-  }
+- (void)unwindForSegue:(UIStoryboardSegue *)unwindSegue towardsViewController:(UIViewController *)subsequentVC {
+    if(self.userNameField.text != nil && ![self.userNameField.text isEqualToString:@""]) {
+        NSString *sanitisedName = [self.userNameField.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+        [BKDefaults setDefaultUserName:sanitisedName];
+        [BKDefaults saveDefaults];
+    }
 }
 
 @end

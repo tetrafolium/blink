@@ -18,26 +18,26 @@ static char rcsid[]  = "$Id: host2ip.c,v 1.1 1996/09/20 12:49:19 sho Exp $";
 */
 struct in_addr host2ip(char *host)
 {
-  struct in_addr in, tmp;
-  struct hostent *hep;
+    struct in_addr in, tmp;
+    struct hostent *hep;
 
-  /* Strip leading white space. */
-  if (host) {
-    while (*host && isspace((int)*host)) host++;  
-  }
+    /* Strip leading white space. */
+    if (host) {
+        while (*host && isspace((int)*host)) host++;
+    }
 
-  /* Check whether this is a dotted decimal. */
-  if (!host) {
-    in.s_addr = INADDR_ANY;
-  }
-  else if ((tmp.s_addr = inet_addr(host)) != -1) {
-    in = tmp;
-  }
-  /* Attempt to resolve host name via DNS. */
-  else if ((hep = gethostbyname(host))) {
-    in = *(struct in_addr *)(hep->h_addr_list[0]);
-  }
-  /* As a last resort, try YP. */
+    /* Check whether this is a dotted decimal. */
+    if (!host) {
+        in.s_addr = INADDR_ANY;
+    }
+    else if ((tmp.s_addr = inet_addr(host)) != -1) {
+        in = tmp;
+    }
+    /* Attempt to resolve host name via DNS. */
+    else if ((hep = gethostbyname(host))) {
+        in = *(struct in_addr *)(hep->h_addr_list[0]);
+    }
+    /* As a last resort, try YP. */
 //  else {
 //    static char *domain = 0;  /* YP domain */
 //    char *value;              /* key value */
@@ -51,5 +51,5 @@ struct in_addr host2ip(char *host)
 //      in.s_addr = INADDR_ANY;
 //    }
 //  }
-  return in;
+    return in;
 } /* host2ip */

@@ -45,130 +45,130 @@ NSTimer *__debounceTimer = nil;
 }
 
 + (CGFloat) mainWindowKBBottomInset {
-  return __mainWindowKBBottomInset;
+    return __mainWindowKBBottomInset;
 }
 
 + (void) updateMainWindowKBBottomInset:(CGFloat) bottomInset {
-  if (__mainWindowKBBottomInset == bottomInset) {
-    return;
-  }
+    if (__mainWindowKBBottomInset == bottomInset) {
+        return;
+    }
 
-  __mainWindowKBBottomInset = bottomInset;
-  [__debounceTimer invalidate];
-  
-  __debounceTimer = [NSTimer scheduledTimerWithTimeInterval:0.6 repeats:NO block:^(NSTimer * _Nonnull timer) {
-    [NSNotificationCenter.defaultCenter postNotificationName:LayoutManagerBottomInsetDidUpdate object:nil];
-  }];
+    __mainWindowKBBottomInset = bottomInset;
+    [__debounceTimer invalidate];
+
+    __debounceTimer = [NSTimer scheduledTimerWithTimeInterval:0.6 repeats:NO block:^(NSTimer * _Nonnull timer) {
+                [NSNotificationCenter.defaultCenter postNotificationName:LayoutManagerBottomInsetDidUpdate object:nil];
+            }];
 }
 
 + (BKLayoutMode) deviceDefaultLayoutMode {
-  DeviceInfo *device = [DeviceInfo shared];
-  if (device.hasNotch) {
-    return BKLayoutModeSafeFit;
-  }
-  
-  if (device.hasCorners) {
-    return BKLayoutModeFill;
-  }
-  
-  return BKLayoutModeCover;
+    DeviceInfo *device = [DeviceInfo shared];
+    if (device.hasNotch) {
+        return BKLayoutModeSafeFit;
+    }
+
+    if (device.hasCorners) {
+        return BKLayoutModeFill;
+    }
+
+    return BKLayoutModeCover;
 }
 
 
 + (UIEdgeInsets) buildSafeInsetsForController:(UIViewController *)ctrl andMode:(BKLayoutMode) mode {
-  UIWindow *window = ctrl.view.window;
-  
-  if (window == ShadowWindow.shared || window.windowScene.session.role == UIWindowSceneSessionRoleExternalDisplay) {
-    // we are on external monitor, so we use device margins to accomodate overscan and ignore mode
-    // it is like BKLayoutModeSafeFit mode
-    return ShadowWindow.shared.refWindow.safeAreaInsets;
-  }
-  
-  UIScreen *mainScreen = UIScreen.mainScreen;
-  UIEdgeInsets deviceMargins = window.safeAreaInsets;// UIEdgeInsetsZero;// ctrl.viewDeviceSafeMargins;
-  
-  BOOL fullScreen = CGRectEqualToRect(mainScreen.bounds, window.bounds);
-  CGFloat slideOverVerticalMargin = (mainScreen.bounds.size.height - window.bounds.size.height) * 0.5;
-  
-  UIEdgeInsets result = UIEdgeInsetsZero;
-  
-  switch (mode) {
-    case BKLayoutModeDefault:
-      return [self buildSafeInsetsForController:ctrl andMode:[self deviceDefaultLayoutMode]];
-    case BKLayoutModeCover:
-      break;
-    case BKLayoutModeSafeFit:
-      result = deviceMargins;
-      if (DeviceInfo.shared.hasCorners &&
-          UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        result.top = 16;
-        result.bottom = 16;
-      }
-      
-      break;
-    case BKLayoutModeFill: {
-      DeviceInfo *deviceInfo = DeviceInfo.shared;
-      
-      if (!deviceInfo.hasCorners) {
-        break;
-      }
-      
-      if (!deviceInfo.hasNotch) {
-        result.top = 5;
-        result.left = 5;
-        result.right = MAX(deviceMargins.right, 5);
-        result.bottom = fullScreen ? 5 : 10;
-        break;
-      }
-      
-      UIInterfaceOrientation orientation = window.windowScene.interfaceOrientation;
-      
-      if (UIInterfaceOrientationIsPortrait(orientation)) {
-        result.top = deviceMargins.top - 10;
-        result.bottom = deviceMargins.bottom - 10;
-        break;
-      }
-      
-      if (orientation == UIInterfaceOrientationLandscapeRight) {
-        result.left = deviceMargins.left - 4; // notch
-        result.right = 10;
-        result.top = 10;
-        result.bottom = 8;
-        break;
-      }
-      
-      if (orientation == UIInterfaceOrientationLandscapeLeft) {
-        result.right = deviceMargins.right - 4;  // notch
-        result.left = 10;
-        result.top = 10;
-        result.bottom = 8;
-        break;
-      }
-      
-      result = deviceMargins;
+    UIWindow *window = ctrl.view.window;
+
+    if (window == ShadowWindow.shared || window.windowScene.session.role == UIWindowSceneSessionRoleExternalDisplay) {
+        // we are on external monitor, so we use device margins to accomodate overscan and ignore mode
+        // it is like BKLayoutModeSafeFit mode
+        return ShadowWindow.shared.refWindow.safeAreaInsets;
     }
-  }
-  
-  result.bottom = MAX(result.bottom, __mainWindowKBBottomInset);
-  
-  if (slideOverVerticalMargin > 0 && result.bottom > slideOverVerticalMargin) {
-    result.bottom -= slideOverVerticalMargin;
-  }
-  
-  return result;
+
+    UIScreen *mainScreen = UIScreen.mainScreen;
+    UIEdgeInsets deviceMargins = window.safeAreaInsets;// UIEdgeInsetsZero;// ctrl.viewDeviceSafeMargins;
+
+    BOOL fullScreen = CGRectEqualToRect(mainScreen.bounds, window.bounds);
+    CGFloat slideOverVerticalMargin = (mainScreen.bounds.size.height - window.bounds.size.height) * 0.5;
+
+    UIEdgeInsets result = UIEdgeInsetsZero;
+
+    switch (mode) {
+    case BKLayoutModeDefault:
+        return [self buildSafeInsetsForController:ctrl andMode:[self deviceDefaultLayoutMode]];
+    case BKLayoutModeCover:
+        break;
+    case BKLayoutModeSafeFit:
+        result = deviceMargins;
+        if (DeviceInfo.shared.hasCorners &&
+                UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            result.top = 16;
+            result.bottom = 16;
+        }
+
+        break;
+    case BKLayoutModeFill: {
+        DeviceInfo *deviceInfo = DeviceInfo.shared;
+
+        if (!deviceInfo.hasCorners) {
+            break;
+        }
+
+        if (!deviceInfo.hasNotch) {
+            result.top = 5;
+            result.left = 5;
+            result.right = MAX(deviceMargins.right, 5);
+            result.bottom = fullScreen ? 5 : 10;
+            break;
+        }
+
+        UIInterfaceOrientation orientation = window.windowScene.interfaceOrientation;
+
+        if (UIInterfaceOrientationIsPortrait(orientation)) {
+            result.top = deviceMargins.top - 10;
+            result.bottom = deviceMargins.bottom - 10;
+            break;
+        }
+
+        if (orientation == UIInterfaceOrientationLandscapeRight) {
+            result.left = deviceMargins.left - 4; // notch
+            result.right = 10;
+            result.top = 10;
+            result.bottom = 8;
+            break;
+        }
+
+        if (orientation == UIInterfaceOrientationLandscapeLeft) {
+            result.right = deviceMargins.right - 4;  // notch
+            result.left = 10;
+            result.top = 10;
+            result.bottom = 8;
+            break;
+        }
+
+        result = deviceMargins;
+    }
+    }
+
+    result.bottom = MAX(result.bottom, __mainWindowKBBottomInset);
+
+    if (slideOverVerticalMargin > 0 && result.bottom > slideOverVerticalMargin) {
+        result.bottom -= slideOverVerticalMargin;
+    }
+
+    return result;
 }
 
 + (NSString *) layoutModeToString:(BKLayoutMode)mode {
-  switch (mode) {
+    switch (mode) {
     case BKLayoutModeFill:
-      return @"Fill";
+        return @"Fill";
     case BKLayoutModeCover:
-      return @"Cover";
+        return @"Cover";
     case BKLayoutModeSafeFit:
-      return @"Fit";
+        return @"Fit";
     default:
-      return @"Default";
-  }
+        return @"Default";
+    }
 }
 
 @end

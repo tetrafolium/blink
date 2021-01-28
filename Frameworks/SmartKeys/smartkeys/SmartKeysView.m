@@ -41,16 +41,16 @@ NSString *const KbdTabKey = @"⇥";
 int const kNonModifierCount = 7;
 
 
-@implementation SmartKey  
+@implementation SmartKey
 
 -(id)initWithName:(NSString *)name symbol:(NSString *)symbol
 {
-  self = [super init];
-  if (self) {
-    _name = name;
-    _symbol = symbol;
-  }
-  return self;
+    self = [super init];
+    if (self) {
+        _name = name;
+        _symbol = symbol;
+    }
+    return self;
 }
 
 @end
@@ -69,7 +69,7 @@ int const kNonModifierCount = 7;
 //
 //- (void) setSelected:(BOOL)selected {
 //    [super setSelected:selected];
-//    
+//
 //    if (selected) {
 //        self.backgroundColor = UIColorFromRGB(255, 130, 0);
 //    }
@@ -81,108 +81,108 @@ int const kNonModifierCount = 7;
 //@end
 
 @implementation SmartKeysView {
-  NSTimer *_timer;
-  __weak IBOutlet UIButton *_ctrlButton;
-  __weak IBOutlet UIButton *_altButton;
-  __weak IBOutlet UIStackView *_stack;
-  __weak IBOutlet UIScrollView *_nonModifierScrollView;
+    NSTimer *_timer;
+    __weak IBOutlet UIButton *_ctrlButton;
+    __weak IBOutlet UIButton *_altButton;
+    __weak IBOutlet UIStackView *_stack;
+    __weak IBOutlet UIScrollView *_nonModifierScrollView;
     IBOutlet UIStackView *_arrowButtonStackView;
     IBOutlet UIStackView *_cursorButtonStackView;
     //__weak IBOutlet UIView *_rightContainerView;
 
-    
-  BOOL isLongPress;
-  UIStackView *_nonModifiersStack;
-  NSArray <SmartKey *> *_nonModifiersKeys;
-    
-  UIStackView *_alternateKeysStack;
-  NSArray <SmartKey *> *_alternateKeys;
+
+    BOOL isLongPress;
+    UIStackView *_nonModifiersStack;
+    NSArray <SmartKey *> *_nonModifiersKeys;
+
+    UIStackView *_alternateKeysStack;
+    NSArray <SmartKey *> *_alternateKeys;
 
 }
 
 
 - (void)awakeFromNib {
-  [super awakeFromNib];
-  self.translatesAutoresizingMaskIntoConstraints = NO;
-  _nonModifierScrollView.translatesAutoresizingMaskIntoConstraints = NO;
-  [self setupModifierButtons];
+    [super awakeFromNib];
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    _nonModifierScrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self setupModifierButtons];
 }
 
 - (void)setupModifierButtons {
 
-  UITapGestureRecognizer *ctrlTapGesture = [[UITapGestureRecognizer alloc]
-      initWithTarget:self
-              action:@selector(modifierButtonTapped:)];
-  ctrlTapGesture.numberOfTapsRequired = 1;
-  UILongPressGestureRecognizer *ctrlLongPressGesture =
-      [[UILongPressGestureRecognizer alloc]
-          initWithTarget:self
-                  action:@selector(longPressOnModifierButton:)];
-  ctrlLongPressGesture.minimumPressDuration = 0.3;
+    UITapGestureRecognizer *ctrlTapGesture = [[UITapGestureRecognizer alloc]
+            initWithTarget:self
+            action:@selector(modifierButtonTapped:)];
+    ctrlTapGesture.numberOfTapsRequired = 1;
+    UILongPressGestureRecognizer *ctrlLongPressGesture =
+        [[UILongPressGestureRecognizer alloc]
+         initWithTarget:self
+         action:@selector(longPressOnModifierButton:)];
+    ctrlLongPressGesture.minimumPressDuration = 0.3;
 
-  [_ctrlButton addGestureRecognizer:ctrlTapGesture];
-  [_ctrlButton addGestureRecognizer:ctrlLongPressGesture];
+    [_ctrlButton addGestureRecognizer:ctrlTapGesture];
+    [_ctrlButton addGestureRecognizer:ctrlLongPressGesture];
 
-  UITapGestureRecognizer *altTapGesture = [[UITapGestureRecognizer alloc]
-      initWithTarget:self
-              action:@selector(modifierButtonTapped:)];
-  altTapGesture.numberOfTapsRequired = 1;
-  UILongPressGestureRecognizer *altLongPressGesture =
-      [[UILongPressGestureRecognizer alloc]
-          initWithTarget:self
-                  action:@selector(longPressOnModifierButton:)];
-  altLongPressGesture.minimumPressDuration = 0.3;
+    UITapGestureRecognizer *altTapGesture = [[UITapGestureRecognizer alloc]
+                                            initWithTarget:self
+                                            action:@selector(modifierButtonTapped:)];
+    altTapGesture.numberOfTapsRequired = 1;
+    UILongPressGestureRecognizer *altLongPressGesture =
+        [[UILongPressGestureRecognizer alloc]
+         initWithTarget:self
+         action:@selector(longPressOnModifierButton:)];
+    altLongPressGesture.minimumPressDuration = 0.3;
 
-  [_altButton addGestureRecognizer:altTapGesture];
-  [_altButton addGestureRecognizer:altLongPressGesture];
+    [_altButton addGestureRecognizer:altTapGesture];
+    [_altButton addGestureRecognizer:altLongPressGesture];
     [_altButton addObserver:self forKeyPath:@"selected" options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:nil];
-    
+
     //[_rightContainerView addSubview:_arrowButtonStackView];
 }
 
 - (NSUInteger)modifiers {
-  // No need to use the tag, as modifiers are predefined.
-  NSUInteger modifiers = 0;
-  if (_ctrlButton.selected) {
-    modifiers |= KbdCtrlModifier;
-    if (!isLongPress) {
-      _ctrlButton.selected = NO;
+    // No need to use the tag, as modifiers are predefined.
+    NSUInteger modifiers = 0;
+    if (_ctrlButton.selected) {
+        modifiers |= KbdCtrlModifier;
+        if (!isLongPress) {
+            _ctrlButton.selected = NO;
+        }
     }
-  }
-  if (_altButton.selected) {
-    modifiers |= KbdAltModifier;
-    if (!isLongPress) {
-      _altButton.selected = NO;
+    if (_altButton.selected) {
+        modifiers |= KbdAltModifier;
+        if (!isLongPress) {
+            _altButton.selected = NO;
+        }
     }
-  }
 
-  return modifiers;
+    return modifiers;
 }
 
 - (void)show {
-  self.hidden = NO;
+    self.hidden = NO;
 }
 
-- (void)showNonModifierKeySection:(SKNonModifierButtonType)type{
+- (void)showNonModifierKeySection:(SKNonModifierButtonType)type {
     [_nonModifiersStack removeFromSuperview];
     [_alternateKeysStack removeFromSuperview];
-    
+
     UIStackView *selectedStackView = nil;
-    
-    if(type == SKNonModifierButtonTypeNormal){        
+
+    if(type == SKNonModifierButtonTypeNormal) {
         _cursorButtonStackView.hidden = YES;
         _arrowButtonStackView.hidden = NO;
 
         selectedStackView = _nonModifiersStack;
         [_nonModifierScrollView addSubview:_nonModifiersStack];
-    }else{
+    } else {
         _cursorButtonStackView.hidden = NO;
         _arrowButtonStackView.hidden = YES;
-        
+
         selectedStackView = _alternateKeysStack;
         [_nonModifierScrollView addSubview:_alternateKeysStack];
     }
-    
+
     // Constraints
     selectedStackView.translatesAutoresizingMaskIntoConstraints = NO;
 
@@ -195,10 +195,10 @@ int const kNonModifierCount = 7;
 
 - (void)setNonModifiers:(NSArray <SmartKey *> *)keys
 {
-  // TODO: Detach previous (if any)
-  // Reattach new one
-  _nonModifiersStack = [self smartKeysStackWith:keys];
-  _nonModifiersKeys = keys;
+    // TODO: Detach previous (if any)
+    // Reattach new one
+    _nonModifiersStack = [self smartKeysStackWith:keys];
+    _nonModifiersKeys = keys;
 }
 
 - (void)setAlternateKeys:(NSArray <SmartKey *> *)keys
@@ -211,55 +211,55 @@ int const kNonModifierCount = 7;
 
 - (UIStackView *)smartKeysStackWith:(NSArray <SmartKey *> *)keys
 {
-  // Configure Stack
-  UIStackView *stack = [[UIStackView alloc] init];
+    // Configure Stack
+    UIStackView *stack = [[UIStackView alloc] init];
 
-  stack.axis = UILayoutConstraintAxisHorizontal;
-  stack.distribution = UIStackViewDistributionFillEqually;
+    stack.axis = UILayoutConstraintAxisHorizontal;
+    stack.distribution = UIStackViewDistributionFillEqually;
 
-  for (SmartKey *key in keys) {
-    SKNonModifierButton *button = [SKNonModifierButton buttonWithType:UIButtonTypeCustom];
-    button.backgroundColor = [UIColor grayColor];
-    [button setTitle:key.name forState:UIControlStateNormal];
-    [stack addArrangedSubview:button];
-    [button addTarget:nil action:@selector(nonModifierUp:) forControlEvents:UIControlEventTouchUpInside];
-    [button addTarget:nil action:@selector(nonModifierUp:) forControlEvents:UIControlEventTouchUpOutside];
-    [button addTarget:nil action:@selector(nonModifierUp:) forControlEvents:UIControlEventTouchDragExit];
-    [button addTarget:nil action:@selector(nonModifierDown:) forControlEvents:UIControlEventTouchDown];
-  }
-  
-  return stack;
+    for (SmartKey *key in keys) {
+        SKNonModifierButton *button = [SKNonModifierButton buttonWithType:UIButtonTypeCustom];
+        button.backgroundColor = [UIColor grayColor];
+        [button setTitle:key.name forState:UIControlStateNormal];
+        [stack addArrangedSubview:button];
+        [button addTarget:nil action:@selector(nonModifierUp:) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:nil action:@selector(nonModifierUp:) forControlEvents:UIControlEventTouchUpOutside];
+        [button addTarget:nil action:@selector(nonModifierUp:) forControlEvents:UIControlEventTouchDragExit];
+        [button addTarget:nil action:@selector(nonModifierDown:) forControlEvents:UIControlEventTouchDown];
+    }
+
+    return stack;
 }
 
 - (IBAction)nonModifierUp:(UIButton *)sender
 {
-  [self.delegate symbolUp:sender.currentTitle];
+    [self.delegate symbolUp:sender.currentTitle];
 }
 
 - (IBAction)nonModifierDown:(UIButton *)sender
 {
-  [self.delegate symbolDown:sender.currentTitle];
+    [self.delegate symbolDown:sender.currentTitle];
 }
 
 - (UIInputViewStyle)inputViewStyle {
-  return UIInputViewStyleDefault;
+    return UIInputViewStyleDefault;
 }
 
 - (void)modifierButtonTapped:(UITapGestureRecognizer *)gesture {
-  //[self modifiers];
-  UIButton *selectedButton = (UIButton *)gesture.view;
-  [selectedButton setSelected:!selectedButton.isSelected];
+    //[self modifiers];
+    UIButton *selectedButton = (UIButton *)gesture.view;
+    [selectedButton setSelected:!selectedButton.isSelected];
 }
 
 - (void)longPressOnModifierButton:(UILongPressGestureRecognizer *)gesture {
-  UIButton *selectedButton = (UIButton *)gesture.view;
-  if (gesture.state == UIGestureRecognizerStateBegan) {
-    [selectedButton setSelected:YES];
-    isLongPress = YES;
-  } else if (gesture.state == UIGestureRecognizerStateEnded) {
-    [selectedButton setSelected:NO];
-    isLongPress = NO;
-  }
+    UIButton *selectedButton = (UIButton *)gesture.view;
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        [selectedButton setSelected:YES];
+        isLongPress = YES;
+    } else if (gesture.state == UIGestureRecognizerStateEnded) {
+        [selectedButton setSelected:NO];
+        isLongPress = NO;
+    }
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -267,14 +267,14 @@ int const kNonModifierCount = 7;
 
 # pragma mark - Alt Button Methods
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
-    if(object == _altButton){
-        if([keyPath isEqualToString:@"selected"]){
-            if([change objectForKey:@"new"]){
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if(object == _altButton) {
+        if([keyPath isEqualToString:@"selected"]) {
+            if([change objectForKey:@"new"]) {
                 int newValue = [[change objectForKey:@"new"]intValue];
-                if(newValue == 1){
+                if(newValue == 1) {
                     [self showNonModifierKeySection:SKNonModifierButtonTypeAlternate];
-                }else{
+                } else {
                     [self showNonModifierKeySection:SKNonModifierButtonTypeNormal];
                 }
             }

@@ -9,7 +9,7 @@
 #import "SKNonModifierButton.h"
 @implementation SKNonModifierButton
 
-- (void)setHighlighted:(BOOL)highlighted{
+- (void)setHighlighted:(BOOL)highlighted {
     [super setHighlighted:highlighted];
     [super animatedButtonSelection:highlighted];
 }

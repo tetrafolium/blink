@@ -38,61 +38,61 @@ static NSArray *FKeys = nil;
 static NSArray *AlternateKeys = nil; // To hold Function Keys F1 - F12
 static NSArray *CursorKeys = nil;
 @implementation SmartKeys {
-  NSTimer *_timer;
+    NSTimer *_timer;
 }
 
 @dynamic view;
 
 + (void)initialize {
-  // Make an object. Do not even there to use dicts
-  HelperKeys = @[
-		    [[SmartKey alloc] initWithName:KbdTabKey symbol:@"\t"],
-		    [[SmartKey alloc] initWithName:@"-" symbol:@"-"],
-		    [[SmartKey alloc] initWithName:@"_" symbol:@"_"],
-		    [[SmartKey alloc] initWithName:@"~" symbol:@"~"],
-		    [[SmartKey alloc] initWithName:@"@" symbol:@"@"],
-		    [[SmartKey alloc] initWithName:@"*" symbol:@"*"],
-            [[SmartKey alloc] initWithName:@"|" symbol:@"|"],
-            [[SmartKey alloc] initWithName:@"/" symbol:@"/"],
-            [[SmartKey alloc] initWithName:@"\\" symbol:@"\\"],
-            [[SmartKey alloc] initWithName:@"^" symbol:@"^"],
-            [[SmartKey alloc] initWithName:@"[" symbol:@"["],
-            [[SmartKey alloc] initWithName:@"]" symbol:@"]"],
-            [[SmartKey alloc] initWithName:@"{" symbol:@"{"],
-            [[SmartKey alloc] initWithName:@"}" symbol:@"}"]
-		 ];
-  
-  ArrowKeys = @[
-		[[SmartKey alloc]initWithName:KbdUpArrowKey symbol:UIKeyInputUpArrow],
-		   [[SmartKey alloc]initWithName:KbdDownArrowKey symbol:UIKeyInputDownArrow],
-		   [[SmartKey alloc]initWithName:KbdLeftArrowKey symbol:UIKeyInputLeftArrow],
-		   [[SmartKey alloc]initWithName:KbdRightArrowKey symbol:UIKeyInputRightArrow]
-		];
-    
-  AlternateKeys = @[
-          [[SmartKey alloc]initWithName:@"F1" symbol:@"F1"],
-          [[SmartKey alloc]initWithName:@"F2" symbol:@"F2"],
-          [[SmartKey alloc]initWithName:@"F3" symbol:@"F3"],
-          [[SmartKey alloc]initWithName:@"F4" symbol:@"F4"],
-          [[SmartKey alloc]initWithName:@"F5" symbol:@"F5"],
-          [[SmartKey alloc]initWithName:@"F6" symbol:@"F6"],
-          [[SmartKey alloc]initWithName:@"F7" symbol:@"F7"],
-          [[SmartKey alloc]initWithName:@"F8" symbol:@"F8"],
-          [[SmartKey alloc]initWithName:@"F9" symbol:@"F9"],
-          [[SmartKey alloc]initWithName:@"F10" symbol:@"F10"],
-          [[SmartKey alloc]initWithName:@"F11" symbol:@"F11"],
-          [[SmartKey alloc]initWithName:@"F12" symbol:@"F12"],
-          ];
-    
-  CursorKeys = @[
-         [[SmartKey alloc]initWithName:@"⇞" symbol:@"Pg Up"],
-         [[SmartKey alloc]initWithName:@"⇟" symbol:@"Pg Down"],
-         [[SmartKey alloc]initWithName:@"↖︎" symbol:@"Home"],
-         [[SmartKey alloc]initWithName:@"↘︎" symbol:@"End"],
-         ];
+    // Make an object. Do not even there to use dicts
+    HelperKeys = @[
+                     [[SmartKey alloc] initWithName:KbdTabKey symbol:@"\t"],
+                     [[SmartKey alloc] initWithName:@"-" symbol:@"-"],
+                     [[SmartKey alloc] initWithName:@"_" symbol:@"_"],
+                     [[SmartKey alloc] initWithName:@"~" symbol:@"~"],
+                     [[SmartKey alloc] initWithName:@"@" symbol:@"@"],
+                     [[SmartKey alloc] initWithName:@"*" symbol:@"*"],
+                     [[SmartKey alloc] initWithName:@"|" symbol:@"|"],
+                     [[SmartKey alloc] initWithName:@"/" symbol:@"/"],
+                     [[SmartKey alloc] initWithName:@"\\" symbol:@"\\"],
+                     [[SmartKey alloc] initWithName:@"^" symbol:@"^"],
+                     [[SmartKey alloc] initWithName:@"[" symbol:@"["],
+                     [[SmartKey alloc] initWithName:@"]" symbol:@"]"],
+                     [[SmartKey alloc] initWithName:@"{" symbol:@"{"],
+                     [[SmartKey alloc] initWithName:@"}" symbol:@"}"]
+                 ];
+
+    ArrowKeys = @[
+                    [[SmartKey alloc]initWithName:KbdUpArrowKey symbol:UIKeyInputUpArrow],
+                    [[SmartKey alloc]initWithName:KbdDownArrowKey symbol:UIKeyInputDownArrow],
+                    [[SmartKey alloc]initWithName:KbdLeftArrowKey symbol:UIKeyInputLeftArrow],
+                    [[SmartKey alloc]initWithName:KbdRightArrowKey symbol:UIKeyInputRightArrow]
+                ];
+
+    AlternateKeys = @[
+                        [[SmartKey alloc]initWithName:@"F1" symbol:@"F1"],
+                        [[SmartKey alloc]initWithName:@"F2" symbol:@"F2"],
+                        [[SmartKey alloc]initWithName:@"F3" symbol:@"F3"],
+                        [[SmartKey alloc]initWithName:@"F4" symbol:@"F4"],
+                        [[SmartKey alloc]initWithName:@"F5" symbol:@"F5"],
+                        [[SmartKey alloc]initWithName:@"F6" symbol:@"F6"],
+                        [[SmartKey alloc]initWithName:@"F7" symbol:@"F7"],
+                        [[SmartKey alloc]initWithName:@"F8" symbol:@"F8"],
+                        [[SmartKey alloc]initWithName:@"F9" symbol:@"F9"],
+                        [[SmartKey alloc]initWithName:@"F10" symbol:@"F10"],
+                        [[SmartKey alloc]initWithName:@"F11" symbol:@"F11"],
+                        [[SmartKey alloc]initWithName:@"F12" symbol:@"F12"],
+                    ];
+
+    CursorKeys = @[
+                     [[SmartKey alloc]initWithName:@"⇞" symbol:@"Pg Up"],
+                     [[SmartKey alloc]initWithName:@"⇟" symbol:@"Pg Down"],
+                     [[SmartKey alloc]initWithName:@"↖︎" symbol:@"Home"],
+                     [[SmartKey alloc]initWithName:@"↘︎" symbol:@"End"],
+                 ];
 }
 
-- (void)viewDidLoad 
+- (void)viewDidLoad
 {
     [self.view setNonModifiers:HelperKeys];
     [self.view setAlternateKeys:AlternateKeys];
@@ -102,9 +102,9 @@ static NSArray *CursorKeys = nil;
 
 - (void)symbolUp:(NSString *)symbol
 {
-  if (_timer != nil) {
-    [_timer invalidate];
-  }
+    if (_timer != nil) {
+        [_timer invalidate];
+    }
 }
 
 - (void)symbolDown:(NSString *)symbol
@@ -114,14 +114,14 @@ static NSArray *CursorKeys = nil;
     [masterArray addObjectsFromArray:ArrowKeys];
     [masterArray addObjectsFromArray:AlternateKeys];
     [masterArray addObjectsFromArray:CursorKeys];
-    
-  for (SmartKey *key in masterArray) {
-    if ([key.name isEqualToString:symbol]) {
-      _timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(symbolEmit:) userInfo:key.symbol repeats:YES];
-      [_timer fire];
-      return;
+
+    for (SmartKey *key in masterArray) {
+        if ([key.name isEqualToString:symbol]) {
+            _timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(symbolEmit:) userInfo:key.symbol repeats:YES];
+            [_timer fire];
+            return;
+        }
     }
-  }
     //Handling Esc key separately as it does not logically belong to either of the above arrays
     if ([KbdEscKey isEqualToString:symbol]) {
         _timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(symbolEmit:) userInfo:UIKeyInputEscape repeats:YES];
@@ -131,7 +131,7 @@ static NSArray *CursorKeys = nil;
 
 - (void)symbolEmit:(NSTimer *)timer
 {
-  [_textInputDelegate insertText:timer.userInfo];
+    [_textInputDelegate insertText:timer.userInfo];
 }
 
 @end

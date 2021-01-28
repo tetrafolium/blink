@@ -42,40 +42,40 @@
 int
 ssh_compatible_openssl(long headerver, long libver)
 {
-	long mask, hfix, lfix;
+    long mask, hfix, lfix;
 
-	/* exact match is always OK */
-	if (headerver == libver)
-		return 1;
+    /* exact match is always OK */
+    if (headerver == libver)
+        return 1;
 
-	/* for versions < 1.0.0, major,minor,fix,status must match */
-	if (headerver < 0x1000000f) {
-		mask = 0xfffff00fL; /* major,minor,fix,status */
-		return (headerver & mask) == (libver & mask);
-	}
+    /* for versions < 1.0.0, major,minor,fix,status must match */
+    if (headerver < 0x1000000f) {
+        mask = 0xfffff00fL; /* major,minor,fix,status */
+        return (headerver & mask) == (libver & mask);
+    }
 
-	/*
-	 * For versions >= 1.0.0, major,minor,status must match and library
-	 * fix version must be equal to or newer than the header.
-	 */
-	mask = 0xfff0000fL; /* major,minor,status */
-	hfix = (headerver & 0x000ff000) >> 12;
-	lfix = (libver & 0x000ff000) >> 12;
-	if ( (headerver & mask) == (libver & mask) && lfix >= hfix)
-		return 1;
-	return 0;
+    /*
+     * For versions >= 1.0.0, major,minor,status must match and library
+     * fix version must be equal to or newer than the header.
+     */
+    mask = 0xfff0000fL; /* major,minor,status */
+    hfix = (headerver & 0x000ff000) >> 12;
+    lfix = (libver & 0x000ff000) >> 12;
+    if ( (headerver & mask) == (libver & mask) && lfix >= hfix)
+        return 1;
+    return 0;
 }
 
 #ifdef	USE_OPENSSL_ENGINE
 void
 ssh_OpenSSL_add_all_algorithms(void)
 {
-	OpenSSL_add_all_algorithms();
+    OpenSSL_add_all_algorithms();
 
-	/* Enable use of crypto hardware */
-	ENGINE_load_builtin_engines();
-	ENGINE_register_all_complete();
-	OPENSSL_config(NULL);
+    /* Enable use of crypto hardware */
+    ENGINE_load_builtin_engines();
+    ENGINE_register_all_complete();
+    OPENSSL_config(NULL);
 }
 #endif
 
